@@ -164,3 +164,18 @@
 * **Consequences / Rationale:** The board is state, `.brain` is the record. Cards and PRs give the owner visibility without reading code, and the merge rules are enforced by configuration rather than convention. The MCP path avoids maintaining a bespoke CLI.
 * **Open:** no git remote, so PR and merge steps are untested end to end; hosting bank source code is an owner decision.
 * **Status:** In Force — board verified working; PR flow verified only up to local commit.
+
+---
+
+### Decision 014: GitHub Issues + Projects as the board; Vikunja retired
+* **Date:** 2026-11-22
+* **Context:** The owner confirmed that bank code on GitHub is acceptable and asked for GitHub Projects. The machine has 7.2 GB free on a 228 GB disk, so local services are a real cost (Vikunja was 119 MB). GitHub's branch protection is unavailable on private repos without Pro.
+* **Decision:**
+  * Private repository `Avanish-Gupta-CSE/digital-eoi-module` is the remote. `main` is the release branch.
+  * The board is GitHub Issues; the column is a `status:` label (`backlog`, `design`, `in-progress`, `review`, `done`). A Project board view groups by those labels.
+  * Labels were chosen over the Project's native Status field because they work from plain `gh issue` commands without GraphQL node ids, and survive the Project being re-created.
+  * Vikunja, its SQLite database and its MCP server are removed. The six blockers are re-created as issues #1–#6.
+  * Enforcement on the free plan: agent policy in `.opencode/opencode.json` plus a committed `.githooks/pre-push` that rejects pushes to `main`/`master`. Recorded explicitly as bypassable with `--no-verify` — it is not server-side protection.
+* **Consequences / Rationale:** Zero local footprint, native issue↔PR linking (`Closes #n`), and the board lives where the code lives. Cost: the board requires internet, and server-side protection needs Pro.
+* **Open:** the `gh` token needs `project,read:project` scope before the Project board view can be created; that is an interactive owner action.
+* **Status:** In Force.

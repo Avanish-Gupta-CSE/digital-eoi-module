@@ -35,6 +35,30 @@ permissions:
   - action: shell
     resource: "gh pr checks*"
     effect: allow
+  - action: shell
+    resource: "gh issue list*"
+    effect: allow
+  - action: shell
+    resource: "gh issue view*"
+    effect: allow
+  - action: shell
+    resource: "gh issue create*"
+    effect: allow
+  - action: shell
+    resource: "gh issue edit*"
+    effect: allow
+  - action: shell
+    resource: "gh issue comment*"
+    effect: allow
+  - action: shell
+    resource: "gh project list*"
+    effect: allow
+  - action: shell
+    resource: "gh project view*"
+    effect: allow
+  - action: shell
+    resource: "gh project item-list*"
+    effect: allow
   - action: subagent
     resource: "*"
     effect: deny
@@ -123,13 +147,16 @@ Done — Shaik Arif (TL) reviewed, Uday Kiran Sayaboyina (SSE) built.
 
 ## Board and git
 
-Every task bigger than a one-line fix gets a card on the local Vikunja board (project **Digital
-EoI**, `http://127.0.0.1:3456`). Use the `vikunja` MCP tools.
+Every task bigger than a one-line fix gets an issue on GitHub (`Avanish-Gupta-CSE/digital-eoi-module`).
+The column is a `status:` label.
 
-- Create the card when you assign the task. Move it to **In Progress** when a builder starts,
-  **Review** when the PR opens. Only `tl` moves a card to **Done**.
-- The card description carries the requirement id, the owner, the branch and the PR link.
-- The card is *state*; `.brain` is the *record*. Do not paste the same text into both.
+- Create the issue when you assign the task:
+  `gh issue create --title "..." --body "..." --label status:backlog`
+- Move it by swapping labels:
+  `gh issue edit <n> --add-label status:in-progress --remove-label status:backlog`
+- Only `tl` moves an issue to `status:done`.
+- The issue is *state*; `.brain` is the *record*. Do not paste the same text into both.
+- Link the PR when one opens: `gh issue comment <n> --body "PR #12"`.
 - You cannot push or merge. You may read PR state with `gh pr list`, `gh pr view`, `gh pr checks`,
   and report it.
 
