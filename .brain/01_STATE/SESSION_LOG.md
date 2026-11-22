@@ -38,6 +38,11 @@
   global config (mode 600) and never in the repository.
 - Vikunja's API-token permissions must use the action names from `/api/v1/routes`, and `expires_at`
   is mandatory. MCP also needs the `mcp: access` permission, which is not part of the default set.
+- Reading and creating cards needs only `tasks` permissions, but **moving a card between columns
+  needs `projects: views_buckets_tasks_update`**. Without it the board is read-only for agents. The
+  move action is `task_bucket_update` (params: `project`, `view`, `bucket`, `task_id`), and it is
+  reached through `find_action`/`do_action`, not as a top-level tool. Moving a card into the Done
+  bucket also marks the task done.
 - The generic `/projects/{id}/tasks` list reports `bucket_id: 0` even when a card is placed; the
   view-scoped `/api/v2/projects/{p}/views/{v}/buckets/tasks` is the accurate read.
 

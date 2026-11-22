@@ -174,6 +174,19 @@ Rules:
 - Blocked cards stay in Backlog with the blocking question in the title — that is why the six
   business questions are the first cards on the board.
 
+Tools the agents actually use (project `2`, kanban view `12`):
+
+| Need | Tool |
+|---|---|
+| create a card | `vikunja_tasks_create` |
+| read the board flat | `vikunja_tasks_list` |
+| read columns with their cards | `do_action` → `project_view_buckets_tasks_list` |
+| list column ids | `do_action` → `buckets_list` |
+| move a card | `do_action` → `task_bucket_update` |
+| comment or edit a card | `vikunja_tasks_update` |
+
+Moving a card into the view's **Done** bucket also marks the task done — one action, not two.
+
 Setup, if the machine restarts:
 
 ```sh
