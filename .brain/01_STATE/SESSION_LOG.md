@@ -2,6 +2,40 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Board moved to GitHub Issues + Projects; Vikunja retired
+
+**Done**
+- Created private repo `Avanish-Gupta-CSE/digital-eoi-module` and pushed `main`.
+- Retired Vikunja: process stopped, `~/vikunja` deleted, MCP server removed from the global config.
+  Reclaimed 119 MB (free space 7.2 GB → 7.3 GB) at the owner's request, since the machine is on a
+  tight disk. Vikunja's SQLite board had 6 cards; nothing of value was lost because the same six
+  items now exist as GitHub issues.
+- Board model: one issue per task, column carried by a `status:` label
+  (`backlog → design → in-progress → review → done`). Chosen over the Project's Status field because
+  labels work from plain `gh issue` commands with no GraphQL node ids.
+- Created labels and issues #1–#6 for the six blocking business questions, each labelled
+  `business-decision, blocking, status:backlog`.
+- Added `.githooks/pre-push` + `git config core.hooksPath .githooks`: rejects any push to
+  `main`/`master` for humans as well as agents.
+- Updated `TEAM.md`, `README.md`, `manager.md` and `CONTRIBUTING.md` to GitHub Issues/Projects; the
+  Manager's permissions now allow the `gh issue` and `gh project` read/create/edit commands.
+
+**Findings**
+- **GitHub branch protection requires Pro on private repos.** The API returns 403 "Upgrade to GitHub
+  Pro or make this repository public". On the free plan, enforcement is therefore the agent policy
+  plus the local pre-push hook, not the server.
+- **The `gh` token lacks the `project` scope** (`gist, read:org, repo, workflow`). GitHub Projects
+  cannot be created until the owner runs `gh auth refresh -s project,read:project`; that flow is
+  interactive and cannot be completed from an agent session. Issues, labels, PRs, reviews and merges
+  all work without it.
+- A local pre-push hook is not a substitute for server-side protection: it can be bypassed with
+  `--no-verify`. Recorded so nobody mistakes it for a hard control.
+
+**Not done / open**
+- Project board view not created (waiting on the `project` scope).
+- Slack/Teams notification on PR — not requested, not built.
+- Still blocked on the six business questions, which are now issues #1–#6.
+
 ## 2026-11-22 — Git repository, PR discipline, and a local scrum board
 
 **Done**

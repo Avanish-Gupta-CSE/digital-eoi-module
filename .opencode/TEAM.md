@@ -150,57 +150,54 @@ When in doubt, say what outcome you want, not who should do it. Nagendra picks t
 
 ## 6. The board
 
-Local Vikunja at **http://127.0.0.1:3456** → project **Digital EoI**. AGPL, single binary, SQLite,
-no Docker, no licence. The agents reach it through its built-in MCP server, so they create and move
-cards natively.
+**GitHub Issues on `Avanish-Gupta-CSE/digital-eoi-module`**, with a Project board view. Every card is
+an issue; the column is a `status:` label on that issue.
 
-Columns and what each one means:
-
-| Column | Means | Who moves it here |
+| Label | Means | Who applies it |
 |---|---|---|
-| **Backlog** | decided, not started, or blocked on a decision | Nagendra |
-| **Design** | Shaik is producing the file plan | Nagendra, on handoff |
-| **In Progress** | code is being written on a branch | the builder |
-| **Review** | PR open, CI running, TL reading the diff | the builder |
-| **Done** | merged, verified, `.brain` updated | Shaik (TL) only |
+| `status:backlog` | decided, not started, or blocked on a decision | Nagendra |
+| `status:design` | Shaik is producing the file plan | Nagendra, on handoff |
+| `status:in-progress` | code is being written on a branch | the builder |
+| `status:review` | PR open, CI running, TL reading the diff | the builder |
+| `status:done` | merged, verified, `.brain` updated | Shaik (TL) only |
+
+Why labels and not the Project's Status field: labels work from the plain `gh issue` commands, need
+no GraphQL node ids, and survive a Project being re-created. The Project board groups by them.
 
 Rules:
 
-- Anything bigger than a one-line fix gets a card. Typo-level work does not — it rides with the PR
+- Anything bigger than a one-line fix gets an issue. Typo-level work does not — it rides with the PR
   that contains it.
-- The card is the *state*; `.brain` is the *record*. Do not repeat the same description in both.
-- Every card in Review carries its branch name and PR link in the description.
-- A card may only be moved to Done by the Tech Lead, after CI is green and the review has no BLOCKER.
-- Blocked cards stay in Backlog with the blocking question in the title — that is why the six
-  business questions are the first cards on the board.
+- The issue is the *state*; `.brain` is the *record*. Do not repeat the same description in both.
+- Every issue in Review carries its branch name and PR link in a comment.
+- Only the Tech Lead moves an issue to `status:done`, after CI is green and the review has no
+  BLOCKER.
+- Blocked issues keep the blocking question in the title — that is why the six business questions
+  are issues #1–#6.
 
-Tools the agents actually use (project `2`, kanban view `12`):
+Tools the agents actually use:
 
-| Need | Tool |
+| Need | Command |
 |---|---|
-| create a card | `vikunja_tasks_create` |
-| read the board flat | `vikunja_tasks_list` |
-| read columns with their cards | `do_action` → `project_view_buckets_tasks_list` |
-| list column ids | `do_action` → `buckets_list` |
-| move a card | `do_action` → `task_bucket_update` |
-| comment or edit a card | `vikunja_tasks_update` |
+| create a card | `gh issue create --title ... --body ... --label business-decision,blocked,status:backlog` |
+| read the board | `gh issue list --label status:in-progress` |
+| move a card | `gh issue edit <n> --add-label status:in-progress --remove-label status:design` |
+| comment / link a PR | `gh issue comment <n> --body "PR #12"` |
+| close when merged | the PR body says `Closes #<n>` — merging closes it |
 
-Moving a card into the view's **Done** bucket also marks the task done — one action, not two.
-
-Setup, if the machine restarts:
+One-time setup for the Project board view (needs the `project` scope):
 
 ```sh
-cd ~/vikunja && nohup ./vikunja web --config ~/vikunja/config.yml > vikunja.log 2>&1 &
-open http://127.0.0.1:3456
+gh auth refresh -s project,read:project
 ```
 
-Login is in `~/vikunja/credentials.txt` (mode 600). The agent API token is in
-`~/vikunja/api-token.txt` and is referenced only from the global OpenCode config — never from this
-repository.
+After that, create the Project and set the board to **Group by: Labels** — two clicks in the UI, or
+`gh project create`. Issues and labels work with or without it.
 
 ## 7. Git and pull requests
 
-The repository is a normal git repo on `main`. Agents work exactly like a disciplined team:
+Remote: **https://github.com/Avanish-Gupta-CSE/digital-eoi-module** (private). Agents work exactly
+like a disciplined team:
 
 ```
 1. git switch main && git pull
@@ -208,29 +205,35 @@ The repository is a normal git repo on `main`. Agents work exactly like a discip
 3. edit, test, commit            feat(dashboard): add quarterly due card
 4. git push -u origin feature/<slug>
 5. gh pr create --fill            ← PR opens, CI starts
-6. card moves to Review
+6. issue moves to status:review
 7. TL reviews the diff, CI must be green
 8. gh pr merge --squash           ← TL or you
-9. card moves to Done, .brain updated
+9. issue moves to status:done, .brain updated
 ```
 
 Enforced, not just agreed:
 
 | Rule | Enforced by |
 |---|---|
-| Nobody pushes to `main` or `master` | policy in `.opencode/opencode.json` — fails with "Blocked by configuration policy" |
+| Nobody pushes to `main` or `master` | agent policy in `.opencode/opencode.json`, plus `.githooks/pre-push` for humans |
 | Nobody force-pushes | same policy |
 | Only TL merges | builders have `gh pr merge` explicitly denied |
 | No review of your own work without saying so | TL prompt: verdict must open with `SELF-REVIEW` |
 | No inline script/style in a JSP | CI job `guardrails`, same script you can run locally |
 | No merge with failing tests | CI job `build and test`, once a `pom.xml` exists |
 
+Install the pre-push hook once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+GitHub's server-side branch protection needs **GitHub Pro on private repos**, so on the free plan
+the hook plus agent policy are the enforcement. If the repo ever goes Pro, enable the rule in
+Settings → Branches as well.
+
 Full detail: `CONTRIBUTING.md`. The PR template asks for the person's name, the requirement id, the
 guardrail checklist and the real test output.
-
-What is **not** set up yet: there is no remote. Until a GitHub or Gitea remote exists, steps 4–8
-cannot run — everything before that (branching, committing, the board, the review discipline)
-already works locally.
 
 ## 8. What "done" means
 

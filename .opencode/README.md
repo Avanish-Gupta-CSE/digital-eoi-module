@@ -139,29 +139,22 @@ The Go console shows allowance used per model.
 
 ## Board and git
 
-**Board:** local Vikunja v2.8.0 at `http://127.0.0.1:3456`, project *Digital EoI*, AGPL, single
-binary + SQLite, no Docker (Docker Desktop needs a paid licence at bank scale). Agents reach it
-through Vikunja's own MCP server (`/api/v2/mcp`), so there is no custom integration code to maintain.
+**Board:** GitHub Issues on `Avanish-Gupta-CSE/digital-eoi-module`. The column is a label:
+`status:backlog → status:design → status:in-progress → status:review → status:done`. A GitHub Project
+board groups by those labels; the issues and labels work with or without it.
 
-```
-Backlog → Design → In Progress → Review → Done
-```
-
-Only the Tech Lead moves a card to Done. Every card in Review carries its branch and PR link.
-Start it after a reboot with:
-
-```sh
-cd ~/vikunja && nohup ./vikunja web --config ~/vikunja/config.yml > vikunja.log 2>&1 &
-```
-
-Credentials: `~/vikunja/credentials.txt`. Agent API token: `~/vikunja/api-token.txt`, referenced only
-from the global OpenCode config, never from this repo.
-
-**Git:** `main` is protected by policy — no agent can push to it or force-push. Branch → commit →
-push → PR → green CI → TL merges. Full rules in `CONTRIBUTING.md`; PR checklist in
+**Git:** `main` is protected by agent policy plus a local `.githooks/pre-push` hook. Branch → commit
+→ push → PR → green CI → TL merges. Full rules in `CONTRIBUTING.md`; PR checklist in
 `.github/PULL_REQUEST_TEMPLATE.md`; CI in `.github/workflows/ci.yml`.
 
-**Not done yet:** no remote exists, so PRs cannot be opened. Everything before that works locally.
+Install the hook once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+GitHub's own branch protection needs Pro on private repos, so on the free plan the hook and the agent
+policy are the enforcement.
 
 ## Two things to know
 

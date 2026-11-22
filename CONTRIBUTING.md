@@ -7,6 +7,15 @@ merge authority.
 
 `main` is always releasable. Nobody commits to it directly — not you, not an agent.
 
+Install the local guard once per clone; it rejects any push to `main`:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+GitHub's server-side branch protection requires **GitHub Pro on private repositories**, so on the
+free plan this hook plus the agent policy in `.opencode/opencode.json` are the enforcement.
+
 | Branch | For | Merged by |
 |---|---|---|
 | `main` | released, verified state | — (protected) |
