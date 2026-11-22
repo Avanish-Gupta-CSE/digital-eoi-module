@@ -2,6 +2,44 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Annex II data model (11 tables) built and proven on H2
+
+**Done**
+- `po` produced the Annex II field inventory: 66 fields, 10 implied child tables, 29 gaps, 7 bank
+  questions. Persisted to `.brain/03_SYSTEM/AnnexII_Field_Inventory.md`.
+- Pre-OCR'd the scanned annex with Apple Vision (tesseract mangled the bordered tables) and saved the
+  text to `.brain/01_Business_Requirement/AnnexII_ocr.md` so nobody repeats it.
+- Re-verified pages 5, 8 and 9 at 600 dpi: **Part IV is 7 columns, not 9** (the `(Not due for
+  settlement)` parenthetical qualifies positive MTM; NPA + restructured is one column). G14/G15/G16
+  closed, G27 closed, and **page 9 is physically truncated in the bank's enclosure** — G28 cannot be
+  closed from this document.
+- `tl` designed the schema; Manager accepted both decision points (borrower/report split, one shared
+  `eoi_seq`). Design in `.brain/03_SYSTEM/AnnexII_Schema_Design.md`.
+- `sse2` wrote the three schema files and the 178-line seed, then hit its step limit before compiling.
+  The remaining work was completed and verified here: ordered `schema-locations`, the aggregate
+  dashboard query, the `Borrower` record, and `SchemaTest`.
+- Seeded so the dashboard totals are unchanged; Textiles deliberately holds **two** facilities of
+  ₹37.5 M each, so `₹ 7,50,00,000.00` is a real `SUM`, not a copied column.
+
+**Verified**
+- `mvn test`: 6/6, including `SchemaTest` (11 tables; duplicate report rejected).
+- Negative test: with `ux_eoi_report_borrower_qtr` commented out the schema test **fails**, and passes
+  when restored. The constraint is genuinely exercised.
+- Running app: `/dashboard` 200 with 4 borrowers, `₹ 25,00,00,000.00` and `₹ 18,25,00,000.00` intact,
+  Sample Chemicals still filtered by the threshold, empty state on `Q1FY2526`, no errors in the log.
+- `check-guardrails.sh` ok; every SQL file ≤ 178 lines.
+
+**Findings**
+- The re-cut breaks the dashboard unless the query moves to `SUM(facility)` in the same change — the
+  Tech Lead flagged this before any code was written, which is why `main` never went red.
+- H2 `MODE=Oracle` accepts `eoi_seq.NEXTVAL` in multi-row inserts and `INSERT … SELECT`; that is what
+  the seed relies on.
+
+**Not done / open**
+- No entry screen yet; the 11 tables are populated only by the seed.
+- No `uat`/Oracle profile. Portability is proven on H2-Oracle-mode only.
+- G1–G29 remain; the four that matter (G26, G28, G19, G22) are documented for the bank.
+
 ## 2026-11-22 — Jumpstart: first working slice, and the unknowns turned into seams
 
 **Done**

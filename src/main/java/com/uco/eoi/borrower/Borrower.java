@@ -3,10 +3,12 @@ package com.uco.eoi.borrower;
 import java.math.BigDecimal;
 
 /**
- * One borrower row as stored in EOI_BORROWER. A plain carrier: no logic.
+ * One row of the dashboard: a borrower for one quarter.
+ *
+ * The two amounts are the SUM of that report's facilities (Annex II Part III), computed
+ * by BorrowerRepository. They are deliberately not stored on the borrower or the report.
  */
 public record Borrower(
-        long id,
         String borrowerName,
         String consortiumName,
         BigDecimal sanctionedLimit,
