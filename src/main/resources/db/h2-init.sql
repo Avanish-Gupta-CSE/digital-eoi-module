@@ -168,11 +168,12 @@ SELECT eoi_seq.NEXTVAL, r.id, x.item_code, x.grade
  WHERE r.report_quarter = 'Q3FY2627';
 
 -- Rubric observations for the Steels report (Part VI.B).
+-- Parameters 1-3 all belong to item I (Conduct of funded facilities).
 INSERT INTO eoi_report_rubric (id, report_id, item_code, param_no, observed_value, grade)
 SELECT eoi_seq.NEXTVAL, r.id, x.item_code, x.param_no, x.observed_value, x.grade
-  FROM (SELECT 'I' AS item_code, 1 AS param_no, 'Regular' AS observed_value, 'Good' AS grade FROM DUAL
-        UNION ALL SELECT 'II', 2, 'Occasional delay', 'Satisfactory' FROM DUAL
-        UNION ALL SELECT 'III', 3, 'Nil', 'Below Par' FROM DUAL) x
+  FROM (SELECT 'I' AS item_code, 1 AS param_no, '2 times' AS observed_value, 'Good' AS grade FROM DUAL
+        UNION ALL SELECT 'I', 2, 'Within 1 month', 'Good' FROM DUAL
+        UNION ALL SELECT 'I', 3, '8% of limit', 'Good' FROM DUAL) x
   JOIN eoi_borrower b ON b.borrower_name = 'Sample Steels Ltd'
   JOIN eoi_report r ON r.borrower_id = b.id
  WHERE r.report_quarter = 'Q3FY2627';

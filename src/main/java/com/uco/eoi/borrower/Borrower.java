@@ -9,10 +9,10 @@ import java.math.BigDecimal;
  * by BorrowerRepository. They are deliberately not stored on the borrower or the report.
  */
 public record Borrower(
+        long borrowerId,
         String borrowerName,
         String consortiumName,
         BigDecimal sanctionedLimit,
         BigDecimal outstanding,
-        String reportQuarter,
         String status) {
 }

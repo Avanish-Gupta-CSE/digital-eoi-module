@@ -43,7 +43,6 @@ CREATE TABLE eoi_report (
 
 -- One report per borrower per quarter. Enforced in the database, not just in Java.
 CREATE UNIQUE INDEX ux_eoi_report_borrower_qtr ON eoi_report (borrower_id, report_quarter);
-CREATE INDEX ix_eoi_report_borrower ON eoi_report (borrower_id);
 
 -- Directors and partners, with the net worth the bank asks for (Part I.III, I.VI).
 CREATE TABLE eoi_borrower_director (
