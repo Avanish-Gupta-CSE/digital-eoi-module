@@ -139,9 +139,10 @@ The Go console shows allowance used per model.
 
 ## Board and git
 
-**Board:** GitHub Issues on `Avanish-Gupta-CSE/digital-eoi-module`. The column is a label:
-`status:backlog → status:design → status:in-progress → status:review → status:done`. A GitHub Project
-board groups by those labels; the issues and labels work with or without it.
+**Board:** GitHub Issues on `Avanish-Gupta-CSE/digital-eoi-module`, surfaced in the **Digital EoI**
+project board — https://github.com/users/Avanish-Gupta-CSE/projects/2. The column is a label:
+`status:backlog → status:design → status:in-progress → status:review → status:done`. In the Board view,
+set **Group by → Labels** once; the API does not expose that setting.
 
 **Git:** `main` is protected on GitHub — pull request required, `guardrails` check required,
 administrators enforced, force-push and deletion blocked. A local `.githooks/pre-push` adds a fast
