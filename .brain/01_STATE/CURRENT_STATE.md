@@ -9,10 +9,12 @@ Arrangements.
 
 ## Repository status
 - **Application exists.** Spring Boot 4.1.3 / Java 25, WAR packaging, Maven.
+- **Data model:** 11 Annex II tables — `eoi_borrower` (master) + `eoi_report` (one per borrower
+  per quarter) + 9 children, all defined in three ordered schema files. Ids from `eoi_seq.NEXTVAL`.
 - Working screen: `/dashboard` — borrowers for the current quarter, Indian money formatting,
-  status badges, empty state, print stylesheet.
+  status badges, empty state, print stylesheet. Amounts are `SUM(facility)` per report.
 - Data: H2 in-memory (`h2` profile) with synthetic rows in `h2-init.sql`. No Oracle profile yet.
-- Tests: 4 passing (`IndianMoneyTest`). CI runs `guardrails` + `mvn test` on every PR.
+- Tests: 6 passing (`IndianMoneyTest` 4, `SchemaTest` 2). CI runs `guardrails` + `mvn test` on every PR.
 - Git: public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected (PR + `guardrails`
   required, admins enforced). See `CONTRIBUTING.md`.
 
