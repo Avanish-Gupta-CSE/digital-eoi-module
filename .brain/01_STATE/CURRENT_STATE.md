@@ -1,6 +1,6 @@
 # CURRENT_STATE
 
-Last updated: 2026-11-21
+Last updated: 2026-11-22
 
 ## Project
 UCO Bank — Digital EoI (Exchange of Information) Module.
@@ -8,15 +8,29 @@ Automated generation of credit information exchange under Consortium / Multiple 
 Arrangements.
 
 ## Repository status
-- No application code yet. No build system, no pom.xml/package.json.
-- Only `.brain/` knowledge base exists.
-- Not a git repo.
+- **Application exists.** Spring Boot 4.1.3 / Java 25, WAR packaging, Maven.
+- Working screen: `/dashboard` — borrowers for the current quarter, Indian money formatting,
+  status badges, empty state, print stylesheet.
+- Data: H2 in-memory (`h2` profile) with synthetic rows in `h2-init.sql`. No Oracle profile yet.
+- Tests: 4 passing (`IndianMoneyTest`). CI runs `guardrails` + `mvn test` on every PR.
+- Git: public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected (PR + `guardrails`
+  required, admins enforced). See `CONTRIBUTING.md`.
+
+## How to run it
+```sh
+mvn -q compile
+mvn -q spring-boot:run -Dspring-boot.run.profiles=h2   # http://localhost:8080/dashboard
+mvn -q test
+sh scripts/check-guardrails.sh
+```
 
 ## Known artefacts
 | Path | What it is |
 |---|---|
-| `.brain/01_Business_Requirement/BRD.pdf` | 9-page scanned PDF (no text layer). Two UCO Bank internal letters + Annex II of the RBI direction. |
+| `.brain/01_Business_Requirement/BRD.pdf` | 9-page scanned PDF (no text layer). Two UCO Bank internal letters + Annex II of the RBI direction. Git-ignored on purpose. |
 | `.brain/01_Business_Requirement/RBI_PARA_127_128.md` | Verbatim regulatory text of paras 127–129, source metadata, and gap analysis. |
+| `.brain/01_STATE/RESUME_HERE.md` | The handoff file: what works, where things are, what to do next, traps. |
+| `.brain/03_SYSTEM/Change_Map.md` | Screen → controller → service → repository → view table. |
 
 ## Regulatory basis (confirmed)
 RBI (Commercial Banks – Transfer and Distribution of Credit Risk) Directions, 2025.
@@ -42,12 +56,13 @@ RBI/DOR/2025-26/159, DOR.STR.REC.No.78/21.04.048/2025-26, dated 28-11-2025, upda
 ## Tooling — agent delivery team (added 2026-11-21, named 2026-11-22)
 | Path | What it is |
 |---|---|
-| `.opencode/agents/*.md` | Eight agents: `manager` (primary/default), `po`, `tl`, `sse2`, `sse`, `sse-b`, `se`, `ase` — see naming table below |
+| `.opencode/agents/*.md` | Eight agents: `manager` (primary/default), `po`, `tl`, `sse2`, `sse`, `sse-b`, `se`, `ase` |
 | `.opencode/guardrails/minimal-code.md` | Binding simplicity, dependency, offline-build, testing, change-map rules |
 | `.opencode/guardrails/ui-ux.md` | Binding UI/UX, bank vocabulary, accessibility, print, local-asset rules |
 | `.opencode/opencode.json` | `default_agent: manager`; both guardrails in `instructions` (absolute paths) |
 | `.opencode/TEAM.md` | Org chart, routing table, worked example, definition of done |
 | `.opencode/README.md` | Quickstart, model tiering, failure modes |
+| `.brain/01_STATE/RESUME_HERE.md` | Start here after a context reset |
 
 Team: Nagendra Immadi (`manager`) · Krishna Chankapurai (`po`) · Shaik Arif (`tl` design/review and
 `sse2` build) · Uday Kiran Sayaboyina (`sse` backend) · Rajeshwari Narella (`sse-b` view) ·
@@ -58,4 +73,5 @@ Workflow: owner → Manager → (PO | TL) → SSE2/SSE/SSE-2/SE/ASE → TL revie
 never sideways. Deliverables are signed by the person who did the work.
 
 ## Unknowns blocking design
-See `.brain/01_STATE/NEXT_STEPS.md`.
+Six business questions are open as GitHub issues #1–#6 on the project board. What can still be built
+without them is listed in `.brain/01_STATE/NEXT_STEPS.md`.

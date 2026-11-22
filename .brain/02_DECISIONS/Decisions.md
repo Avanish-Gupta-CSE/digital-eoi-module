@@ -192,3 +192,17 @@
   * The local `.githooks/pre-push` and the agent policy in `.opencode/opencode.json` remain as fast-fail layers, not as the primary control.
 * **Consequences / Rationale:** Direct writes to `main` are now impossible for everyone, including the owner and every agent. Verified by a 409 from the contents API and by a policy block on `git push`. Cost: the repository, its issues, and `.brain` notes are public; the owner accepted this and no borrower data or Finacle extracts exist in the repo.
 * **Status:** In Force.
+
+---
+
+### Decision 016: First slice — Spring Boot 4.1.3 + Java 25, plain JDBC, unknowns as config
+* **Date:** 2026-11-22
+* **Context:** The six business questions block the *content* of the module but not its shape. Java 25 is the installed JDK; Spring Boot 3.x does not officially support it. The first screen is read-only and reads one table.
+* **Decision:**
+  * Spring Boot **4.1.3** on Java 25, WAR packaging, Maven. WAR so the same artifact runs with `java -jar` and deploys to Tomcat 11.
+  * `spring-boot-starter-jdbc` with `JdbcTemplate` for this slice, **not** JPA. One read-only query, no entities, no lazy-loading surprises, and SQL a beginner can read. This departs from the JPA line in STANDING_DECISIONS §2 and is deliberately narrow: revisit when Annex II brings many related tables.
+  * Every open question becomes configuration or a seam: `eoi.borrower-threshold-amount`, `eoi.current-quarter`, and `BorrowerRepository` as the only data source. No threshold, quarter or recipient is hardcoded.
+  * Bootstrap 5.3.3 vendored under `static/assets/vendor/` with its MIT licence. No CDN, no npm, no asset build step.
+* **Consequences / Rationale:** The team can build against a real, running screen today and swap any business answer in with a property change. Plain JDBC keeps the guardrail "a beginner can read the SQL" true. Cost: if Annex II grows into a dozen related tables with maker–checker state, hand-written SQL gets repetitive — that is the recorded trigger to revisit JPA.
+* **Verified:** `/dashboard` 200 with 4 borrowers, empty state on an empty quarter, all assets local, `mvn test` 4/4, guardrails script passes.
+* **Status:** In Force.

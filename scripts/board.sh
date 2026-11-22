@@ -22,9 +22,18 @@ project_id() {
     python3 -c "import json,sys;print(next(p['id'] for p in json.load(sys.stdin)['projects'] if p['number']==$NUMBER))"
 }
 
-status_field() {
+# Prints: <fieldId> <optionIdForStatus>
+status_ids() {
   gh project field-list "$NUMBER" --owner "$OWNER" --format json |
-    python3 -c "import json,sys;f=next(f for f in json.load(sys.stdin)['fields'] if f['name']=='$FIELD');print(f['id'],','.join(o['id']+':'+o['name'] for o in f['options']))"
+    python3 -c "
+import json,sys
+f=next(f for f in json.load(sys.stdin)['fields'] if f['name']=='$FIELD')
+opt=[o['id'] for o in f['options'] if o['name']=='$1']
+if not opt:
+    names='|'.join(o['name'] for o in f['options'])
+    print('unknown status \'$1\'. available: '+names); sys.exit(1)
+print(f['id'], opt[0])
+"
 }
 
 item_for_issue() {
@@ -34,20 +43,11 @@ m=[i['id'] for i in items if (i.get('content') or {}).get('number')==int('$1')]
 print(m[0] if m else '')"
 }
 
-set_status() {
-  issue="$1"; status="$2"
-  item=$(item_for_issue "$issue")
-  if [ -z "$item" ]; then
-    echo "issue #$issue is not on the board" >&2
-    exit 1
-  fi
-  field_line=$(status_field)
-  field_id=${field_line%% *}
-  option_id=$(echo "${field_line#* }" | tr ',' '\n' | awk -F: -v want="$status" '$2==want{print $1}')
-  if [ -z "$option_id" ]; then
-    echo "unknown status '$status'. available: $(echo "${field_line#* }" | tr ',' '\n' | cut -d: -f2 | paste -sd'|' -)" >&2
-    exit 1
-  fi
+apply_status() {
+  item="$1"; status="$2"; issue="$3"
+  ids=$(status_ids "$status") || { echo "$ids" >&2; exit 1; }
+  field_id=${ids% *}
+  option_id=${ids#* }
   gh project item-edit --project-id "$(project_id)" --id "$item" \
     --field-id "$field_id" --single-select-option-id "$option_id" >/dev/null
   echo "#$issue -> $status"
@@ -73,16 +73,19 @@ for s in order+[k for k in buckets if k not in order]:
 "
     ;;
   add)
-    title="$1"; body="$2"; status="${3:-Todo}"
+    title="$2"; body="$3"; status="${4:-Todo}"
     url=$(gh issue create --repo "$REPO" --title "$title" --body "$body")
     number=$(echo "$url" | grep -o '[0-9]*$')
-    gh project item-add "$NUMBER" --owner "$OWNER" --url "$url" >/dev/null
+    # item-add returns the new item id, so no eventual-consistency lookup is needed.
+    item=$(gh project item-add "$NUMBER" --owner "$OWNER" --url "$url" --format json --jq .id)
     echo "created #$number: $title"
-    set_status "$number" "$status"
+    apply_status "$item" "$status" "$number"
     ;;
   move)
     [ -n "$3" ] || { echo "usage: board.sh move <issue> <Status>" >&2; exit 1; }
-    set_status "$2" "$3"
+    item=$(item_for_issue "$2")
+    [ -n "$item" ] || { echo "issue #$2 is not on the board" >&2; exit 1; }
+    apply_status "$item" "$3" "$2"
     ;;
   *)
     sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'

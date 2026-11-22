@@ -2,6 +2,34 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Jumpstart: first working slice, and the unknowns turned into seams
+
+**Done**
+- Spring Boot 4.1.3 / Java 25 skeleton, WAR packaging, Maven, `h2` profile, H2 in `MODE=Oracle`.
+- `/dashboard` renders from real SQL: borrower, consortium, formatted limits, status badge,
+  empty state for an empty quarter, print stylesheet. Header/breadcrumb/footer fragments.
+- `IndianMoney` formats Indian grouping (`₹ 25,00,00,000.00`) — tested, 4 cases.
+- Bootstrap 5.3.3 vendored into `static/assets/vendor/bootstrap/` with its MIT licence. Zero
+  external requests; verified every asset returns 200 from the app.
+- Unknowns contained rather than guessed: threshold and current quarter are properties; the
+  repository is the single data seam.
+- Verified running: `/dashboard` 200 with 4 borrowers; `?quarter=Q1FY2526` shows the empty state;
+  the ₹4.5 crore sample row is filtered out by the threshold property; `mvn test` 4/4;
+  `check-guardrails.sh` ok.
+
+**Fixed while building (worth remembering)**
+- `${view.empty}` breaks — `empty` is a reserved EL word. Use `${empty view.rows}`.
+- An extra method on a record (`isEmptyResult()`) was not resolvable by EL; records are fine as
+  long as the view object carries only components.
+- `mvn spring-boot:run` alone served stale classes; `mvn compile` must run first.
+- Stale Jasper output is cleared by deleting `target/work`.
+
+**Not done / open**
+- No `uat`/Oracle profile yet (needs `ojdbc11` and bank credentials).
+- Annex II tables, entry form, maker–checker, scoring, export, Finacle adapter — all still to build;
+  sequence in `01_STATE/NEXT_STEPS.md`.
+- The six business questions remain open as issues #1–#6.
+
 ## 2026-11-22 — Board columns switched to Status; label drift removed
 
 **Done**

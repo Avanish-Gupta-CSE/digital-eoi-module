@@ -1,7 +1,7 @@
 # Digital EoI Module — START HERE
 
-> **Every agent (and every new session) reads this file first, then [`AGENT_RULES.md`](AGENT_RULES.md), then [`01_STATE/CURRENT_STATE.md`](01_STATE/CURRENT_STATE.md).**
-> This folder (`.brain/`) is the project's persistent memory. It is **git-ignored and never shipped** with a release. If it disagrees with the code, **the code wins**: fix the note.
+> **Every agent (and every new session) reads this file first, then [`AGENT_RULES.md`](AGENT_RULES.md), then [`01_STATE/RESUME_HERE.md`](01_STATE/RESUME_HERE.md), then [`01_STATE/CURRENT_STATE.md`](01_STATE/CURRENT_STATE.md).**
+> This folder (`.brain/`) is the project's persistent memory. It **is** committed to the repository, deliberately: it is how the next agent continues after a context window is exhausted, and how the knowledge survives a lost laptop. Because the repository is public, treat everything written here as public — no credentials, no real borrower data, no Finacle extracts. If it disagrees with the code, **the code wins**: fix the note.
 
 Last updated: 20 Nov 2026.
 
