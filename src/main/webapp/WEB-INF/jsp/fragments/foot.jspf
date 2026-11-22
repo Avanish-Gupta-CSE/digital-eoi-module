@@ -1,0 +1,10 @@
+<footer class="app-footer">
+    <div class="container d-flex justify-content-between">
+        <span>Digital EoI Module &middot; v0.1.0</span>
+        <span>Confidential &mdash; internal use only</span>
+    </div>
+</footer>
+<script src="/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+</body>
+</html>

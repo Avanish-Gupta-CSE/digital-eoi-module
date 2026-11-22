@@ -1,0 +1,176 @@
+/* UCO Bank palette: navy #003366. Bootstrap handles layout; this file handles identity. */
+
+:root {
+    --uco-navy: #003366;
+    --uco-navy-light: #0a4d8c;
+    --uco-text: #1f2933;
+    --uco-muted: #5b6770;
+    --uco-border: #d9dee3;
+}
+
+body {
+    background: #f4f6f8;
+    color: var(--uco-text);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.app-header {
+    background: var(--uco-navy);
+    color: #ffffff;
+    padding: 0.75rem 0;
+    border-bottom: 3px solid var(--uco-navy-light);
+}
+
+.app-brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.app-module {
+    margin-left: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.35);
+    font-size: 1rem;
+}
+
+.app-user {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.app-role {
+    font-weight: 600;
+}
+
+.app-sep {
+    margin: 0 0.4rem;
+}
+
+.app-env {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+}
+
+.page-subtitle {
+    color: var(--uco-muted);
+    margin-bottom: 0;
+}
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid var(--uco-border);
+    border-left: 4px solid var(--uco-navy);
+    border-radius: 4px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--uco-muted);
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.table {
+    background: #ffffff;
+    border: 1px solid var(--uco-border);
+}
+
+.table thead th {
+    background: #eef2f6;
+    color: var(--uco-navy);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--uco-border);
+    position: sticky;
+    top: 0;
+}
+
+.amount {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.badge-due {
+    background: #fff4d6;
+    color: #7a5300;
+    border: 1px solid #e6c96a;
+}
+
+.badge-submitted {
+    background: #e3f4ea;
+    color: #14603a;
+    border: 1px solid #8fcea9;
+}
+
+.badge-overdue {
+    background: #fde8e8;
+    color: #8c1d1d;
+    border: 1px solid #eba5a5;
+}
+
+.empty-state {
+    background: #ffffff;
+    border: 1px dashed var(--uco-border);
+    border-radius: 4px;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.empty-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.empty-text {
+    color: var(--uco-muted);
+    max-width: 46rem;
+    margin: 0 auto;
+}
+
+.app-footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--uco-border);
+    color: var(--uco-muted);
+    font-size: 0.8rem;
+}
+
+/* The prescribed EoI format is printed, so navigation and controls must disappear. */
+@media print {
+    .app-header,
+    .app-footer,
+    .breadcrumb,
+    .btn {
+        display: none;
+    }
+
+    body {
+        background: #ffffff;
+    }
+
+    .table {
+        border: 1px solid #000000;
+    }
+}

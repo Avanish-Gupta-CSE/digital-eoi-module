@@ -1,0 +1,13 @@
+<header class="app-header">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <span class="app-brand">UCO Bank</span>
+            <span class="app-module">Digital EoI</span>
+        </div>
+        <div class="app-user">
+            <span class="app-role">Credit Officer</span>
+            <span class="app-sep">&middot;</span>
+            <span class="app-env">DEV</span>
+        </div>
+    </div>
+</header>

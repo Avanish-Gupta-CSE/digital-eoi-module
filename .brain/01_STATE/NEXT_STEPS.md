@@ -1,8 +1,40 @@
 # NEXT_STEPS
 
-Last updated: 2026-11-21
+Last updated: 2026-11-22
 
-## Blocking questions — must be answered before any code is written
+## Status
+
+The build has started. A skeleton now runs (`/dashboard`, H2, 4 tests, CI green). The six questions
+below are **no longer a full block** — each one is contained behind a property or a not-yet-built
+layer, so work continues without guessing.
+
+| Question | Contained by | Unlocks when answered |
+|---|---|---|
+| #1 Finacle mechanism | `BorrowerRepository` is the only data source | the real adapter |
+| #2 v1 scope | only the dashboard exists today | which Annex II parts to build |
+| #3 Submission channel | nothing exports yet | the export/transmit design |
+| #4 Quarterly calendar | `eoi.current-quarter` property | the scheduler |
+| #5 ₹5 crore threshold | `eoi.borrower-threshold-amount` | confirming the population rule |
+| #6 Non-Finacle data | no manual-entry screens yet | Parts I/II entry screens |
+
+## Build sequence — what is unlocked now
+
+Each phase is one board card. Verify column states how to prove it.
+
+| # | Phase | Depends on | Verify |
+|---|---|---|---|
+| 0 | Skeleton, dashboard, money formatting, CI | nothing | **done** — `/dashboard` 200, 4 tests, guardrails green |
+| 1 | Annex II data model, Parts I–VI | #2 (shape only) | every Annex II cell maps to a column; schema runs on H2 |
+| 2 | Maker entry form for Parts I/II | phase 1 | bad input errors under the field; good input persists |
+| 3 | Maker–checker state machine + audit table | phases 1–2 | a maker cannot approve their own record |
+| 4 | Part VI scoring engine | phase 1 | one unit test per rubric row (BRD pp. 50–52) |
+| 5 | Report renderer (print/PDF) | phases 1–4 | side-by-side against BRD pp. 3–9 |
+| 6 | Finacle adapter | #1 | a mock and a live adapter behind one interface |
+| 7 | Quarterly scheduler + alerts | #4 | generation logged with user, timestamp, version |
+
+Phase 1 needs no business answer — Annex II's structure is fixed by the RBI direction. Start there.
+
+## The six questions, verbatim from the BRD
 
 1. **Finacle integration mechanism.** API / web service, direct DB extract, or file drop?
    This single answer determines the whole architecture (sync adapter vs batch ETL).
@@ -17,17 +49,8 @@ Last updated: 2026-11-21
 6. **Data not in Finacle.** Shareholding changes, net worth of directors, integrity of
    management, litigation — manual entry screens + maker-checker, or external sources?
 
-## Order of work once unblocked
-
-1. Data model for Annex II (Parts I–VI) → verify: every Annex II cell maps to a column/field.
-2. Part VI grading rules engine → verify: each rubric row (pp. 50–52) has a unit test.
-3. Maker–Checker state machine → verify: maker cannot approve own record.
-4. Quarterly scheduler + audit trail → verify: generation logged with user, timestamp, version.
-5. Report renderer matching the prescribed layout → verify: side-by-side vs BRD.pdf pages 3–9.
-
 ## Notes
-- All work now runs through the agent team in `.opencode/agents/` — talk to `manager`, not to
-  `build`. Do not paste the guardrails into a prompt; they load automatically.
+- All work runs through the agent team in `.opencode/agents/` — talk to `manager`.
 - Part V (currency positions) and Part IV (derivatives MTM) are the least likely data to exist
   cleanly in Finacle. Confirm with treasury before promising auto-population.
 - Page 6 of the BRD scan OCR'd poorly; re-read the original if Part V precision matters.
