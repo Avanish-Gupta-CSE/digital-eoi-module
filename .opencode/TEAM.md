@@ -185,14 +185,11 @@ Tools the agents actually use:
 | comment / link a PR | `gh issue comment <n> --body "PR #12"` |
 | close when merged | the PR body says `Closes #<n>` — merging closes it |
 
-One-time setup for the Project board view (needs the `project` scope):
+The Project board is **Digital EoI** — https://github.com/users/Avanish-Gupta-CSE/projects/2 — with a
+`Board` view holding all open issues. One setting cannot be applied through the API: in the Board
+view, choose **Group by → Labels**. Once. After that the five `status:` labels *are* the columns.
 
-```sh
-gh auth refresh -s project,read:project
-```
-
-After that, create the Project and set the board to **Group by: Labels** — two clicks in the UI, or
-`gh project create`. Issues and labels work with or without it.
+(The API exposes view layout and visible fields but not grouping, so this is a UI-only setting.)
 
 ## 7. Git and pull requests
 
