@@ -2,6 +2,35 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Repository made public; server-side branch protection enabled
+
+**Done**
+- Scanned tracked files for credentials before publishing: no keys, tokens, passwords, or private
+  keys; no PDFs or binaries tracked (the BRD scan stays git-ignored). 34 tracked files.
+- Flipped `Avanish-Gupta-CSE/digital-eoi-module` to public at the owner's instruction.
+- Enabled branch protection on `main`: pull request required, required status check `guardrails`,
+  administrators enforced, force-push and deletion blocked, zero required approvals so a single
+  person can still merge.
+- Published a doc correction through a PR, because `TEAM.md`, `CONTRIBUTING.md` and `README.md` still
+  claimed protection required GitHub Pro. The repo being public makes it available on the free plan.
+
+**Verified**
+- Agent layer: `git push origin main` returned `Blocked by configuration policy` before git ran.
+- Server layer: a direct write to `main` via the contents API returned
+  `409 — Changes must be made through a pull request. Required status check "guardrails" is expected`,
+  and the file did not appear (`404`).
+- CI ran on both the PR and the resulting `main` push; both green.
+
+**Findings**
+- `enforce_admins: true` plus `required_approving_review_count: 0` is the right combination for a
+  solo developer: the owner cannot bypass the PR and CI gate, but does not need a second approver.
+- Going public also means the six business-decision issues and the `.brain` notes are public. The
+  owner accepted this explicitly; no borrower data or Finacle extracts exist in the repository.
+
+**Not done / open**
+- GitHub Projects board still blocked: the `gh` token lacks `project` scope. Issues and labels work.
+- Still blocked on the six business questions, which are issues #1–#6.
+
 ## 2026-11-22 — Board moved to GitHub Issues + Projects; Vikunja retired
 
 **Done**
