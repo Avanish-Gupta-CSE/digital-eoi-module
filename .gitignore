@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+
+# logs and local state
+*.log
+*.db
+*.db-journal
+*.mv.db
+*.trace.db
+
+# build output
+target/
+build/
+out/
+dist/
+
+# IDE and editor
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# node — assets are vendored, never built
+node_modules/
+
+# Bank source documents stay out of distributed history.
+# The extracted regulatory text is versioned in .brain/01_Business_Requirement/*.md.
+# If the repository is ever hosted off-machine, this prevents a scanned bank letter
+# travelling with it. Re-include deliberately with: git add -f <file>
+.brain/01_Business_Requirement/*.pdf
+
+# local agent scratch
+.opencode/tmp/

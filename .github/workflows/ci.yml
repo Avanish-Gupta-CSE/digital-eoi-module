@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  guardrails:
+    name: guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check inline script and style
+        run: sh scripts/check-guardrails.sh
+
+  build:
+    name: build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: detect build
+        id: detect
+        run: |
+          if [ -f pom.xml ]; then echo "found=true" >> "$GITHUB_OUTPUT"; else echo "found=false" >> "$GITHUB_OUTPUT"; fi
+      - name: note
+        if: steps.detect.outputs.found == 'false'
+        run: echo "No pom.xml yet - nothing to build. This job becomes a real gate with the first commit that adds one."
+      - uses: actions/setup-java@v4
+        if: steps.detect.outputs.found == 'true'
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: mvn test
+        if: steps.detect.outputs.found == 'true'
+        run: mvn -q -B test
