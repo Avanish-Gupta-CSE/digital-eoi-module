@@ -179,3 +179,16 @@
 * **Consequences / Rationale:** Zero local footprint, native issue↔PR linking (`Closes #n`), and the board lives where the code lives. Cost: the board requires internet, and server-side protection needs Pro.
 * **Open:** the `gh` token needs `project,read:project` scope before the Project board view can be created; that is an interactive owner action.
 * **Status:** In Force.
+
+---
+
+### Decision 015: Public repository with server-side branch protection
+* **Date:** 2026-11-22
+* **Context:** Decision 014 recorded that branch protection needs GitHub Pro on private repos, leaving only the agent policy and a local hook. The owner instructed that the repository be made public, which makes protection available on the free plan.
+* **Decision:**
+  * `Avanish-Gupta-CSE/digital-eoi-module` is **public**. Publishing was gated on a secret scan of tracked files: no keys, tokens, passwords, private keys, PDFs or binaries. The BRD scan remains git-ignored.
+  * Branch protection on `main`: pull request required, required status check `guardrails`, `enforce_admins: true`, force-push and deletion blocked, `required_approving_review_count: 0`.
+  * Zero required approvals is deliberate: a solo developer must not be locked out, while admins are still bound by the PR and CI gate.
+  * The local `.githooks/pre-push` and the agent policy in `.opencode/opencode.json` remain as fast-fail layers, not as the primary control.
+* **Consequences / Rationale:** Direct writes to `main` are now impossible for everyone, including the owner and every agent. Verified by a 409 from the contents API and by a policy block on `git push`. Cost: the repository, its issues, and `.brain` notes are public; the owner accepted this and no borrower data or Finacle extracts exist in the repo.
+* **Status:** In Force.

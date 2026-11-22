@@ -143,18 +143,16 @@ The Go console shows allowance used per model.
 `status:backlog → status:design → status:in-progress → status:review → status:done`. A GitHub Project
 board groups by those labels; the issues and labels work with or without it.
 
-**Git:** `main` is protected by agent policy plus a local `.githooks/pre-push` hook. Branch → commit
-→ push → PR → green CI → TL merges. Full rules in `CONTRIBUTING.md`; PR checklist in
-`.github/PULL_REQUEST_TEMPLATE.md`; CI in `.github/workflows/ci.yml`.
+**Git:** `main` is protected on GitHub — pull request required, `guardrails` check required,
+administrators enforced, force-push and deletion blocked. A local `.githooks/pre-push` adds a fast
+error. Branch → commit → push → PR → green CI → TL merges. Full rules in `CONTRIBUTING.md`; PR
+checklist in `.github/PULL_REQUEST_TEMPLATE.md`; CI in `.github/workflows/ci.yml`.
 
 Install the hook once per clone:
 
 ```sh
 git config core.hooksPath .githooks
 ```
-
-GitHub's own branch protection needs Pro on private repos, so on the free plan the hook and the agent
-policy are the enforcement.
 
 ## Two things to know
 

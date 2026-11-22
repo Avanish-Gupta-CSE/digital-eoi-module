@@ -215,22 +215,25 @@ Enforced, not just agreed:
 
 | Rule | Enforced by |
 |---|---|
-| Nobody pushes to `main` or `master` | agent policy in `.opencode/opencode.json`, plus `.githooks/pre-push` for humans |
-| Nobody force-pushes | same policy |
+| Nobody pushes to `main` or `master` | **GitHub branch protection (server-side, admins included)** + agent policy + `.githooks/pre-push` |
+| No force-push, no branch deletion | GitHub branch protection |
+| CI must pass before merge | GitHub required check `guardrails` |
 | Only TL merges | builders have `gh pr merge` explicitly denied |
 | No review of your own work without saying so | TL prompt: verdict must open with `SELF-REVIEW` |
 | No inline script/style in a JSP | CI job `guardrails`, same script you can run locally |
 | No merge with failing tests | CI job `build and test`, once a `pom.xml` exists |
 
-Install the pre-push hook once per clone:
+Install the pre-push hook once per clone. It only exists to fail fast locally — the server is the real
+gate:
 
 ```sh
 git config core.hooksPath .githooks
 ```
 
-GitHub's server-side branch protection needs **GitHub Pro on private repos**, so on the free plan
-the hook plus agent policy are the enforcement. If the repo ever goes Pro, enable the rule in
-Settings → Branches as well.
+`main` is protected on GitHub with: pull request required, check `guardrails` required,
+administrators enforced, force-push and deletion blocked, zero required approvals (so one person can
+still work alone). Verified: a direct write to `main` returns `409 — Changes must be made through a
+pull request`.
 
 Full detail: `CONTRIBUTING.md`. The PR template asks for the person's name, the requirement id, the
 guardrail checklist and the real test output.
