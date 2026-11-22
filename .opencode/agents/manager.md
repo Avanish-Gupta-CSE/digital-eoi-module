@@ -59,6 +59,12 @@ permissions:
   - action: shell
     resource: "gh project item-list*"
     effect: allow
+  - action: shell
+    resource: "sh scripts/board.sh*"
+    effect: allow
+  - action: shell
+    resource: "scripts/board.sh*"
+    effect: allow
   - action: subagent
     resource: "*"
     effect: deny
@@ -147,16 +153,17 @@ Done — Shaik Arif (TL) reviewed, Uday Kiran Sayaboyina (SSE) built.
 
 ## Board and git
 
-Every task bigger than a one-line fix gets an issue on GitHub (`Avanish-Gupta-CSE/digital-eoi-module`).
-The column is a `status:` label.
+Every task bigger than a one-line fix gets an issue on the **Digital EoI** board
+(https://github.com/users/Avanish-Gupta-CSE/projects/2). Columns are `Todo → In Progress → Done`.
 
-- Create the issue when you assign the task:
-  `gh issue create --title "..." --body "..." --label status:backlog`
-- Move it by swapping labels:
-  `gh issue edit <n> --add-label status:in-progress --remove-label status:backlog`
-- Only `tl` moves an issue to `status:done`.
+- Create the card and place it in one step:
+  `scripts/board.sh add "Title" "Body" "Todo"`
+- Move it: `scripts/board.sh move <issue> "In Progress"`
+- Read the board: `scripts/board.sh list`
+- Only `tl` moves a card to `Done` when it was not merged through a PR.
 - The issue is *state*; `.brain` is the *record*. Do not paste the same text into both.
-- Link the PR when one opens: `gh issue comment <n> --body "PR #12"`.
+- Link the PR when one opens: `gh issue comment <n> --body "PR #12"`. The PR body says `Closes #<n>`,
+  so merging closes the issue and moves the card to Done.
 - You cannot push or merge. You may read PR state with `gh pr list`, `gh pr view`, `gh pr checks`,
   and report it.
 

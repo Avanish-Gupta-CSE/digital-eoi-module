@@ -150,46 +150,37 @@ When in doubt, say what outcome you want, not who should do it. Nagendra picks t
 
 ## 6. The board
 
-**GitHub Issues on `Avanish-Gupta-CSE/digital-eoi-module`**, with a Project board view. Every card is
-an issue; the column is a `status:` label on that issue.
+**Digital EoI** — https://github.com/users/Avanish-Gupta-CSE/projects/2 — a GitHub Project board
+linked to the repository. Every card is an issue; the column is the project's **Status** field.
 
-| Label | Means | Who applies it |
-|---|---|---|
-| `status:backlog` | decided, not started, or blocked on a decision | Nagendra |
-| `status:design` | Shaik is producing the file plan | Nagendra, on handoff |
-| `status:in-progress` | code is being written on a branch | the builder |
-| `status:review` | PR open, CI running, TL reading the diff | the builder |
-| `status:done` | merged, verified, `.brain` updated | Shaik (TL) only |
+```
+Todo  →  In Progress  →  Done
+```
 
-Why labels and not the Project's Status field: labels work from the plain `gh issue` commands, need
-no GraphQL node ids, and survive a Project being re-created. The Project board groups by them.
+Three columns, deliberately. Design and Review are visible from the PR that GitHub links onto the
+card (card #7 shows `PR #8`), so they do not need their own column.
 
 Rules:
 
-- Anything bigger than a one-line fix gets an issue. Typo-level work does not — it rides with the PR
-  that contains it.
+- Anything bigger than a one-line fix gets an issue. Typo-level work does not — it rides with the PR.
 - The issue is the *state*; `.brain` is the *record*. Do not repeat the same description in both.
-- Every issue in Review carries its branch name and PR link in a comment.
-- Only the Tech Lead moves an issue to `status:done`, after CI is green and the review has no
-  BLOCKER.
+- The PR body says `Closes #<n>`; merging closes the issue and GitHub moves the card to **Done**.
+- Only the Tech Lead moves a card to Done for work that was not merged through a PR.
 - Blocked issues keep the blocking question in the title — that is why the six business questions
-  are issues #1–#6.
+  are issues #1–#6, all sitting in Todo.
 
-Tools the agents actually use:
+One command for everything, so nobody touches GraphQL ids:
 
 | Need | Command |
 |---|---|
-| create a card | `gh issue create --title ... --body ... --label business-decision,blocked,status:backlog` |
-| read the board | `gh issue list --label status:in-progress` |
-| move a card | `gh issue edit <n> --add-label status:in-progress --remove-label status:design` |
-| comment / link a PR | `gh issue comment <n> --body "PR #12"` |
-| close when merged | the PR body says `Closes #<n>` — merging closes it |
+| see the board | `scripts/board.sh list` |
+| create a card | `scripts/board.sh add "Title" "Body" [Todo\|In Progress\|Done]` |
+| move a card | `scripts/board.sh move <issue> "In Progress"` |
+| link a PR | `gh issue comment <n> --body "PR #12"` |
+| close when merged | `Closes #<n>` in the PR body |
 
-The Project board is **Digital EoI** — https://github.com/users/Avanish-Gupta-CSE/projects/2 — with a
-`Board` view holding all open issues. One setting cannot be applied through the API: in the Board
-view, choose **Group by → Labels**. Once. After that the five `status:` labels *are* the columns.
-
-(The API exposes view layout and visible fields but not grouping, so this is a UI-only setting.)
+`Status` was chosen over grouping by labels because a label grouping creates a column for *every*
+label — `blocked` and `business-decision` would have become columns too.
 
 ## 7. Git and pull requests
 

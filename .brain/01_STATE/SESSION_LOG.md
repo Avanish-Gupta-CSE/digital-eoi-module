@@ -2,6 +2,34 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Board columns switched to Status; label drift removed
+
+**Done**
+- The project board was created, linked to the repo, and its default view converted to a Board
+  layout holding all seven issues.
+- Correction after looking at the live UI: columns come from the project's **Status** field
+  (`Todo → In Progress → Done`), not from labels. Grouping by labels would create a column for every
+  label, so `blocked` and `business-decision` would have become columns too.
+- Added `scripts/board.sh` (`list`, `add`, `move`) so agents never touch GraphQL ids:
+  `scripts/board.sh move 1 "In Progress"`. Verified by moving #1 to In Progress and back, and by
+  confirming a bad stage name is rejected.
+- Removed the five `status:*` labels from all issues and deleted their definitions, so there is one
+  state and not two. `blocked` and `business-decision` remain.
+- Updated `TEAM.md`, `README.md` and `manager.md`; the Manager may run `scripts/board.sh`.
+
+**Findings**
+- `gh project link` refuses user-owned projects ("has different owner from '@me'"); the
+  `linkProjectV2ToRepository` GraphQL mutation links them correctly.
+- Grouping ("Column by") is not exposed in the public GraphQL schema — only `layout` and
+  `visibleFieldIds` are. Layout is settable, grouping is not.
+- Closing an issue via a merged `Closes #n` moves its card to Done automatically, so the PR flow and
+  the board need no extra step.
+
+**Not done / open**
+- Design and Review are not columns; they are visible from the linked PR on each card. Accepted as a
+  deliberate simplification.
+- Still blocked on the six business questions, which are issues #1–#6 in Todo.
+
 ## 2026-11-22 — Repository made public; server-side branch protection enabled
 
 **Done**
