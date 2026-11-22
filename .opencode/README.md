@@ -137,6 +137,32 @@ The Go console shows allowance used per model.
 - No agent may add a dependency, a CDN link, or an internet font/image. That is a human decision.
 - Work is done when TL reviewed it and the build or test result is known — not when a subagent says so.
 
+## Board and git
+
+**Board:** local Vikunja v2.8.0 at `http://127.0.0.1:3456`, project *Digital EoI*, AGPL, single
+binary + SQLite, no Docker (Docker Desktop needs a paid licence at bank scale). Agents reach it
+through Vikunja's own MCP server (`/api/v2/mcp`), so there is no custom integration code to maintain.
+
+```
+Backlog → Design → In Progress → Review → Done
+```
+
+Only the Tech Lead moves a card to Done. Every card in Review carries its branch and PR link.
+Start it after a reboot with:
+
+```sh
+cd ~/vikunja && nohup ./vikunja web --config ~/vikunja/config.yml > vikunja.log 2>&1 &
+```
+
+Credentials: `~/vikunja/credentials.txt`. Agent API token: `~/vikunja/api-token.txt`, referenced only
+from the global OpenCode config, never from this repo.
+
+**Git:** `main` is protected by policy — no agent can push to it or force-push. Branch → commit →
+push → PR → green CI → TL merges. Full rules in `CONTRIBUTING.md`; PR checklist in
+`.github/PULL_REQUEST_TEMPLATE.md`; CI in `.github/workflows/ci.yml`.
+
+**Not done yet:** no remote exists, so PRs cannot be opened. Everything before that works locally.
+
 ## Two things to know
 
 **Paths are absolute.** `.opencode/opencode.json` points at the two guardrail files by full path,

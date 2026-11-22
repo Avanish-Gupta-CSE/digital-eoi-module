@@ -26,6 +26,15 @@ permissions:
   - action: shell
     resource: "ls *"
     effect: allow
+  - action: shell
+    resource: "gh pr list*"
+    effect: allow
+  - action: shell
+    resource: "gh pr view*"
+    effect: allow
+  - action: shell
+    resource: "gh pr checks*"
+    effect: allow
   - action: subagent
     resource: "*"
     effect: deny
@@ -111,6 +120,18 @@ Done — Shaik Arif (TL) reviewed, Uday Kiran Sayaboyina (SSE) built.
    work the same feature concurrently — backend and view — but never the same file.
 7. **Stop and ask** if: a dependency is needed, a bank rule is unclear, the data model would change,
    or the work would break a guardrail limit.
+
+## Board and git
+
+Every task bigger than a one-line fix gets a card on the local Vikunja board (project **Digital
+EoI**, `http://127.0.0.1:3456`). Use the `vikunja` MCP tools.
+
+- Create the card when you assign the task. Move it to **In Progress** when a builder starts,
+  **Review** when the PR opens. Only `tl` moves a card to **Done**.
+- The card description carries the requirement id, the owner, the branch and the PR link.
+- The card is *state*; `.brain` is the *record*. Do not paste the same text into both.
+- You cannot push or merge. You may read PR state with `gh pr list`, `gh pr view`, `gh pr checks`,
+  and report it.
 
 ## Reporting to the owner
 

@@ -2,6 +2,51 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-22 — Git repository, PR discipline, and a local scrum board
+
+**Done**
+- `git init` on `main`, first commit `chore(repo): initialise repository with team config and
+  guardrails` (33 files). The BRD scan is deliberately excluded via `.gitignore` so a bank document
+  cannot travel with a future remote; the extracted RBI text stays versioned.
+- `CONTRIBUTING.md`: branch model (`feature/`, `fix/`, `chore/`), commit convention, four merge
+  conditions, who may merge, recovery rules.
+- `.github/PULL_REQUEST_TEMPLATE.md`: person, requirement id, guardrail checklist, real test output,
+  data confirmation.
+- `.github/workflows/ci.yml` + `scripts/check-guardrails.sh`: CI runs the inline-script/style check
+  immediately and `mvn test` once a `pom.xml` exists.
+- Enforcement: project policies deny `git push` to `main`/`master` and any `--force`/`-f` push for
+  every agent. Builders have `gh pr merge` and `gh pr review` explicitly denied; the Tech Lead can
+  push, open PRs, review and squash-merge; the Manager can only read PR state.
+- Board: **Vikunja v2.8.0**, native arm64 binary in `~/vikunja`, SQLite, bound to 127.0.0.1:3456,
+  no Docker. Project "Digital EoI" with Buckets `Backlog → Design → In Progress → Review → Done`,
+  and the six blocking business questions seeded as cards in Backlog.
+- Integration: Vikunja ships its own MCP server at `/api/v2/mcp`; connected through the global
+  OpenCode config with a scoped API token. Verified in-session: `projects_list` and `tasks_list`
+  return the board, and all six cards sit in the Backlog bucket.
+- Docs: `TEAM.md` gained "The board" and "Git and pull requests"; `manager.md` gained board/git
+  discipline; `README.md` gained a board/git section.
+
+**Findings**
+- Taiga's original repo now redirects to `kaleidos-ventures/taiga` with no pushes since 2023-12-13 —
+  not viable for a pilot that must survive offline. Focalboard also redirects. Vikunja (6.1k stars,
+  active) and Plane (62.9k, heavy: Postgres + Redis + MinIO) were the real contenders; Vikunja won
+  on footprint and on having a first-party MCP server.
+- Docker Desktop requires a paid commercial licence for organisations of UCO Bank's size, and its
+  daemon was not running. The native binary avoids both the licence question and the daemon.
+- `{env:VAR}` in MCP headers is not reliable here: the shared background service does not inherit a
+  shell export, and this build has no `opencode service set env`. The token therefore lives in the
+  global config (mode 600) and never in the repository.
+- Vikunja's API-token permissions must use the action names from `/api/v1/routes`, and `expires_at`
+  is mandatory. MCP also needs the `mcp: access` permission, which is not part of the default set.
+- The generic `/projects/{id}/tasks` list reports `bucket_id: 0` even when a card is placed; the
+  view-scoped `/api/v2/projects/{p}/views/{v}/buckets/tasks` is the accurate read.
+
+**Not done / open**
+- No git remote. PR creation, branch protection and CI cannot be exercised until a remote exists —
+  this is an owner decision because it determines where bank source code is stored.
+- Vikunja is started by hand; no launchd agent yet.
+- Still blocked on the six business questions, which are now also the board's backlog.
+
 ## 2026-11-22 — Named the team and added the second senior engineer
 
 **Done**

@@ -29,6 +29,27 @@ permissions:
   - action: shell
     resource: "./mvnw*"
     effect: allow
+  - action: shell
+    resource: "git add*"
+    effect: allow
+  - action: shell
+    resource: "git commit*"
+    effect: allow
+  - action: shell
+    resource: "git switch*"
+    effect: allow
+  - action: shell
+    resource: "git checkout*"
+    effect: allow
+  - action: shell
+    resource: "git push*"
+    effect: allow
+  - action: shell
+    resource: "gh pr*"
+    effect: allow
+  - action: shell
+    resource: "sh scripts/check-guardrails.sh"
+    effect: allow
   - action: subagent
     resource: "*"
     effect: deny

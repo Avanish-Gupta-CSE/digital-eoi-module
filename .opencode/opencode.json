@@ -4,5 +4,27 @@
   "instructions": [
     "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/minimal-code.md",
     "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/ui-ux.md"
+  ],
+  "policies": [
+    {
+      "action": "tool.use",
+      "resource": "shell:git push* main*",
+      "effect": "deny"
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:git push* master*",
+      "effect": "deny"
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:git push* --force*",
+      "effect": "deny"
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:git push* -f*",
+      "effect": "deny"
+    }
   ]
 }

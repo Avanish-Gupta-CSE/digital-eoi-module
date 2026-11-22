@@ -15,7 +15,10 @@ permissions:
     resource: "rm -rf *"
     effect: deny
   - action: shell
-    resource: "git push*"
+    resource: "gh pr merge*"
+    effect: deny
+  - action: shell
+    resource: "gh pr review*"
     effect: deny
   - action: shell
     resource: "git reset --hard*"

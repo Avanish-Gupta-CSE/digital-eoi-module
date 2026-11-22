@@ -148,7 +148,78 @@ When in doubt, say what outcome you want, not who should do it. Nagendra picks t
 
 ---
 
-## 6. What "done" means
+## 6. The board
+
+Local Vikunja at **http://127.0.0.1:3456** → project **Digital EoI**. AGPL, single binary, SQLite,
+no Docker, no licence. The agents reach it through its built-in MCP server, so they create and move
+cards natively.
+
+Columns and what each one means:
+
+| Column | Means | Who moves it here |
+|---|---|---|
+| **Backlog** | decided, not started, or blocked on a decision | Nagendra |
+| **Design** | Shaik is producing the file plan | Nagendra, on handoff |
+| **In Progress** | code is being written on a branch | the builder |
+| **Review** | PR open, CI running, TL reading the diff | the builder |
+| **Done** | merged, verified, `.brain` updated | Shaik (TL) only |
+
+Rules:
+
+- Anything bigger than a one-line fix gets a card. Typo-level work does not — it rides with the PR
+  that contains it.
+- The card is the *state*; `.brain` is the *record*. Do not repeat the same description in both.
+- Every card in Review carries its branch name and PR link in the description.
+- A card may only be moved to Done by the Tech Lead, after CI is green and the review has no BLOCKER.
+- Blocked cards stay in Backlog with the blocking question in the title — that is why the six
+  business questions are the first cards on the board.
+
+Setup, if the machine restarts:
+
+```sh
+cd ~/vikunja && nohup ./vikunja web --config ~/vikunja/config.yml > vikunja.log 2>&1 &
+open http://127.0.0.1:3456
+```
+
+Login is in `~/vikunja/credentials.txt` (mode 600). The agent API token is in
+`~/vikunja/api-token.txt` and is referenced only from the global OpenCode config — never from this
+repository.
+
+## 7. Git and pull requests
+
+The repository is a normal git repo on `main`. Agents work exactly like a disciplined team:
+
+```
+1. git switch main && git pull
+2. git switch -c feature/<slug>
+3. edit, test, commit            feat(dashboard): add quarterly due card
+4. git push -u origin feature/<slug>
+5. gh pr create --fill            ← PR opens, CI starts
+6. card moves to Review
+7. TL reviews the diff, CI must be green
+8. gh pr merge --squash           ← TL or you
+9. card moves to Done, .brain updated
+```
+
+Enforced, not just agreed:
+
+| Rule | Enforced by |
+|---|---|
+| Nobody pushes to `main` or `master` | policy in `.opencode/opencode.json` — fails with "Blocked by configuration policy" |
+| Nobody force-pushes | same policy |
+| Only TL merges | builders have `gh pr merge` explicitly denied |
+| No review of your own work without saying so | TL prompt: verdict must open with `SELF-REVIEW` |
+| No inline script/style in a JSP | CI job `guardrails`, same script you can run locally |
+| No merge with failing tests | CI job `build and test`, once a `pom.xml` exists |
+
+Full detail: `CONTRIBUTING.md`. The PR template asks for the person's name, the requirement id, the
+guardrail checklist and the real test output.
+
+What is **not** set up yet: there is no remote. Until a GitHub or Gitea remote exists, steps 4–8
+cannot run — everything before that (branching, committing, the board, the review discipline)
+already works locally.
+
+## 8. What "done" means
 
 A task is done when all four are true:
 
@@ -161,7 +232,7 @@ Not done: "the agent said it finished". Never accept that from anyone, including
 
 ---
 
-## 7. When something goes wrong
+## 9. When something goes wrong
 
 | Symptom | What Nagendra does |
 |---|---|
@@ -174,7 +245,7 @@ Not done: "the agent said it finished". Never accept that from anyone, including
 
 ---
 
-## 8. Your side of the deal
+## 10. Your side of the deal
 
 The team handles code, tests, wording and review. These stay with you:
 

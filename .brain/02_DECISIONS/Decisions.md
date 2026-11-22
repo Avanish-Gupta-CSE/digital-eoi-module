@@ -149,3 +149,18 @@
   * Shaik Arif keeps two seats: `tl` (design and review, `edit` denied) and `sse2` (build, full access). Two seats keep review from becoming self-review. A verdict on his own build must open with `SELF-REVIEW`, and the Manager requests a peer opinion from `sse`/`sse-b` for anything touching money, scoring, or approval.
 * **Consequences / Rationale:** The owner can say "ask Krishna" or "get Shaik to review" and routing still works through the Manager. The two-SSE split doubles throughput on a feature without file collisions. Cost of the split: two prompts to keep in sync, and an explicit file-ownership rule that must be enforced by the Manager.
 * **Status:** In Force. Intent documented in `.opencode/TEAM.md`; not yet exercised on a real feature.
+
+---
+
+### Decision 013: Local Vikunja board and a PR-gated git workflow
+* **Date:** 2026-11-22
+* **Context:** The owner asked for an open-source scrum board integrated with the agent team and with git, so the agents behave like an enterprise team: branch, PR, review, merge.
+* **Decision:**
+  * Repository initialised on `main` with `CONTRIBUTING.md` defining the branch model, commit convention and merge conditions. CI (`guardrails` + `mvn test` once a `pom.xml` exists) gates every PR.
+  * Enforcement is structural: project policies deny every agent `git push` to `main`/`master` and any force push; builders are denied `gh pr merge` and `gh pr review`; only the Tech Lead may push branches, open PRs, review and squash-merge; the Manager may only read PR state.
+  * Board: **Vikunja v2.8.0** (AGPL), native arm64 binary, SQLite, bound to `127.0.0.1:3456`, no Docker. Project "Digital EoI" with `Backlog → Design → In Progress → Review → Done`. Integration uses Vikunja's first-party MCP server at `/api/v2/mcp`, so no custom integration code exists.
+  * Rejected: Taiga (upstream dormant since 2023), Focalboard (redirects), Plane (Postgres + Redis + MinIO; too heavy for one laptop), Kanboard (kanban only, JSON-RPC, no first-party MCP). Rejected Docker Desktop on licence grounds.
+  * Secrets: the agent API token lives in the global OpenCode config (mode 600) and `~/vikunja/api-token.txt` (mode 600). It is never written into this repository. The BRD scan is git-ignored so a bank document cannot travel with a remote.
+* **Consequences / Rationale:** The board is state, `.brain` is the record. Cards and PRs give the owner visibility without reading code, and the merge rules are enforced by configuration rather than convention. The MCP path avoids maintaining a bespoke CLI.
+* **Open:** no git remote, so PR and merge steps are untested end to end; hosting bank source code is an owner decision.
+* **Status:** In Force — board verified working; PR flow verified only up to local commit.
