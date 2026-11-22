@@ -50,6 +50,7 @@ public class BorrowerService {
 
     private BorrowerRow toRow(Borrower borrower) {
         return new BorrowerRow(
+                initialsOf(borrower.borrowerName()),
                 borrower.borrowerName(),
                 borrower.consortiumName(),
                 IndianMoney.format(borrower.sanctionedLimit()),
@@ -58,11 +59,18 @@ public class BorrowerService {
                 statusClass(borrower.status()));
     }
 
+    private String initialsOf(String name) {
+        String[] words = name.trim().split("\\s+");
+        String first = words[0].substring(0, 1);
+        String second = words.length > 1 ? words[1].substring(0, 1) : "";
+        return (first + second).toUpperCase();
+    }
+
     private String statusClass(String status) {
         return switch (status) {
-            case "SUBMITTED" -> "badge-submitted";
-            case "OVERDUE" -> "badge-overdue";
-            default -> "badge-due";
+            case "SUBMITTED" -> "status-submitted";
+            case "OVERDUE" -> "status-overdue";
+            default -> "status-due";
         };
     }
 }

@@ -1,0 +1,51 @@
+<%-- KPI row for the dashboard. Included by dashboard.jsp; expects ${view}. --%>
+<section class="kpi-grid" aria-label="Summary for ${view.quarter}">
+    <div class="kpi">
+        <span class="kpi-icon is-total" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+        </span>
+        <span class="kpi-body">
+            <span class="kpi-value">${view.total}</span>
+            <span class="kpi-label">Borrowers</span>
+        </span>
+    </div>
+    <div class="kpi">
+        <span class="kpi-icon is-due" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+        </span>
+        <span class="kpi-body">
+            <span class="kpi-value">${view.dueCount}</span>
+            <span class="kpi-label">Due</span>
+        </span>
+    </div>
+    <div class="kpi">
+        <span class="kpi-icon is-submitted" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6 9 17l-5-5"/>
+            </svg>
+        </span>
+        <span class="kpi-body">
+            <span class="kpi-value">${view.submittedCount}</span>
+            <span class="kpi-label">Submitted</span>
+        </span>
+    </div>
+    <div class="kpi">
+        <span class="kpi-icon is-overdue" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/>
+            </svg>
+        </span>
+        <span class="kpi-body">
+            <span class="kpi-value">${view.overdueCount}</span>
+            <span class="kpi-label">Overdue</span>
+        </span>
+    </div>
+</section>

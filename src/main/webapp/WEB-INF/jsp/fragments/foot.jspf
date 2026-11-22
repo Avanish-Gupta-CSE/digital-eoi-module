@@ -1,6 +1,6 @@
 <footer class="app-footer">
-    <div class="container d-flex justify-content-between">
-        <span>Digital EoI Module &middot; v0.1.0</span>
+    <div class="app-footer-inner">
+        <span>Digital EoI Module &middot; v0.1.0 &middot; RBI Paras 127&ndash;128</span>
         <span>Confidential &mdash; internal use only</span>
     </div>
 </footer>

@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#002b52">
     <title>Digital EoI &mdash; UCO Bank</title>
     <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
