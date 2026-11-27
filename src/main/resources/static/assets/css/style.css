@@ -782,3 +782,70 @@ a.borrower-name:hover {
     color: var(--navy-600);
     text-decoration: underline;
 }
+
+/* ---------- Annex II entry form ---------- */
+
+/* The one primary action of the screen: save the draft. */
+.btn-bank-primary {
+    background: var(--navy);
+    border: 1px solid var(--navy);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 1rem;
+    min-height: 44px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-bank-primary:hover,
+.btn-bank-primary:focus {
+    background: var(--navy-600);
+    border-color: var(--navy-600);
+    color: #fff;
+}
+
+.btn-bank-primary:focus-visible {
+    outline: 3px solid rgba(10, 74, 128, 0.35);
+    outline-offset: 2px;
+}
+
+.entry-card {
+    padding: 1.25rem 1.35rem 1.35rem;
+}
+
+.entry-required {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0 0 1rem;
+}
+
+.entry-part {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 1.1rem 1.1rem;
+    margin: 0 0 1.1rem;
+}
+
+.entry-part legend {
+    float: none;
+    width: auto;
+    padding: 0 0.45rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.entry-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+}

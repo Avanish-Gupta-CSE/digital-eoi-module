@@ -12,33 +12,21 @@
             <p class="page-subtitle">Quarter ${view.quarter} &middot; ${view.borrower.consortiumName}</p>
         </div>
         <div class="page-actions">
+            <a class="btn btn-primary btn-bank-primary" href="/reports/${view.reportId()}/edit">Edit Annex II</a>
+            <a class="btn-print" href="/reports/${view.reportId()}/export.csv">Export CSV</a>
             <a class="btn-print" href="/dashboard">Back to dashboard</a>
             <button type="button" id="print-button" class="btn-print">Print</button>
         </div>
     </div>
 
-    <p class="report-status-line">
-        <c:choose>
-            <c:when test="${view.status == 'APPROVED'}">
-                <span class="status-pill status-approved">${view.status}</span>
-            </c:when>
-            <c:when test="${view.status == 'SUBMITTED'}">
-                <span class="status-pill status-submitted">${view.status}</span>
-            </c:when>
-            <c:when test="${view.status == 'RETURNED'}">
-                <span class="status-pill status-returned">${view.status}</span>
-            </c:when>
-            <c:when test="${view.status == 'DUE'}">
-                <span class="status-pill status-due">${view.status}</span>
-            </c:when>
-            <c:when test="${view.status == 'OVERDUE'}">
-                <span class="status-pill status-overdue">${view.status}</span>
-            </c:when>
-            <c:otherwise>
-                <span class="status-pill status-draft">${view.status}</span>
-            </c:otherwise>
-        </c:choose>
-    </p>
+    <c:if test="${param.saved == '1'}">
+        <div class="alert alert-success alert-dismissible fade show" role="status" data-auto-fade>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            Annex II for ${view.quarter} saved.
+        </div>
+    </c:if>
+
+    <%@ include file="fragments/report-status.jspf" %>
 
     <%@ include file="fragments/report-part1-3.jspf" %>
     <%@ include file="fragments/report-part4-6.jspf" %>
