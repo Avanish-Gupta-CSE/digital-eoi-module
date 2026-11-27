@@ -15,6 +15,10 @@
   CSS appended only; no existing rule touched.
 - Fixed a defect the view agent reported on itself: `report.jsp` duplicated the document wrapper
   that `head.jspf` already provides. Removed; `DOCTYPE` count is 0 and `head.jspf` is included once.
+- Review caught a second, related defect the checklist missed: `report.jsp` also emitted its own
+  trailing `</body></html>` **after** `foot.jspf`, which already closes both. Invalid HTML, and it
+  contradicted the line above. Removed; the page now ends at the `foot.jspf` include, matching
+  `dashboard.jsp`.
 
 **Deliberate omissions on the printed form**
 - No "(Rs. in crore)" heading on Parts III/IV: the figures are rupees, so that heading would be a
