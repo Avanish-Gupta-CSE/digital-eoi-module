@@ -46,5 +46,3 @@
 </main>
 
 <%@ include file="fragments/foot.jspf" %>
-</body>
-</html>
