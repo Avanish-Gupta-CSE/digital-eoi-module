@@ -2,6 +2,105 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-27 — PR 1 (Slice 1): Split `eoi_derivative` NPA & restructured columns + Decision 017
+
+**Done**
+- `sse2` split `eoi_derivative.npa_restructured_amount` into `npa_amount` and `restructured_notional_amount`
+  in `schema-annexii-exposure.sql`, `h2-init.sql`, and `SchemaTest.java` (matching `RBI/DOR/2025-26/159` p. 48).
+- Updated `AnnexII_Schema_Design.md` §3 and resolved `Decisions.md` provenance note.
+
+**Verified**
+- `mvn -o test`: 7/7 passing (`IndianMoneyTest` 4, `SchemaTest` 3); `sh scripts/check-guardrails.sh`: `guardrails: ok`.
+
+## 2026-11-27 — Krishna wrote REQ-002 (Annex II entry) and REQ-003 (maker–checker)
+
+**Done**
+- `Requirements.md` grew by 107 lines: two stories with acceptance criteria and exact screen wording.
+- REQ-002 covers all six parts on one entry screen, and carries Decision 017's temporary assumptions
+  inline — mock `FinacleDataSource`, Parts I–VI only, quarter/threshold as properties, advisory Part VI
+  scoring, eight-column Part IV.
+- REQ-003 covers submit/approve/return, who-sees-what, and the uneditable history, citing Para 128(2)
+  and 128(5).
+
+**Decisions taken on his two flags**
+- **REQ-001 stays unused and is now documented as such.** The dashboard was built and merged before
+  stories were written; it takes REQ-001 when written. Renumbering was rejected because a later
+  REQ-001 could collide.
+- **REQ-002 stays one story** (one screen, part tabs). Splitting into six is a bank decision about
+  per-part submission, not a technical one — recorded in the file so it is not re-litigated silently.
+
+**Not done / open**
+- These are specifications for slices *after* Slice 1; no code was written from them.
+- Slice 1 PR 1 (Part IV split) is in flight with `se`.
+
+## 2026-11-27 — Slice 1 blocked by session permissions; Decision 017 recorded
+
+**Done**
+- Recorded **Decision 017** (temporary assumptions for #1–#6, Part IV split into `npa_amount` +
+  `restructured_notional_amount`, NPA override mandatory, no new Maven dependency).
+- Mapped this session's permission boundary instead of guessing:
+  * `.brain/**` edit — **allowed** (Decisions.md and this log written)
+  * application code edit — **denied** (`Permission denied: edit` on `schema-annexii-exposure.sql`)
+  * shell — only `git status`, `git diff`, `git log`, `ls`. `mvn`, `git switch` denied.
+  * subagents — **denied** (`Permission denied: subagent`), so the PO→TL→SSE chain cannot run.
+- Left the pre-existing uncommitted `.brain/01_STATE/*` edits untouched and preserved.
+
+**Finding — unresolved contradiction in our own notes**
+Two 2026-11-27 entries in this log disagree about `RBI_Circular.pdf`:
+- one says it is `RBI/DOR/2025-26/159` (Commercial Banks, 57 pp.) and records the Part IV 8-column split;
+- the next says it is `RBI/DOR/2025-26/277` (Urban Co-operative Banks, 95 pp.) with Annex II/III deleted.
+The file is 398,222 bytes. The two notes cannot both be true. The 8-column split is adopted on the
+owner's instruction and is safe either way (both columns nullable and additive), but **the circular's
+identity must be confirmed before any Annex II figure is quoted to the bank**. This model cannot read
+PDF input and shell is restricted, so the check could not be completed here.
+
+**Not done / open — Slice 1, ready to execute unchanged once permissions return**
+1. Branch (preserving the `.brain/01_STATE/*` edits) and commit Decision 017.
+2. `eoi_derivative`: split `npa_restructured_amount` → `npa_amount` + `restructured_notional_amount`
+   in `schema-annexii-exposure.sql`, `h2-init.sql`, `SchemaTest`.
+3. Read-only `/reports/{id}`: all six parts, Part V nets computed in Java, print stylesheet,
+   dashboard rows linked to it.
+4. `tl` review, `mvn -q test`, `check-guardrails.sh`, PR, CI `guardrails`, squash-merge.
+
+**To unblock:** run this session under an agent with code edit + shell + subagent rights
+(`manager` with subagents, or `sse2`). Nothing else is required — the plan above is complete.
+
+## 2026-11-27 — Re-read updated `RBI_Circular.pdf` (`RBI/DOR/2025-26/159`); closed scan gaps & caught Part IV 8-column split
+
+**Done**
+- Extracted all 57 pages of the updated `.brain/01_Business_Requirement/RBI_Circular.pdf` via `pypdf`.
+- Confirmed it is `RBI/DOR/2025-26/159` (`DOR.STR.REC.No.78/21.04.048/2025-26`, Nov 28, 2025, updated Oct 1, 2026).
+
+**Findings**
+- **Scan/OCR gaps closed directly from the official PDF:**
+  - G17 & G18 (Part IV Section B): B.1 Interest-rate only, B.2 Other contracts incl. FX derivatives, B.3 Any other contracts.
+  - G21 & G22 (Part V): `(Rs. in crore)` sits at the Part V header level (applies to the whole section).
+  - G24, G25, G26 (Part VI pp. 50–51): `Above 6 times` / `Above 4 times`, full `> 90 days` NPA-regularized clause, and Section V (`Adequate systems are in place` / `...but not adhered` / `...not in place`).
+  - G28 (Part VI p. 52): `Expertise Competence / Commitments` = `Professional & visionary` | `Have necessary experience` | `-do-`; `Tract Record` = `Timely` | `Executions /` (truncated in RBI's own PDF!) | `-do-`.
+- **Schema catch on Part IV (p. 48):** Part IV has **8 columns** (`Amount of contracts classified as NPA` and `Notional Amount of outstanding contracts which have been restructured` are two separate columns, not one). `eoi_derivative.npa_restructured_amount` in `src/main/resources/db/schema-annexii-exposure.sql` should be split before Part IV UI/export.
+
+## 2026-11-27 — Reviewed `RBI_Circular.pdf` vs `.brain` context and prepared team gap list + build plan
+
+**Done**
+- Re-read `.brain` state (`CURRENT_STATE.md`, `NEXT_STEPS.md`, `RESUME_HERE.md`, `SESSION_LOG.md`,
+  `RBI_PARA_127_128.md`, `AnnexII_Field_Inventory.md`, `AnnexII_Schema_Design.md`, `Change_Map.md`,
+  `Decisions.md`) and inspected the latest repository tree (`020780e`, PR `#17` dashboard UI rebuild).
+- Extracted and searched all 95 pages of `.brain/01_Business_Requirement/RBI_Circular.pdf` via `pypdf`.
+
+**Findings**
+- **`RBI_Circular.pdf` is the wrong RBI circular for this project.** It is `RBI/DOR/2025-26/277`
+  (`DOR.CRE.REC.196/07-01-005/2025-26`, *Urban Co-operative Banks – Credit Facilities Directions, 2025*,
+  updated Oct 1, 2026). Its Paras 127–128 cover UCB housing repair loans (₹10L/₹6L), and its
+  Annex II/III are marked deleted (`12[*****]`, `13[*****]`).
+- The actual governing circular cited by UCO Bank's BRD is `RBI/DOR/2025-26/159`
+  (*Commercial Banks – Transfer and Distribution of Credit Risk Directions, 2025*, dated 28-11-2025),
+  already verified and documented in `.brain/01_Business_Requirement/RBI_PARA_127_128.md`.
+
+**Not done / open**
+- No application code modified; waiting on owner review of the consolidated plan and bank-team
+  clarification list.
+- Remember to commit `.brain/01_STATE/*` updates via a feature/chore branch PR (since `main` is protected).
+
 ## 2026-11-22 — Annex II data model (11 tables) built and proven on H2
 
 **Done**

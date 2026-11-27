@@ -64,7 +64,7 @@ facility_date DATE Y · sanctioned_amount NUMERIC(18,2) Y · outstanding_amount 
 
 **eoi_derivative** — id PK · report_id FK · serial_no NUMERIC(9,0) Y (G19) · nature VARCHAR(100) N
 (G17, G18) · notional_amount NUMERIC(18,2) Y · weighted_avg_maturity NUMERIC(18,4) Y (G20) ·
-positive_mtm NUMERIC(18,2) Y · npa_restructured_amount NUMERIC(18,2) Y · restructuring_reasons
+positive_mtm NUMERIC(18,2) Y · npa_amount NUMERIC(18,2) Y · restructured_notional_amount NUMERIC(18,2) Y · restructuring_reasons
 VARCHAR(500) Y
 
 **eoi_currency_position** — id PK · report_id FK · currency VARCHAR(10) N (G23) · short_long

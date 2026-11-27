@@ -1,12 +1,20 @@
 # NEXT_STEPS
 
-Last updated: 2026-11-22
+Last updated: 2026-11-27
 
 ## Status
 
-The build has started. A skeleton now runs (`/dashboard`, H2, 4 tests, CI green). The six questions
+The build has started. A skeleton now runs (`/dashboard` rebuilt in `#17` with KPI cards, search,
+and status filters; 11 Annex II tables on H2; 6 tests; CI green). The six business questions
 below are **no longer a full block** — each one is contained behind a property or a not-yet-built
 layer, so work continues without guessing.
+
+> **RBI Circular verified (2026-11-27):** `.brain/01_Business_Requirement/RBI_Circular.pdf` is now
+> the correct 57-page `RBI/DOR/2025-26/159` (*Commercial Banks – Transfer and Distribution of Credit Risk
+> Directions, 2025*). This closes several BRD scan gaps (G17, G18, G21, G22, G24, G25, G26, and most of G28)
+> and reveals that **Part IV has 8 columns** (not 7): `Amount of contracts classified as NPA` and
+> `Notional Amount of outstanding contracts which have been restructured` are two separate columns —
+> **split done in PR 1 of Slice 1**: `eoi_derivative` now has `npa_amount` + `restructured_notional_amount`.
 
 | Question | Contained by | Unlocks when answered |
 |---|---|---|
