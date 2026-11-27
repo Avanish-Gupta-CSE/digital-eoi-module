@@ -1,0 +1,24 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<p class="report-status-line">
+    <c:choose>
+        <c:when test="${view.status() == 'APPROVED'}">
+            <span class="status-pill status-approved">${view.status()}</span>
+        </c:when>
+        <c:when test="${view.status() == 'SUBMITTED'}">
+            <span class="status-pill status-submitted">${view.status()}</span>
+        </c:when>
+        <c:when test="${view.status() == 'RETURNED'}">
+            <span class="status-pill status-returned">${view.status()}</span>
+        </c:when>
+        <c:when test="${view.status() == 'DUE'}">
+            <span class="status-pill status-due">${view.status()}</span>
+        </c:when>
+        <c:when test="${view.status() == 'OVERDUE'}">
+            <span class="status-pill status-overdue">${view.status()}</span>
+        </c:when>
+        <c:otherwise>
+            <span class="status-pill status-draft">${view.status()}</span>
+        </c:otherwise>
+    </c:choose>
+</p>
