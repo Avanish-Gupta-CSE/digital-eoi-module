@@ -50,6 +50,7 @@ public class BorrowerService {
 
     private BorrowerRow toRow(Borrower borrower) {
         return new BorrowerRow(
+                borrower.reportId(),
                 initialsOf(borrower.borrowerName()),
                 borrower.borrowerName(),
                 borrower.consortiumName(),

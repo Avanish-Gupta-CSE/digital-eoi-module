@@ -7,6 +7,7 @@ Keep this table current. A beginner must be able to find the file for a label ch
 | Screen | URL | Controller | Service | Repository | View | JS |
 |---|---|---|---|---|---|---|
 | Quarterly dashboard | `/dashboard` | `web/DashboardController#dashboard` | `borrower/BorrowerService#dashboard` | `borrower/BorrowerRepository#findByQuarter` | `WEB-INF/jsp/dashboard.jsp` | `assets/js/dashboard.js` |
+| Annex II report (read-only) | `/reports/{id}` | `report/ReportController#report` | `report/ReportService#report` | `report/ReportRepository` | `WEB-INF/jsp/report.jsp` + `fragments/report-part1-3.jspf`, `report-part4-6.jspf` | `assets/js/dashboard.js` (print binding only) |
 
 ## Shared pieces
 

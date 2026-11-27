@@ -1,0 +1,149 @@
+<section class="report-part">
+    <h2 class="report-heading">Part I &mdash; Bio Data of the Company</h2>
+
+    <dl class="report-list">
+        <dt>Borrowing party&rsquo;s name</dt>
+        <dd>${view.borrower.name}</dd>
+        <dt>Address</dt>
+        <dd>${view.borrower.address}</dd>
+        <dt>Constitution</dt>
+        <dd>${view.borrower.constitution}</dd>
+        <dt>Business activity &mdash; Main</dt>
+        <dd>${view.borrower.mainActivity}</dd>
+        <dt>Group affiliation</dt>
+        <dd>${view.borrower.groupAffiliation}</dd>
+        <dt>Associate concerns</dt>
+        <dd>${view.borrower.associateConcerns}</dd>
+    </dl>
+
+    <h3 class="report-subheading">Directors and partners</h3>
+    <c:choose>
+        <c:when test="${empty view.directors}">
+            <p class="report-empty-line">No directors or partners recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Net worth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.directors}" var="director">
+                        <tr>
+                            <td>${director.name}</td>
+                            <td>${director.designation}</td>
+                            <td>${director.netWorthText}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <h3 class="report-subheading">Allied activities</h3>
+    <c:choose>
+        <c:when test="${empty view.alliedActivities}">
+            <p class="report-empty-line">None recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <ul class="report-chips">
+                <c:forEach items="${view.alliedActivities}" var="activity">
+                    <li>${activity}</li>
+                </c:forEach>
+            </ul>
+        </c:otherwise>
+    </c:choose>
+
+    <h3 class="report-subheading">Other financing banks</h3>
+    <c:choose>
+        <c:when test="${empty view.otherBanks}">
+            <p class="report-empty-line">None recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <ul class="report-chips">
+                <c:forEach items="${view.otherBanks}" var="bank">
+                    <li>${bank}</li>
+                </c:forEach>
+            </ul>
+        </c:otherwise>
+    </c:choose>
+</section>
+
+<section class="report-part">
+    <h2 class="report-heading">Part II &mdash; Major credit quality indicators</h2>
+
+    <dl class="report-list">
+        <dt>IRAC classification</dt>
+        <dd>${view.report.iracClassification}</dd>
+        <dt>Internal rating</dt>
+        <dd>${view.report.internalRating}</dd>
+        <dt>Internal rating narration</dt>
+        <dd>${view.report.internalRatingNarration}</dd>
+        <dt>External rating</dt>
+        <dd>${view.report.externalRating}</dd>
+        <dt>Latest annual report</dt>
+        <dd>${view.report.annualReportLatest}</dd>
+        <dt>Annual report as on</dt>
+        <dd>${view.report.annualReportAsOn}</dd>
+        <dt>Changes in shareholding</dt>
+        <dd>${view.report.changesShareholding}</dd>
+        <dt>Special information</dt>
+        <dd>${view.report.specialInformation}</dd>
+    </dl>
+</section>
+
+<section class="report-part">
+    <h2 class="report-heading">Part III &mdash; Exposure Details other than Derivatives</h2>
+
+    <c:choose>
+        <c:when test="${empty view.facilities}">
+            <p class="report-empty-line">No facilities recorded for this quarter.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Type</th>
+                        <th scope="col">Purpose</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Sanctioned</th>
+                        <th scope="col">Outstanding</th>
+                        <th scope="col">Repayment terms</th>
+                        <th scope="col">Defaults</th>
+                        <th scope="col">Securities</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.facilities}" var="facility">
+                        <tr>
+                            <td>${facility.type}</td>
+                            <td>${facility.purpose}</td>
+                            <td>${facility.facilityDateText}</td>
+                            <td class="text-end">${facility.sanctionedText}</td>
+                            <td class="text-end">${facility.outstandingText}</td>
+                            <td>${facility.repaymentTerms}</td>
+                            <td>${facility.defaults}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${empty facility.securities}">
+                                        <span class="report-none">None offered</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <ul class="report-chips">
+                                            <c:forEach items="${facility.securities}" var="security">
+                                                <li>${security}</li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+</section>

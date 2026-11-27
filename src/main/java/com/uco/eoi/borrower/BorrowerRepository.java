@@ -15,7 +15,8 @@ import org.springframework.stereotype.Repository;
 public class BorrowerRepository {
 
     private static final String FIND_BY_QUARTER = """
-            SELECT b.id AS borrower_id,
+            SELECT r.id AS report_id,
+                   b.id AS borrower_id,
                    b.borrower_name,
                    b.consortium_name,
                    COALESCE(SUM(f.sanctioned_amount), 0) AS sanctioned_limit,
@@ -25,7 +26,7 @@ public class BorrowerRepository {
               JOIN eoi_borrower b ON b.id = r.borrower_id
               LEFT JOIN eoi_facility f ON f.report_id = r.id
              WHERE r.report_quarter = ?
-             GROUP BY b.id, b.borrower_name, b.consortium_name, r.status
+             GROUP BY r.id, b.id, b.borrower_name, b.consortium_name, r.status
              ORDER BY b.borrower_name
             """;
 
@@ -37,6 +38,7 @@ public class BorrowerRepository {
 
     public List<Borrower> findByQuarter(String quarter) {
         return jdbc.query(FIND_BY_QUARTER, (rs, rowNumber) -> new Borrower(
+                rs.getLong("report_id"),
                 rs.getLong("borrower_id"),
                 rs.getString("borrower_name"),
                 rs.getString("consortium_name"),

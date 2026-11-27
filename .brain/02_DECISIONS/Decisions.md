@@ -218,7 +218,13 @@
   3. **Submission (#3).** A print/PDF-ready Annex II screen plus a zero-dependency CSV export. **No new Maven dependency** may be added to achieve this without the owner's explicit approval.
   4. **Calendar (#4) and threshold (#5).** Fixed quarter-ends driven by `eoi.current-quarter` and `eoi.borrower-threshold-amount`. Both stay properties; neither is hardcoded.
   5. **Non-Finacle data (#6) and Part VI.** Full maker entry forms, "prefill from previous quarter", and **advisory** auto-scoring in Part VI (an officer may override with remarks). The NPA rule is mandatory and not overridable: where a contract is classified NPA and still NPA as on the exchange date, the grade is Below Par.
-* **Schema consequence (Part IV, 8 columns).** `eoi_derivative.npa_restructured_amount` is split into **`npa_amount`** and **`restructured_notional_amount`**, matching the annex's two separate columns ("Amount of contracts classified as NPA" and "Notional Amount of outstanding contracts which have been restructured", p. 48). Applies to `schema-annexii-exposure.sql`, `h2-init.sql` and `SchemaTest`.
+* **Schema consequence (Part IV, 8 columns).** `eoi_derivative.npa_restructured_amount` is split into **`npa_amount`** and **`restructured_notional_amount`**, matching the annex's two separate columns ("Amount of contracts classified as NPA" and "Notional Amount of outstanding contracts which have been restructured", p. 48). Applies to `schema-annexii-exposure.sql`, `h2-init.sql` and `SchemaTest`. **Delivered in PR #18, merge `dc6e789`.**
+* **Oracle migration (required before UAT).** PR #18 changes the H2 path, which recreates the table; CI therefore does not prove Oracle. UAT must run:
+  ```sql
+  ALTER TABLE eoi_derivative ADD (npa_amount NUMERIC(18,2), restructured_notional_amount NUMERIC(18,2));
+  ALTER TABLE eoi_derivative DROP COLUMN npa_restructured_amount;
+  ```
+  Recorded here because the merged PR body does not carry this risk section.
 * **Provenance note (resolved 2026-11-27):** `.brain/01_Business_Requirement/RBI_Circular.pdf` was replaced by the owner at 11:38 IST with the official 57-page `RBI/DOR/2025-26/159` (*Commercial Banks – Transfer and Distribution of Credit Risk Directions, 2025*). The earlier 11:28 entry referred to an older file before replacement. Page 48 of `159` confirms Part IV has 8 columns (`Amount of contracts classified as NPA` and `Notional Amount of outstanding contracts which have been restructured` are two separate columns).
 * **Consequences / Rationale:** Work proceeds without inventing bank rules: every assumption is visible, reversible and confined. Cost: some built behaviour will be replaced once the bank answers (#1 especially), and Part VI scoring is advisory until the grading discipline question is settled. This is accepted deliberately to finish the product.
 * **Status:** In Force, temporary by construction — each numbered assumption is retired by the bank answer that replaces it.
