@@ -849,3 +849,24 @@ a.borrower-name:hover {
     padding-top: 0.9rem;
     border-top: 1px solid var(--line);
 }
+
+/* ---------- Maker and checker ---------- */
+
+.workflow-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 0.9rem 0 0;
+}
+
+.workflow-actions form {
+    margin: 0;
+}
+
+@media print {
+    .workflow-card,
+    .workflow-actions {
+        display: none !important;
+    }
+}

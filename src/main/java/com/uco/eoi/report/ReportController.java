@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ReportController {
 
     private final ReportService reportService;
+    private final WorkflowService workflowService;
 
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, WorkflowService workflowService) {
         this.reportService = reportService;
+        this.workflowService = workflowService;
     }
 
     @GetMapping("/reports/{id}")
@@ -25,6 +27,7 @@ public class ReportController {
             return "redirect:/dashboard?error=notfound";
         }
         model.addAttribute("view", view);
+        model.addAttribute("history", workflowService.history(id));
         return "report";
     }
 }

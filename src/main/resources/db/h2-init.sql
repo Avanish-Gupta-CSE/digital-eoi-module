@@ -3,6 +3,7 @@
 -- Ids come from eoi_seq.NEXTVAL, never a literal, so the seed follows the production rule.
 
 -- Children first, so the deletes respect the foreign keys.
+DELETE FROM eoi_audit_log;
 DELETE FROM eoi_report_rubric;
 DELETE FROM eoi_report_experience;
 DELETE FROM eoi_currency_position;

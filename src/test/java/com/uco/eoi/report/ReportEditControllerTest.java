@@ -38,6 +38,7 @@ class ReportEditControllerTest {
             "db/schema.sql",
             "db/schema-annexii-exposure.sql",
             "db/schema-annexii-experience.sql",
+            "db/schema-audit.sql",
             "db/h2-init.sql");
 
     private Connection connection;
