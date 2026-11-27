@@ -137,8 +137,8 @@ SELECT eoi_seq.NEXTVAL, f.id, x.security_description
 -- One derivative contract for the Steels report (Part IV).
 INSERT INTO eoi_derivative
     (id, report_id, serial_no, nature, notional_amount, weighted_avg_maturity,
-     positive_mtm, npa_restructured_amount, restructuring_reasons)
-SELECT eoi_seq.NEXTVAL, r.id, 1, 'Interest Rate Swap', 100000000.00, 3.5000, 2500000.00, 0.00, NULL
+     positive_mtm, npa_amount, restructured_notional_amount, restructuring_reasons)
+SELECT eoi_seq.NEXTVAL, r.id, 1, 'Interest Rate Swap', 100000000.00, 3.5000, 2500000.00, 0.00, 0.00, NULL
   FROM eoi_borrower b
   JOIN eoi_report r ON r.borrower_id = b.id
  WHERE b.borrower_name = 'Sample Steels Ltd'

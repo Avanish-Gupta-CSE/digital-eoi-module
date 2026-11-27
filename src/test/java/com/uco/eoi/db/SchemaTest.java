@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.AfterEach;
@@ -73,6 +74,14 @@ class SchemaTest {
                 .isInstanceOf(SQLException.class);
     }
 
+    @Test
+    @DisplayName("eoi_derivative keeps the NPA amount and the restructured notional in separate columns")
+    void derivativeHasSplitNpaAndRestructuredColumns() throws SQLException {
+        assertThat(columnNames("eoi_derivative"))
+                .contains("NPA_AMOUNT", "RESTRUCTURED_NOTIONAL_AMOUNT")
+                .doesNotContain("NPA_RESTRUCTURED_AMOUNT");
+    }
+
     private boolean tableExists(String table) throws SQLException {
         String sql = "SELECT COUNT(*) FROM information_schema.tables "
                 + "WHERE table_schema = 'PUBLIC' AND table_name = ?";
@@ -83,6 +92,21 @@ class SchemaTest {
                 return rows.getInt(1) == 1;
             }
         }
+    }
+
+    private List<String> columnNames(String table) throws SQLException {
+        String sql = "SELECT column_name FROM information_schema.columns "
+                + "WHERE table_schema = 'PUBLIC' AND table_name = ?";
+        List<String> names = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, table.toUpperCase());
+            try (ResultSet rows = statement.executeQuery()) {
+                while (rows.next()) {
+                    names.add(rows.getString(1));
+                }
+            }
+        }
+        return names;
     }
 
     private long insertBorrower(String name) throws SQLException {

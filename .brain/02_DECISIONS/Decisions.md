@@ -206,3 +206,31 @@
 * **Consequences / Rationale:** The team can build against a real, running screen today and swap any business answer in with a property change. Plain JDBC keeps the guardrail "a beginner can read the SQL" true. Cost: if Annex II grows into a dozen related tables with maker–checker state, hand-written SQL gets repetitive — that is the recorded trigger to revisit JPA.
 * **Verified:** `/dashboard` 200 with 4 borrowers, empty state on an empty quarter, all assets local, `mvn test` 4/4, guardrails script passes.
 * **Status:** In Force.
+
+---
+
+### Decision 017: Finish the application on recorded temporary assumptions
+* **Date:** 2026-11-27
+* **Context:** The six business questions (#1–#6) are still unanswered, but the owner has directed that the application be completed now on explicit temporary assumptions, each contained behind a property or an interface so a real bank answer is a small swap rather than a rewrite. This decision supersedes the "stay blocked" posture of Decision 013/014-era notes; it does not guess silently — every assumption is written down here.
+* **Temporary assumptions (binding until the bank answers):**
+  1. **Finacle (#1).** A clean `FinacleDataSource` interface, with an H2/mock implementation returning simulated CIF, IRAC classification, facilities, limits, balances, overdrawing counts and stock-statement dates. "Sync from Finacle" must work end to end on the mock. No real Finacle client is written or implied.
+  2. **v1 scope (#2).** Build the complete Annex II, Parts I–VI, per the annex (RBI/DOR/2025-26/159, pp. 46–52). Annex I and Annex III remain out of scope.
+  3. **Submission (#3).** A print/PDF-ready Annex II screen plus a zero-dependency CSV export. **No new Maven dependency** may be added to achieve this without the owner's explicit approval.
+  4. **Calendar (#4) and threshold (#5).** Fixed quarter-ends driven by `eoi.current-quarter` and `eoi.borrower-threshold-amount`. Both stay properties; neither is hardcoded.
+  5. **Non-Finacle data (#6) and Part VI.** Full maker entry forms, "prefill from previous quarter", and **advisory** auto-scoring in Part VI (an officer may override with remarks). The NPA rule is mandatory and not overridable: where a contract is classified NPA and still NPA as on the exchange date, the grade is Below Par.
+* **Schema consequence (Part IV, 8 columns).** `eoi_derivative.npa_restructured_amount` is split into **`npa_amount`** and **`restructured_notional_amount`**, matching the annex's two separate columns ("Amount of contracts classified as NPA" and "Notional Amount of outstanding contracts which have been restructured", p. 48). Applies to `schema-annexii-exposure.sql`, `h2-init.sql` and `SchemaTest`.
+* **Provenance note (resolved 2026-11-27):** `.brain/01_Business_Requirement/RBI_Circular.pdf` was replaced by the owner at 11:38 IST with the official 57-page `RBI/DOR/2025-26/159` (*Commercial Banks – Transfer and Distribution of Credit Risk Directions, 2025*). The earlier 11:28 entry referred to an older file before replacement. Page 48 of `159` confirms Part IV has 8 columns (`Amount of contracts classified as NPA` and `Notional Amount of outstanding contracts which have been restructured` are two separate columns).
+* **Consequences / Rationale:** Work proceeds without inventing bank rules: every assumption is visible, reversible and confined. Cost: some built behaviour will be replaced once the bank answers (#1 especially), and Part VI scoring is advisory until the grading discipline question is settled. This is accepted deliberately to finish the product.
+* **Status:** In Force, temporary by construction — each numbered assumption is retired by the bank answer that replaces it.
+
+---
+
+### Decision 018: Part V arithmetic shown literally; across-currency total withheld until FX exists
+* **Date:** 2026-11-27
+* **Context:** The Annex II report view must show Part V (un-hedged foreign currency exposure) with its net positions. The Tech Lead asked for two sign-offs before coding: the sign convention, and whether an across-all-currencies total is shown.
+* **Decision:**
+  * **Arithmetic follows the annex literally.** Per currency: short-term net = (a) long − (b) short; long-term net = (a) long − (b) short; overall per currency = I − II, i.e. short-term net − long-term net. That is the printed formula `Overall Net Position (I − ll)`, not an economic interpretation of it. It is implemented once, in `ReportService#netExposures`, with the annex reference in a comment.
+  * **The across-all-currencies total is not displayed.** It is a raw sum of different currencies and is meaningless without FX rates, which are out of scope (Decision 017). The screen shows per-currency rows and a short note that the consolidated figure needs FX rates; the column is not printed blank without explanation.
+  * **Amounts stay in absolute units** and are not run through the Indian rupee formatter for per-currency positions, because a position in USD is not rupees. Part III and IV amounts remain rupees, formatted with `IndianMoney`.
+* **Consequences / Rationale:** The report cannot print a wrong regulatory figure, and the missing consolidated value is explained rather than silently omitted. Cost: the form is not visually complete until FX rates are in scope — accepted, and recorded here so it is a decision rather than an oversight.
+* **Status:** In Force.

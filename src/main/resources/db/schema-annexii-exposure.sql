@@ -32,17 +32,19 @@ CREATE TABLE eoi_facility_security (
 
 CREATE INDEX ix_eoi_security_facility ON eoi_facility_security (facility_id);
 
--- One derivative contract of one report (Part IV).
+-- One derivative contract of one report (Part IV). Annex II p. 48 asks for the NPA
+-- amount and the restructured notional as two separate figures, so they get two columns.
 CREATE TABLE eoi_derivative (
-    id                      NUMERIC(18,0)  NOT NULL,
-    report_id               NUMERIC(18,0)  NOT NULL,
-    serial_no               NUMERIC(9,0),
-    nature                  VARCHAR(100)   NOT NULL,
-    notional_amount         NUMERIC(18,2),
-    weighted_avg_maturity   NUMERIC(18,4),
-    positive_mtm            NUMERIC(18,2),
-    npa_restructured_amount NUMERIC(18,2),
-    restructuring_reasons   VARCHAR(500),
+    id                           NUMERIC(18,0)  NOT NULL,
+    report_id                    NUMERIC(18,0)  NOT NULL,
+    serial_no                    NUMERIC(9,0),
+    nature                       VARCHAR(100)   NOT NULL,
+    notional_amount              NUMERIC(18,2),
+    weighted_avg_maturity        NUMERIC(18,4),
+    positive_mtm                 NUMERIC(18,2),
+    npa_amount                   NUMERIC(18,2),
+    restructured_notional_amount NUMERIC(18,2),
+    restructuring_reasons        VARCHAR(500),
     CONSTRAINT pk_eoi_derivative PRIMARY KEY (id),
     CONSTRAINT fk_eoi_derivative_report FOREIGN KEY (report_id)
         REFERENCES eoi_report (id)

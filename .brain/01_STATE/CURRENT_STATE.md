@@ -1,6 +1,6 @@
 # CURRENT_STATE
 
-Last updated: 2026-11-22
+Last updated: 2026-11-27
 
 ## Project
 UCO Bank — Digital EoI (Exchange of Information) Module.
@@ -11,10 +11,10 @@ Arrangements.
 - **Application exists.** Spring Boot 4.1.3 / Java 25, WAR packaging, Maven.
 - **Data model:** 11 Annex II tables — `eoi_borrower` (master) + `eoi_report` (one per borrower
   per quarter) + 9 children, all defined in three ordered schema files. Ids from `eoi_seq.NEXTVAL`.
-- Working screen: `/dashboard` — borrowers for the current quarter, Indian money formatting,
-  status badges, empty state, print stylesheet. Amounts are `SUM(facility)` per report.
+- Working screen: `/dashboard` (rebuilt in `#17` with KPI cards, search & status filters in
+  `dashboard.js`, initials avatars, status pills, print stylesheet). Amounts are `SUM(facility)` per report.
 - Data: H2 in-memory (`h2` profile) with synthetic rows in `h2-init.sql`. No Oracle profile yet.
-- Tests: 6 passing (`IndianMoneyTest` 4, `SchemaTest` 2). CI runs `guardrails` + `mvn test` on every PR.
+- Tests: 7 passing (`IndianMoneyTest` 4, `SchemaTest` 3). CI runs `guardrails` + `mvn test` on every PR.
 - Git: public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected (PR + `guardrails`
   required, admins enforced). See `CONTRIBUTING.md`.
 
@@ -30,7 +30,8 @@ sh scripts/check-guardrails.sh
 | Path | What it is |
 |---|---|
 | `.brain/01_Business_Requirement/BRD.pdf` | 9-page scanned PDF (no text layer). Two UCO Bank internal letters + Annex II of the RBI direction. Git-ignored on purpose. |
-| `.brain/01_Business_Requirement/RBI_PARA_127_128.md` | Verbatim regulatory text of paras 127–129, source metadata, and gap analysis. |
+| `.brain/01_Business_Requirement/RBI_Circular.pdf` | **Correct governing direction (updated 2026-11-27):** `RBI/DOR/2025-26/159` (*Commercial Banks – Transfer and Distribution of Credit Risk Directions, 2025*, 57 pages). Resolves BRD scan/OCR gaps on Annex II pp. 46–52 (and reveals Part IV has **8 columns**, not 7). Git-ignored. |
+| `.brain/01_Business_Requirement/RBI_PARA_127_128.md` | Verbatim regulatory text of paras 127–129 from `RBI/DOR/2025-26/159`, source metadata, and gap analysis. |
 | `.brain/01_STATE/RESUME_HERE.md` | The handoff file: what works, where things are, what to do next, traps. |
 | `.brain/03_SYSTEM/Change_Map.md` | Screen → controller → service → repository → view table. |
 
