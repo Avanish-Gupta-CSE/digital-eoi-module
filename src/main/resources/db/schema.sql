@@ -28,6 +28,8 @@ CREATE TABLE eoi_report (
     report_quarter            VARCHAR(8)     NOT NULL,
     status                    VARCHAR(20)    NOT NULL,
     reported_on               DATE,
+    submitted_by              VARCHAR(50),
+    checked_by                VARCHAR(50),
     irac_classification       VARCHAR(20),
     internal_rating           VARCHAR(20),
     internal_rating_narration VARCHAR(500),

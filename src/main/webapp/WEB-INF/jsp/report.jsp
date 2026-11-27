@@ -26,7 +26,23 @@
         </div>
     </c:if>
 
+    <c:if test="${not empty param.error}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            ${not empty errorMessage ? errorMessage : param.error}
+        </div>
+    </c:if>
+
+    <c:if test="${not empty param.workflow}">
+        <div class="alert alert-success alert-dismissible fade show" role="status" data-auto-fade>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            ${param.workflow}
+        </div>
+    </c:if>
+
     <%@ include file="fragments/report-status.jspf" %>
+
+    <%@ include file="fragments/report-workflow.jspf" %>
 
     <%@ include file="fragments/report-part1-3.jspf" %>
     <%@ include file="fragments/report-part4-6.jspf" %>

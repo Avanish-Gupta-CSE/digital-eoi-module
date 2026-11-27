@@ -29,7 +29,8 @@ class SchemaTest {
     private static final List<String> SCHEMA_FILES = List.of(
             "db/schema.sql",
             "db/schema-annexii-exposure.sql",
-            "db/schema-annexii-experience.sql");
+            "db/schema-annexii-experience.sql",
+            "db/schema-audit.sql");
 
     private static final String[] EXPECTED_TABLES = {
             "eoi_borrower", "eoi_report", "eoi_borrower_director", "eoi_borrower_allied",

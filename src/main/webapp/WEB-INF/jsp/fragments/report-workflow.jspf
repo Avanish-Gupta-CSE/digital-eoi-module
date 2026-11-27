@@ -1,0 +1,82 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<c:set var="makerCanAct" value="${view.status() == 'DRAFT' or view.status() == 'DUE' or view.status() == 'RETURNED' or view.status() == 'OVERDUE'}"/>
+<c:set var="checkerCanAct" value="${view.status() == 'SUBMITTED'}"/>
+
+<c:if test="${makerCanAct or checkerCanAct}">
+    <section class="data-card workflow-card">
+        <div class="data-card-head">
+            <h2 class="data-card-title">Maker and checker</h2>
+            <span class="count-pill">${view.status()}</span>
+        </div>
+        <div class="entry-card">
+            <c:choose>
+                <c:when test="${makerCanAct}">
+                    <div class="workflow-actions">
+                        <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/sync-finacle">
+                            <button type="submit" class="btn-print" id="sync-finacle-button">Sync from Finacle</button>
+                        </form>
+                        <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/submit">
+                            <button type="submit" class="btn-bank-primary" id="submit-button">Submit for Checking</button>
+                        </form>
+                    </div>
+                </c:when>
+                <c:when test="${checkerCanAct}">
+                    <div class="workflow-actions">
+                        <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/approve">
+                            <button type="submit" class="btn-bank-primary" id="approve-button">Approve</button>
+                        </form>
+                    </div>
+                    <form method="post" id="return-form" action="${pageContext.request.contextPath}/reports/${view.reportId()}/return">
+                        <label class="form-label" for="return-remarks">Remarks *</label>
+                        <textarea class="form-control" id="return-remarks" name="remarks" rows="2"
+                                  aria-describedby="return-remarks-error"></textarea>
+                        <span class="text-danger small d-none" id="return-remarks-error" role="alert"></span>
+                        <div class="workflow-actions">
+                            <button type="submit" class="btn-print" id="return-button">Return to Maker</button>
+                        </div>
+                    </form>
+                </c:when>
+            </c:choose>
+        </div>
+    </section>
+</c:if>
+
+<section class="data-card workflow-card">
+    <div class="data-card-head">
+        <h2 class="data-card-title">History</h2>
+        <span class="count-pill">${history.size()}</span>
+    </div>
+    <c:choose>
+        <c:when test="${empty history}">
+            <p class="report-empty-line">No history yet. History appears after the report is submitted for checking.</p>
+        </c:when>
+        <c:otherwise>
+            <div class="table-responsive">
+                <table class="eoi-table report-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Action</th>
+                        <th scope="col">Officer</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Remarks</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${history}" var="entry">
+                        <tr>
+                            <td>${entry.action()}</td>
+                            <td>${entry.actorId()}</td>
+                            <td>${entry.actorRole()}</td>
+                            <td>${entry.remarks()}</td>
+                            <td>${entry.createdAtText()}</td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</section>
