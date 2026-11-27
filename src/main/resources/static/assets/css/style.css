@@ -638,3 +638,147 @@ body {
         color: #000 !important;
     }
 }
+
+/* ---------- Annex II report ---------- */
+
+.report-part {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.15rem;
+    margin-bottom: 1rem;
+    break-inside: avoid;
+}
+
+.report-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.5rem;
+    margin: 0 0 0.9rem;
+}
+
+.report-subheading {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1rem 0 0.5rem;
+}
+
+.report-status-line {
+    margin: 0 0 1rem;
+}
+
+.report-list {
+    display: grid;
+    grid-template-columns: minmax(220px, 34%) 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0 0 0.9rem;
+}
+
+.report-list dt {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.report-list dd {
+    margin: 0;
+    color: var(--ink);
+    font-size: 0.9rem;
+}
+
+.report-list dd:empty::after {
+    content: "Not recorded";
+    color: var(--faint);
+    font-weight: 400;
+}
+
+.report-table {
+    font-size: 0.86rem;
+}
+
+.report-table.eoi-table thead th,
+.report-table.eoi-table tbody td {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.86rem;
+}
+
+.report-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.report-chips li {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #f8fafc;
+    color: var(--ink);
+    font-size: 0.78rem;
+    padding: 0.15rem 0.6rem;
+}
+
+.report-note {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 0.6rem;
+}
+
+.report-empty-line {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin: 0 0 0.8rem;
+}
+
+.report-none {
+    color: var(--faint);
+}
+
+.status-approved {
+    background: var(--ok-bg);
+    color: var(--ok);
+}
+
+.status-draft {
+    background: #eef2f7;
+    color: var(--muted);
+}
+
+.status-returned {
+    background: var(--bad-bg);
+    color: var(--bad);
+}
+
+@media print {
+    .report-part {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        page-break-after: always;
+    }
+
+    .report-part:last-of-type {
+        page-break-after: auto;
+    }
+}
+
+/* The borrower name is the link into the Annex II report of that quarter. */
+a.borrower-name {
+    color: inherit;
+    text-decoration: none;
+}
+
+a.borrower-name:hover {
+    color: var(--navy-600);
+    text-decoration: underline;
+}

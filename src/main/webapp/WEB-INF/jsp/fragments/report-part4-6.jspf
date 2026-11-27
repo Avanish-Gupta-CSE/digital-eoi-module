@@ -1,0 +1,141 @@
+<section class="report-part">
+    <h2 class="report-heading">Part IV &mdash; Exposure Details, Derivatives Transactions</h2>
+
+    <c:choose>
+        <c:when test="${empty view.derivatives}">
+            <p class="report-empty-line">No derivative contracts recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr.</th>
+                        <th scope="col">Nature</th>
+                        <th scope="col">Notional</th>
+                        <th scope="col">Maturity</th>
+                        <th scope="col">Positive MTM</th>
+                        <th scope="col">NPA amount</th>
+                        <th scope="col">Restructured notional</th>
+                        <th scope="col">Reasons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.derivatives}" var="derivative">
+                        <tr>
+                            <td>${derivative.serialNo}</td>
+                            <td>${derivative.nature}</td>
+                            <td class="text-end">${derivative.notionalText}</td>
+                            <td>${derivative.maturityText}</td>
+                            <td class="text-end">${derivative.positiveMtmText}</td>
+                            <td class="text-end">${derivative.npaText}</td>
+                            <td class="text-end">${derivative.restructuredText}</td>
+                            <td>${derivative.reasons}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+</section>
+
+<section class="report-part">
+    <h2 class="report-heading">Part V &mdash; Un-hedged foreign currency exposures</h2>
+
+    <c:choose>
+        <c:when test="${empty view.currencyPositions}">
+            <p class="report-empty-line">No currency positions recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Currency</th>
+                        <th scope="col">Short long</th>
+                        <th scope="col">Short short</th>
+                        <th scope="col">Short net</th>
+                        <th scope="col">Long long</th>
+                        <th scope="col">Long short</th>
+                        <th scope="col">Long net</th>
+                        <th scope="col">Overall (I &minus; II)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.currencyPositions}" var="row">
+                        <tr>
+                            <td>${row.currency}</td>
+                            <td class="text-end">${row.shortLong}</td>
+                            <td class="text-end">${row.shortShort}</td>
+                            <td class="text-end">${row.shortNet}</td>
+                            <td class="text-end">${row.longLong}</td>
+                            <td class="text-end">${row.longShort}</td>
+                            <td class="text-end">${row.longNet}</td>
+                            <td class="text-end">${row.overallNet}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <p class="report-note">The consolidated position across all currencies needs FX rates and is not shown (Decision 018).</p>
+</section>
+
+<section class="report-part">
+    <h2 class="report-heading">Part VI &mdash; Experience with the borrower</h2>
+
+    <h3 class="report-subheading">Experience</h3>
+    <c:choose>
+        <c:when test="${empty view.experience}">
+            <p class="report-empty-line">No experience items recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.experience}" var="item">
+                        <tr>
+                            <td>${item.itemCode}</td>
+                            <td>${item.grade}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <h3 class="report-subheading">Rubric observations</h3>
+    <c:choose>
+        <c:when test="${empty view.rubric}">
+            <p class="report-empty-line">No rubric observations recorded.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Parameter no.</th>
+                        <th scope="col">Observed value</th>
+                        <th scope="col">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.rubric}" var="row">
+                        <tr>
+                            <td>${row.itemCode}</td>
+                            <td>${row.paramNo}</td>
+                            <td>${row.observedValue}</td>
+                            <td>${row.grade}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <p class="report-note">Where a contract is NPA and continues to be NPA on the exchange date, the grade is Below Par.</p>
+</section>

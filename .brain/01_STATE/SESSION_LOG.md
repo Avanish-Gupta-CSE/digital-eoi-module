@@ -2,6 +2,34 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-27 — PR 2/3 of Slice 1: read-only Annex II report screen
+
+**Done**
+- Backend (`sse2`): `report/ReportView`, `ReportRepository` (10 native-SQL reads), `ReportService`
+  with `netExposures` implementing Part V literally (`shortNet = long − short`,
+  `longNet = long − short`, `overallNet = shortNet − longNet`), and `ReportServiceTest`.
+  Two record types (`ReportHeader`, `FacilityWithId`) were missing and had to be added to
+  `ReportView` to make it compile — 22 lines, no behaviour change.
+- View (`sse-b`): `report.jsp` (58 lines) plus `fragments/report-part1-3.jspf` (149) and
+  `fragments/report-part4-6.jspf` (141), rendering all six parts with the annex's own headings.
+  CSS appended only; no existing rule touched.
+- Fixed a defect the view agent reported on itself: `report.jsp` duplicated the document wrapper
+  that `head.jspf` already provides. Removed; `DOCTYPE` count is 0 and `head.jspf` is included once.
+
+**Deliberate omissions on the printed form**
+- No "(Rs. in crore)" heading on Parts III/IV: the figures are rupees, so that heading would be a
+  factor-of-ten mislabel. Storage unit stays open (bank question #7).
+- No across-all-currencies total; one muted line explains it needs FX rates (Decision 018).
+
+**Verified**
+- `mvn -q test`: 9 tests, 0 failures.
+- `sh scripts/check-guardrails.sh`: ok.
+- Every file ≤ 200 lines; every JSP ≤ 150.
+
+**Not done / open**
+- Dashboard rows are not yet linked to `/reports/{id}` (PR 2b). The screen is reachable by URL only.
+- No `uat`/Oracle profile; print page numbers may need a native footer, not CSS.
+
 ## 2026-11-27 — PR 1 (Slice 1): Split `eoi_derivative` NPA & restructured columns + Decision 017
 
 **Done**

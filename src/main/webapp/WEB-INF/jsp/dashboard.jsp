@@ -89,7 +89,7 @@
                                     <div class="borrower-cell">
                                         <span class="borrower-initials" aria-hidden="true">${row.initials}</span>
                                         <span>
-                                            <span class="borrower-name">${row.borrowerName}</span>
+                                            <a class="borrower-name" href="/reports/${row.reportId}">${row.borrowerName}</a>
                                             <span class="borrower-sub">${row.consortiumName}</span>
                                         </span>
                                     </div>
