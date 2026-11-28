@@ -45,6 +45,12 @@ Read `.brain/03_SYSTEM/Architecture.md`, then the matching reference in the bank
 `.brain/03_SYSTEM/Secure_Coding_Compliance.md` (the bank's secure-coding office order, point by point).
 The bank's order wins over convenience.
 
+## Scope of a change
+
+Touch only the lines the task needs. Do not rewrite, rename or "tidy" working code next to yours (a
+dry run rewrote the existing return-form JS to share a helper: that is a separate task, and a risk
+to a security-relevant screen). Add alongside; if sharing code really is needed, ask the Manager.
+
 ## Report format (adds one line)
 
 `CHANGED`, `TEST`, `RUN`, `SECURITY`, `OPEN`. `SECURITY` lists rules 1-10 as `yes` / `n/a because ...`

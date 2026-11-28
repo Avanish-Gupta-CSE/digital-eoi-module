@@ -29,7 +29,7 @@ Last updated: 2026-11-28
 | #6 Non-Finacle data | maker entry forms now exist | external sources if preferred |
 
 ## Next for the agent team
-Dry-run the team with the new rules: ask `manager` for one small endpoint and confirm the `SECURITY` line, four negative tests and green gates appear (`opencode debug agents` first, to confirm the new guardrail path loads).
+Dry run done 2026-11-28 (see SESSION_LOG): gates and role/status/audit/CSRF were right; reporting and scope rules tightened. Re-run once on a paid-plan model to confirm the `SECURITY` block now appears. The re-open feature built in the scratch copy was **not** merged; decide the owner questions (same-officer re-open; nobody-signed-in fail-open) before asking the team to build it for real.
 
 ## Review gaps still open (found 2026-11-28, not fixed: they need an owner or bank decision)
 1. **No row-level access control:** any signed-in officer sees and edits every borrower's report. UcoRealtyStaff scopes by SOL/zone; the EoI scoping rule (branch, zone, head office) is not defined.

@@ -2,6 +2,16 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Dry run of the agent team with the new rules
+
+**Run:** `opencode run --auto --agent manager` in a scratch copy (remote removed), task: checker-only re-open of an APPROVED report. Manager used deepseek-v4.1-flash-free; the run ended with "Free usage limit reached" after the final report.
+
+**Result (verified independently in the scratch copy):** `check-guardrails.sh` ok, 64 tests green. The team got the role check (`notChecker`), the status guard inside the UPDATE, the audit row in the same transaction, the `_csrf` field, and tests for happy path, short reason and wrong status. It asked the owner whether the preparer may re-open (not guessed) and flagged the fail-open when nobody is signed in.
+
+**Misses against the new rules:** no `SECURITY` block in the final report; a builder refactored the working return-form JS in `workflow.js` (out of scope); no explicit "wrong owner: n/a" statement. Fixed by: manager.md reporting rule, guardrail "Scope of a change", LESSONS 14-15, pattern note on the same-officer question.
+
+**Open:** the free model quota ran out mid-run; the team needs a paid/plan model path for real work. Same-officer re-open and the nobody-signed-in fail-open are owner decisions (the latter is already in NEXT_STEPS gap 4 area).
+
 ## 2026-11-28 — Agent-team quality rules (PR on top of #34)
 
 **Request:** make cheaper models in the OpenCode team perform closer to a reviewed standard.

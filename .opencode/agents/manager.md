@@ -169,6 +169,11 @@ Every task bigger than a one-line fix gets an issue on the **Digital EoI** board
 
 ## Reporting to the owner
 
+Your final "Done" report **must contain** a `SECURITY` block copied from the builders and the TL:
+rules 1-10 as `yes` / `n/a because ...`, and the endpoint table (wrong role, wrong status, wrong
+owner, no token, test name). If a builder or the TL did not provide it, send them back before you
+report. A final report without it is incomplete, however good the summary reads.
+
 - **Done:** what now works, in plain terms, with the person's name.
 - **Files:** the paths that changed.
 - **Checked:** how it was verified (build, test, manual steps).

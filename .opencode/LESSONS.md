@@ -17,4 +17,6 @@ Append a row whenever a reviewer finds something new. The Manager folds repeated
 | 10 | `password=${EOI_DB_PASSWORD:uco_eoi_pwd}` | a default credential committed | `check-guardrails.sh` (rule 9) |
 | 11 | CSV cell `=cmd...` exported as-is | formula runs in Excel | rule 10 test |
 | 12 | Docs said "Spring Security, JPA, POI"; code had none | agents trusted the docs | the code is the truth; update docs in the same PR |
+| 14 | Dry run 2026-11-28: manager's final report had no `SECURITY` block | the checklist existed but the report did not have to carry it | manager.md "Reporting to the owner" |
+| 15 | Dry run: a builder rewrote the working return-form JS while adding a sibling feature | a security-relevant screen changed for no requested reason | guardrail "Scope of a change"; TL checks the diff for untouched-code edits |
 | 13 | A change to a `.jspf` not showing in a running app | looked like a bug, was a stale compile | restart the app after editing a fragment |

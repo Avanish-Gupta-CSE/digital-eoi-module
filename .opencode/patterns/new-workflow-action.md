@@ -9,4 +9,6 @@ Copy: `WorkflowController.approve` and `WorkflowService.approve`.
    (c) `writeAudit(...)` (rule 7).
 3. The refusal message says what to do next, in plain words.
 4. The workflow URL is the one kind of write URL that does **not** go into `ReportLockConfig`.
-5. Tests: happy path, wrong role, wrong status (draft, already approved), same officer.
+5. If the bank has not said whether the officer who prepared the report may also do this action
+   (approve forbids it), **ask the owner** and write the answer in `.brain/02_DECISIONS/`; do not guess.
+6. Tests: happy path, wrong role, wrong status (draft, already approved), same officer.
