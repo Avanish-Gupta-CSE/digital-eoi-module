@@ -1,5 +1,6 @@
 package com.uco.eoi.report;
 
+import com.uco.eoi.report.ReportView.*;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
