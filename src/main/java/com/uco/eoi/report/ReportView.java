@@ -24,29 +24,77 @@ public record ReportView(
         List<CurrencyRow> currencyPositions,
         List<ExperienceRow> experience,
         List<RubricRow> rubric) {
-}
 
-/** Part I: the static identity of the borrower. */
-record BorrowerPart(
-        String name,
-        String address,
-        String constitution,
-        String mainActivity,
-        String groupAffiliation,
-        String associateConcerns,
-        String consortiumName) {
-}
+    /** Part I: the static identity of the borrower. */
+    public record BorrowerPart(
+            String name,
+            String address,
+            String constitution,
+            String mainActivity,
+            String groupAffiliation,
+            String associateConcerns,
+            String consortiumName) {
+    }
 
-/** Part II: the credit quality indicators of one report, plus the two carry-over items. */
-record ReportPart(
-        String iracClassification,
-        String internalRating,
-        String internalRatingNarration,
-        String externalRating,
-        String annualReportLatest,
-        String annualReportAsOn,
-        String changesShareholding,
-        String specialInformation) {
+    /** Part II: the credit quality indicators of one report, plus the two carry-over items. */
+    public record ReportPart(
+            String iracClassification,
+            String internalRating,
+            String internalRatingNarration,
+            String externalRating,
+            String annualReportLatest,
+            String annualReportAsOn,
+            String changesShareholding,
+            String specialInformation) {
+    }
+
+    /** Part I.III and I.VI: one director or partner, with the net worth the bank asks for. */
+    public record DirectorRow(String name, String designation, String netWorthText) {
+    }
+
+    /** Part III: one credit facility, with the security offered against it (III.VII). */
+    public record FacilityRow(
+            String type,
+            String purpose,
+            String facilityDateText,
+            String sanctionedText,
+            String outstandingText,
+            String repaymentTerms,
+            String defaults,
+            List<String> securities) {
+    }
+
+    /** Part IV: one derivative contract. NPA amount and restructured notional are two columns. */
+    public record DerivativeRow(
+            String serialNo,
+            String nature,
+            String notionalText,
+            String maturityText,
+            String positiveMtmText,
+            String npaText,
+            String restructuredText,
+            String reasons) {
+    }
+
+    /** Part V as printed: the four buckets plus the three nets computed from them. */
+    public record CurrencyRow(
+            String currency,
+            BigDecimal shortLong,
+            BigDecimal shortShort,
+            BigDecimal shortNet,
+            BigDecimal longLong,
+            BigDecimal longShort,
+            BigDecimal longNet,
+            BigDecimal overallNet) {
+    }
+
+    /** Part VI.A: one graded experience item. */
+    public record ExperienceRow(String itemCode, String grade) {
+    }
+
+    /** Part VI.B: one rubric parameter observation. */
+    public record RubricRow(String itemCode, int paramNo, String observedValue, String grade) {
+    }
 }
 
 /** The report header: which report it is, whose it is, and Parts I and II. */
@@ -55,24 +103,8 @@ record ReportHeader(
         long borrowerId,
         String quarter,
         String status,
-        BorrowerPart borrower,
-        ReportPart report) {
-}
-
-/** Part I.III and I.VI: one director or partner, with the net worth the bank asks for. */
-record DirectorRow(String name, String designation, String netWorthText) {
-}
-
-/** Part III: one credit facility, with the security offered against it (III.VII). */
-record FacilityRow(
-        String type,
-        String purpose,
-        String facilityDateText,
-        String sanctionedText,
-        String outstandingText,
-        String repaymentTerms,
-        String defaults,
-        List<String> securities) {
+        ReportView.BorrowerPart borrower,
+        ReportView.ReportPart report) {
 }
 
 /** One facility as it sits in the table, before its securities are attached to it. */
@@ -87,18 +119,6 @@ record FacilityWithId(
         String defaults) {
 }
 
-/** Part IV: one derivative contract. NPA amount and restructured notional are two columns. */
-record DerivativeRow(
-        String serialNo,
-        String nature,
-        String notionalText,
-        String maturityText,
-        String positiveMtmText,
-        String npaText,
-        String restructuredText,
-        String reasons) {
-}
-
 /** Part V as stored: the four position buckets of one currency, before any netting. */
 record RawCurrency(
         String currency,
@@ -106,24 +126,4 @@ record RawCurrency(
         BigDecimal shortShort,
         BigDecimal longLong,
         BigDecimal longShort) {
-}
-
-/** Part V as printed: the four buckets plus the three nets computed from them. */
-record CurrencyRow(
-        String currency,
-        BigDecimal shortLong,
-        BigDecimal shortShort,
-        BigDecimal shortNet,
-        BigDecimal longLong,
-        BigDecimal longShort,
-        BigDecimal longNet,
-        BigDecimal overallNet) {
-}
-
-/** Part VI.A: one graded experience item. */
-record ExperienceRow(String itemCode, String grade) {
-}
-
-/** Part VI.B: one rubric parameter observation. */
-record RubricRow(String itemCode, int paramNo, String observedValue, String grade) {
 }

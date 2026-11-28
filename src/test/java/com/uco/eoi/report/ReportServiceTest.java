@@ -2,6 +2,8 @@ package com.uco.eoi.report;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.uco.eoi.report.ReportView.*;
+
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
