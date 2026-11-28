@@ -71,6 +71,9 @@ public class BorrowerService {
         return switch (status) {
             case "SUBMITTED" -> "status-submitted";
             case "OVERDUE" -> "status-overdue";
+            case "DRAFT" -> "status-draft";
+            case "APPROVED" -> "status-approved";
+            case "RETURNED" -> "status-returned";
             default -> "status-due";
         };
     }

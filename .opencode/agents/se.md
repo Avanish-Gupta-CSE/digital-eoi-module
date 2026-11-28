@@ -1,7 +1,7 @@
 ---
 description: Vishal Singh (SE) — software engineer. Makes one well-specified change across 1–3 files, following an existing pattern exactly.
 mode: subagent
-model: opencode-go/muse-spark-1.3-contributor#high
+model: opencode/deepseek-v4.1-flash-free#high
 steps: 18
 color: "#fdcb6e"
 permissions:

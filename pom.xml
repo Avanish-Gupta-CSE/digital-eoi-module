@@ -48,10 +48,17 @@
       <artifactId>jakarta.servlet.jsp.jstl</artifactId>
     </dependency>
 
-    <!-- H2 for the local profile. Oracle driver is added with the uat profile. -->
+    <!-- H2 for the local profile. Oracle 19c driver below is for UAT and production. -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Oracle 19c for UAT and production. Version comes from the Spring Boot parent. -->
+    <dependency>
+      <groupId>com.oracle.database.jdbc</groupId>
+      <artifactId>ojdbc11</artifactId>
       <scope>runtime</scope>
     </dependency>
 
