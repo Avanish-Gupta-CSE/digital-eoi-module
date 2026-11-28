@@ -2,6 +2,14 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Oracle UAT Docker, Parts III–VI child forms, and SSO/HRMS Auth (PRs #27, #28, #29)
+
+**Done**
+- **PR #27 (`d915828`)**: Added `ojdbc11`, Oracle UAT defaults in `application.properties`, `db_migrations/01_CREATE_EOI_TABLES.sql` & `02_SEED_EOI_DEMO.sql`, `scripts/dev-start.sh` (verified 200 OK against `uco-oracle-free`), and dashboard `Draft`/`Approved`/`Returned` filter chips + `Open` action link. Switched `se` agent to `opencode/deepseek-v4.1-flash-free#high`.
+- **PR #28 (`0840cd2`)**: Added Parts I.III–I.V and III–VI child-row add/delete endpoints (`ReportChildController`, `ReportRubricController`, `ReportChildRepository`, `ReportExposureRepository`, `ReportChildWriteRepository`, `ReportChildItems`), JSP fragments (`edit-part1-children.jspf`, `edit-part3.jspf`, `edit-part4.jspf`, `edit-part5-6.jspf`, `edit-part6-rubric.jspf`), delete confirmation in `report-edit.js`, and 6 controller tests (`ReportChildControllerTest`).
+- **PR #29 (`ea03bd6`)**: Added Bank SSO (`GET /entry?Value=...` AES-GCM via `SsoToken`), `HRMS_DBA` lookup (`HrmsLookupService`), dev/UAT OTP login (`GET/POST /login`, `login.jsp`), `AuthConfig` session interceptor, `WorkflowController` & `nav.jspf` `StaffPrincipal` wiring, `report-edit.jsp` child fragment includes, and 7 `AuthControllerTest` tests.
+- **Verified**: `mvn -o clean test` (45/45), `sh scripts/check-guardrails.sh` (`guardrails: ok`), and `bash scripts/dev-start.sh` (200 OK against live Oracle Docker `uco-oracle-free`).
+
 ## 2026-11-28 — Pareto model tiering & step-budget tuning (Decision 018)
 
 **Done**
