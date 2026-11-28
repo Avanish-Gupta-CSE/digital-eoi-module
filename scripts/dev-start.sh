@@ -95,6 +95,11 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE USER $APP_USER IDENTIFIED BY $APP_PASSWORD';
         EXECUTE IMMEDIATE 'GRANT CONNECT, RESOURCE, CREATE TABLE, CREATE SEQUENCE, UNLIMITED TABLESPACE TO $APP_USER';
     END IF;
+    BEGIN
+        EXECUTE IMMEDIATE 'GRANT SELECT ON hrms_dba.employee_contact_details TO $APP_USER';
+        EXECUTE IMMEDIATE 'GRANT SELECT ON hrms_dba.employee_tenure TO $APP_USER';
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END;
 END;
 /
 COMMIT;
@@ -145,7 +150,7 @@ cd "$ROOT_DIR"
 mvn -o -q clean package -DskipTests
 
 echo "==> Starting the application on port $APP_PORT"
-nohup mvn -o spring-boot:run -Dspring-boot.run.arguments="--server.port=$APP_PORT" > "$LOG_FILE" 2>&1 < /dev/null &
+DEV_LOGIN_ENABLED=true nohup mvn -o spring-boot:run -Dspring-boot.run.arguments="--server.port=$APP_PORT" > "$LOG_FILE" 2>&1 < /dev/null &
 APP_PID=$!
 echo "$APP_PID" > "$RUN_DIR/eoi.pid"
 
@@ -161,12 +166,12 @@ until grep -q "Started DigitalEoiApplication" "$LOG_FILE" 2>/dev/null; do
     sleep 2
 done
 
-echo "==> Checking http://localhost:$APP_PORT/dashboard"
-HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:$APP_PORT/dashboard")
+echo "==> Checking http://localhost:$APP_PORT/login and /dashboard"
+HTTP_CODE=$(curl -s -L -o /dev/null -w '%{http_code}' "http://localhost:$APP_PORT/dashboard")
 if [ "$HTTP_CODE" = "200" ]; then
-    echo "    200 OK - the dashboard answers against Oracle"
+    echo "    200 OK - login & dashboard guard answer against Oracle"
 else
-    echo "    the dashboard answered with HTTP $HTTP_CODE" >&2
+    echo "    answered with HTTP $HTTP_CODE" >&2
     tail -30 "$LOG_FILE" >&2
     exit 1
 fi
