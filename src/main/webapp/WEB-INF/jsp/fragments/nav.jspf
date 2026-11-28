@@ -14,13 +14,29 @@
         </div>
         <div class="header-right">
             <span class="env-chip">DEV</span>
-            <div class="user-block">
-                <span class="user-avatar" aria-hidden="true">CO</span>
-                <span class="user-meta">
-                    <span class="user-name">Credit Officer</span>
-                    <span class="user-role">Maker</span>
-                </span>
-            </div>
+            <c:choose>
+                <c:when test="${not empty sessionScope.staff}">
+                    <div class="user-block">
+                        <span class="user-avatar" aria-hidden="true">${sessionScope.staff.initials()}</span>
+                        <span class="user-meta">
+                            <span class="user-name">${sessionScope.staff.name}</span>
+                            <span class="user-role">${sessionScope.staff.role}</span>
+                        </span>
+                    </div>
+                    <form method="post" action="${pageContext.request.contextPath}/logout">
+                        <button type="submit" class="signout-button">Sign out</button>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <div class="user-block">
+                        <span class="user-avatar" aria-hidden="true">CO</span>
+                        <span class="user-meta">
+                            <span class="user-name">Credit Officer</span>
+                            <span class="user-role">Maker</span>
+                        </span>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </header>

@@ -21,6 +21,13 @@
 
     <%@ include file="fragments/report-status.jspf" %>
 
+    <c:if test="${param.saved == '1'}">
+        <div class="alert alert-success alert-dismissible fade show" role="status">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            Entry saved.
+        </div>
+    </c:if>
+
     <c:if test="${param.prefilled == '1'}">
         <div class="alert alert-success alert-dismissible fade show" role="status">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -125,6 +132,12 @@
             </div>
         </div>
     </form:form>
+
+    <%@ include file="fragments/edit-part1-children.jspf" %>
+    <%@ include file="fragments/edit-part3.jspf" %>
+    <%@ include file="fragments/edit-part4.jspf" %>
+    <%@ include file="fragments/edit-part5-6.jspf" %>
+    <%@ include file="fragments/edit-part6-rubric.jspf" %>
 
 </main>
 
