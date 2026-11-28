@@ -231,6 +231,21 @@
 
 ---
 
+### Decision 018: Pareto model tiering & step-budget tuning across the 8-seat team
+* **Date:** 2026-11-28
+* **Context:** To maximize throughput and first-pass accuracy with minimal cost across the OpenCode Go ($10), MiniMax M Plan, and Free buckets (and avoid mid-task step-limit pauses observed in PRs #18–#24).
+* **Decision:**
+  * `tl`: stays on `opencode-go/deepseek-v4-pro#high` (`steps: 18`, up from 14).
+  * `manager`: moved to `opencode/deepseek-v4.1-flash-free#high` ($0, preserves Go allowance).
+  * `sse2`: upgraded to `minimax-coding-plan/MiniMax-M3` ($0 marginal on M Plan, stronger pattern setter).
+  * `sse` & `sse-b`: keep `minimax-coding-plan/MiniMax-M3.1-Flash` ($0 marginal, `steps: 22`, up from 18).
+  * `se`: moved to `opencode-go/muse-spark-1.3-contributor#high` ($0.10/$0.20, `steps: 18`, up from 12).
+  * `po` & `ase`: keep `opencode/deepseek-v4.1-flash-free#high` and `#low` ($0).
+* **Verified:** All chosen model/variant strings tested live via `opencode run --model ...` (`OK`).
+* **Status:** In Force.
+
+---
+
 ### Decision 018: Part V arithmetic shown literally; across-currency total withheld until FX exists
 * **Date:** 2026-11-27
 * **Context:** The Annex II report view must show Part V (un-hedged foreign currency exposure) with its net positions. The Tech Lead asked for two sign-offs before coding: the sign convention, and whether an across-all-currencies total is shown.

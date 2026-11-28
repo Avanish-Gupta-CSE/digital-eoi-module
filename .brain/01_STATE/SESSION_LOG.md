@@ -2,6 +2,35 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Pareto model tiering & step-budget tuning (Decision 018)
+
+**Done**
+- Reconfigured `.opencode/agents/`: `manager` → `deepseek-v4.1-flash-free#high`, `sse2` → `MiniMax-M3`, `se` → `muse-spark-1.3-contributor#high` (`steps: 18`), `tl` → `steps: 18`, `sse`/`sse-b` → `steps: 22`.
+- Verified all models live via `opencode run --model ...` and recorded Decision 018.
+
+## 2026-11-27 — Slices 1–4 complete on `main` (PRs #18, #19, #20, #23, #24)
+
+**Delivered**
+- **#18** Part IV split: `npa_restructured_amount` → `npa_amount` + `restructured_notional_amount`.
+- **#19** Read-only Annex II report screen (`/reports/{id}`), Parts I–VI; Part V nets computed in Java.
+- **#20** Part VI advisory scoring (`ConductScoringService`), NPA-still-NPA forced Below Par.
+- **#23** Maker entry (`/reports/{id}/edit`, `/prefill`), maker–checker workflow
+  (`/submit`, `/approve`, `/return`) and the `eoi_audit_log` audit trail.
+- **#24** Finacle seam (`FinacleDataSource` + `MockFinacleDataSource`), `sync-finacle`, CSV export.
+- **#22** follow-up fix: removed duplicate `</body></html>` that merged with #19 despite the review
+  blocking it. Verified on `main` directly, not from the merge report.
+
+**Verified now**
+- 32 tests pass (`IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2,
+  `ConductScoringServiceTest` 12, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4).
+- Guardrails green; `main` protected by PR + required check.
+
+**Open — all bank-gated**
+- Oracle 19c `uat` profile (`ojdbc11`, `application-uat.properties`, schema run incl. the Part IV
+  `ALTER`). CI has only ever proved the H2 path.
+- Bank SSO/HRMS login (`uco-realty-v3` pattern), live `FinacleDataSource` adapter (question #1),
+  quarterly scheduler (question #4), lender transmission (question #3).
+
 ## 2026-11-27 — PR 2/3 of Slice 1: read-only Annex II report screen
 
 **Done**

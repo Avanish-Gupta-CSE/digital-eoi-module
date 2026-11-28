@@ -1,7 +1,7 @@
 ---
 description: Nagendra Immadi (Manager) — delivery manager and the agent you talk to. Turns a goal into tasks, assigns the right teammate, and reports back in plain language.
 mode: primary
-model: opencode-go/deepseek-v4-pro#high
+model: opencode/deepseek-v4.1-flash-free#high
 steps: 25
 color: "#6c5ce7"
 permissions:

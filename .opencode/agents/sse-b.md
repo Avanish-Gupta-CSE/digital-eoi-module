@@ -2,7 +2,7 @@
 description: Rajeshwari Narella (SSE-2) — senior software engineer, view layer. Builds the JSP, Bootstrap markup, form validation and report/export views for one feature slice, following the pattern set by SSE2.
 mode: subagent
 model: minimax-coding-plan/MiniMax-M3.1-Flash
-steps: 18
+steps: 22
 color: "#55efc4"
 permissions:
   - action: edit

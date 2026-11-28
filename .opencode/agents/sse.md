@@ -2,7 +2,7 @@
 description: Uday Kiran Sayaboyina (SSE) — senior software engineer, backend slice. Builds controller, service, repository and the JSP for one feature slice, following the pattern set by SSE2.
 mode: subagent
 model: minimax-coding-plan/MiniMax-M3.1-Flash
-steps: 18
+steps: 22
 color: "#00cec9"
 permissions:
   - action: edit
