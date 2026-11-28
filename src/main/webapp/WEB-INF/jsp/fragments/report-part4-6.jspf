@@ -22,14 +22,14 @@
                 <tbody>
                     <c:forEach items="${view.derivatives}" var="derivative">
                         <tr>
-                            <td>${derivative.serialNo}</td>
-                            <td>${derivative.nature}</td>
-                            <td class="text-end">${derivative.notionalText}</td>
-                            <td>${derivative.maturityText}</td>
-                            <td class="text-end">${derivative.positiveMtmText}</td>
-                            <td class="text-end">${derivative.npaText}</td>
-                            <td class="text-end">${derivative.restructuredText}</td>
-                            <td>${derivative.reasons}</td>
+                            <td><c:out value="${derivative.serialNo}"/></td>
+                            <td><c:out value="${derivative.nature}"/></td>
+                            <td class="text-end"><c:out value="${derivative.notionalText}"/></td>
+                            <td><c:out value="${derivative.maturityText}"/></td>
+                            <td class="text-end"><c:out value="${derivative.positiveMtmText}"/></td>
+                            <td class="text-end"><c:out value="${derivative.npaText}"/></td>
+                            <td class="text-end"><c:out value="${derivative.restructuredText}"/></td>
+                            <td><c:out value="${derivative.reasons}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -62,14 +62,14 @@
                 <tbody>
                     <c:forEach items="${view.currencyPositions}" var="row">
                         <tr>
-                            <td>${row.currency}</td>
-                            <td class="text-end">${row.shortLong}</td>
-                            <td class="text-end">${row.shortShort}</td>
-                            <td class="text-end">${row.shortNet}</td>
-                            <td class="text-end">${row.longLong}</td>
-                            <td class="text-end">${row.longShort}</td>
-                            <td class="text-end">${row.longNet}</td>
-                            <td class="text-end">${row.overallNet}</td>
+                            <td><c:out value="${row.currency}"/></td>
+                            <td class="text-end"><c:out value="${row.shortLong}"/></td>
+                            <td class="text-end"><c:out value="${row.shortShort}"/></td>
+                            <td class="text-end"><c:out value="${row.shortNet}"/></td>
+                            <td class="text-end"><c:out value="${row.longLong}"/></td>
+                            <td class="text-end"><c:out value="${row.longShort}"/></td>
+                            <td class="text-end"><c:out value="${row.longNet}"/></td>
+                            <td class="text-end"><c:out value="${row.overallNet}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -99,8 +99,8 @@
                 <tbody>
                     <c:forEach items="${view.experience}" var="item">
                         <tr>
-                            <td>${item.itemCode}</td>
-                            <td>${item.grade}</td>
+                            <td><c:out value="${item.itemCode}"/></td>
+                            <td><c:out value="${item.grade}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -126,10 +126,10 @@
                 <tbody>
                     <c:forEach items="${view.rubric}" var="row">
                         <tr>
-                            <td>${row.itemCode}</td>
-                            <td>${row.paramNo}</td>
-                            <td>${row.observedValue}</td>
-                            <td>${row.grade}</td>
+                            <td><c:out value="${row.itemCode}"/></td>
+                            <td><c:out value="${row.paramNo}"/></td>
+                            <td><c:out value="${row.observedValue}"/></td>
+                            <td><c:out value="${row.grade}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>

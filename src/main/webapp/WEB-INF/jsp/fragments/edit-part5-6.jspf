@@ -23,15 +23,16 @@
                 <tbody>
                     <c:forEach items="${editChildren.currencies}" var="r">
                         <tr>
-                            <td>${r.currency}</td>
-                            <td class="text-end">${r.shortLongText}</td>
-                            <td class="text-end">${r.shortShortText}</td>
-                            <td class="text-end">${r.longLongText}</td>
-                            <td class="text-end">${r.longShortText}</td>
+                            <td><c:out value="${r.currency}"/></td>
+                            <td class="text-end"><c:out value="${r.shortLongText}"/></td>
+                            <td class="text-end"><c:out value="${r.shortShortText}"/></td>
+                            <td class="text-end"><c:out value="${r.longLongText}"/></td>
+                            <td class="text-end"><c:out value="${r.longShortText}"/></td>
                             <td>
                                 <form class="child-delete-form" method="post"
                                       action="${pageContext.request.contextPath}/reports/${view.reportId()}/currencies/${r.id()}/delete"
                                       data-confirm="Delete this currency position?">
+                                    <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </td>
@@ -44,6 +45,7 @@
 
     <form class="row g-2 align-items-end mt-3" method="post"
           action="${pageContext.request.contextPath}/reports/${view.reportId()}/currencies/add">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="col-12 col-md-2">
             <label class="form-label" for="currency-code">Currency *</label>
             <input class="form-control" id="currency-code" name="currencyCode" type="text" required>
@@ -89,12 +91,13 @@
                 <tbody>
                     <c:forEach items="${editChildren.experience}" var="r">
                         <tr>
-                            <td>${r.itemCode}</td>
-                            <td>${r.grade}</td>
+                            <td><c:out value="${r.itemCode}"/></td>
+                            <td><c:out value="${r.grade}"/></td>
                             <td>
                                 <form class="child-delete-form" method="post"
                                       action="${pageContext.request.contextPath}/reports/${view.reportId()}/experience/${r.id()}/delete"
                                       data-confirm="Delete this experience grade?">
+                                    <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </td>
@@ -107,6 +110,7 @@
 
     <form class="row g-2 align-items-end mt-3" method="post"
           action="${pageContext.request.contextPath}/reports/${view.reportId()}/experience/save">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="col-12 col-md-5">
             <label class="form-label" for="experience-item-code">Item *</label>
             <input class="form-control" id="experience-item-code" name="itemCode" type="text" required>

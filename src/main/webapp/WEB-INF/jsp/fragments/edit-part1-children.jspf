@@ -23,13 +23,14 @@
                     <tbody>
                         <c:forEach items="${editChildren.directors}" var="r">
                             <tr>
-                                <td>${r.name}</td>
-                                <td>${r.designation}</td>
-                                <td class="text-end">${r.netWorthText}</td>
+                                <td><c:out value="${r.name}"/></td>
+                                <td><c:out value="${r.designation}"/></td>
+                                <td class="text-end"><c:out value="${r.netWorthText}"/></td>
                                 <td>
                                     <form class="child-delete-form" method="post"
                                           action="${pageContext.request.contextPath}/reports/${view.reportId()}/directors/${r.id()}/delete"
                                           data-confirm="Delete this director or partner?">
+                                        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     </form>
                                 </td>
@@ -42,6 +43,7 @@
 
         <form class="row g-2 align-items-end mt-3" method="post"
               action="${pageContext.request.contextPath}/reports/${view.reportId()}/directors/add">
+            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
             <div class="col-12 col-md-4">
                 <label class="form-label" for="director-name">Name *</label>
                 <input class="form-control" id="director-name" name="name" type="text" required>
@@ -77,11 +79,12 @@
                     <tbody>
                         <c:forEach items="${editChildren.allied}" var="r">
                             <tr>
-                                <td>${r.text}</td>
+                                <td><c:out value="${r.text}"/></td>
                                 <td>
                                     <form class="child-delete-form" method="post"
                                           action="${pageContext.request.contextPath}/reports/${view.reportId()}/allied/${r.id()}/delete"
                                           data-confirm="Delete this allied activity?">
+                                        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     </form>
                                 </td>
@@ -94,6 +97,7 @@
 
         <form class="row g-2 align-items-end mt-3" method="post"
               action="${pageContext.request.contextPath}/reports/${view.reportId()}/allied/add">
+            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
             <div class="col-12 col-md-9">
                 <label class="form-label" for="allied-activity-name">Activity name *</label>
                 <input class="form-control" id="allied-activity-name" name="activityName" type="text" required>
@@ -121,11 +125,12 @@
                     <tbody>
                         <c:forEach items="${editChildren.banks}" var="r">
                             <tr>
-                                <td>${r.text}</td>
+                                <td><c:out value="${r.text}"/></td>
                                 <td>
                                     <form class="child-delete-form" method="post"
                                           action="${pageContext.request.contextPath}/reports/${view.reportId()}/banks/${r.id()}/delete"
                                           data-confirm="Delete this financing bank?">
+                                        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     </form>
                                 </td>
@@ -138,6 +143,7 @@
 
         <form class="row g-2 align-items-end mt-3" method="post"
               action="${pageContext.request.contextPath}/reports/${view.reportId()}/banks/add">
+            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
             <div class="col-12 col-md-9">
                 <label class="form-label" for="bank-name">Bank name *</label>
                 <input class="form-control" id="bank-name" name="bankName" type="text" required>

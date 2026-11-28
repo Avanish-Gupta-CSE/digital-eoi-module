@@ -1,6 +1,6 @@
 # CURRENT_STATE
 
-Last updated: 2026-11-28
+Last updated: 2026-11-28 (security hardening pass, Decision 020)
 
 ## Project
 UCO Bank — Digital EoI (Exchange of Information) Module.
@@ -15,9 +15,15 @@ Arrangements.
   - Oracle UAT/Prod default (`application.properties` + `ojdbc11`), verified against Docker Oracle Free (`uco-oracle-free` on `localhost:1521/FREEPDB1`) via `scripts/dev-start.sh`, `db_migrations/01_CREATE_EOI_TABLES.sql`, and `db_migrations/02_SEED_EOI_DEMO.sql`.
   - H2 in-memory (`--spring.profiles.active=h2`) with synthetic rows in `h2-init.sql`.
 - **Auth:** Session-based (`HttpSession` + `AuthConfig` interceptor): Bank SSO (`GET /entry?Value=...` AES-GCM), `HRMS_DBA` lookup (`HrmsLookupService`), and dev/UAT OTP login (`GET/POST /login`, test OTP `123456` gated by `DEV_LOGIN_ENABLED=true`).
-- **Tests:** **45 passing** (`mvn -o clean test`) — `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4.
+- **Tests:** **57 passing** (`mvn -o clean test`) — `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5, `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4.
   CI runs `guardrails` + `mvn test` on every PR.
-- **Git:** `main` at `ea03bd6` (PRs #27, #28, #29 merged). Public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected. See `CONTRIBUTING.md`.
+- **Git:** `main` at `029faf0` (PRs up to #33 merged). The security pass of 2026-11-28 is uncommitted until the owner reviews it. Public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected. See `CONTRIBUTING.md`.
+
+## Security controls in force (2026-11-28)
+CSRF token on every POST (`web/CsrfFilter`); CSP and hardening headers (`web/SecurityHeadersFilter`); all JSP output escaped; approve/return CHECKER-only with status-guarded SQL; frozen reports (`report/ReportLockInterceptor`); report-scoped child deletes; login throttle and session-id change; no default DB password; hardened session cookie. Plain filters and interceptors, not Spring Security (Decisions 019, 020).
+
+## Look and feel (2026-11-28)
+UcoRealtyStaff shell: UCO Bank logo header, blue nav bar, UCO footer. Assets in `static/assets/images/`. Bump `?v=` on `style.css` in `fragments/head.jspf` after any CSS change.
 
 ## Working screens (all on `main`)
 

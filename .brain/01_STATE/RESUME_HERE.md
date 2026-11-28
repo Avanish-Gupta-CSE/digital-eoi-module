@@ -6,7 +6,7 @@ Last updated: 2026-11-22. If anything here disagrees with the code, **the code w
 
 ## 1. What works right now
 
-A Spring Boot 4.1.3 / Java 25 app, packaged as a WAR, that renders one real screen from H2.
+A Spring Boot 4.1.3 / Java 25 WAR with the full Annex II maker-checker flow, SSO/HRMS login and a security layer (CSRF, CSP, report lock). **Sections 4 and 5 below are partly historic: `CURRENT_STATE.md` and `NEXT_STEPS.md` are the live truth.** Every new form must carry the `_csrf` hidden field.
 
 ```sh
 # run it (the second command is not optional: spring-boot:run does not recompile)
@@ -15,7 +15,7 @@ mvn -q spring-boot:run -Dspring-boot.run.profiles=h2
 # open http://localhost:8080/dashboard
 
 # verify
-mvn -q test                    # 4 tests
+mvn -q test                    # 57 tests
 sh scripts/check-guardrails.sh # no inline script/style in JSPs
 ```
 

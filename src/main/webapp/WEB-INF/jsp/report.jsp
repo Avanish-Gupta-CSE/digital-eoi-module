@@ -8,8 +8,8 @@
     <div class="page-head">
         <div>
             <p class="page-eyebrow">Annex II report</p>
-            <h1 class="page-title">${view.borrower.name}</h1>
-            <p class="page-subtitle">Quarter ${view.quarter} &middot; ${view.borrower.consortiumName}</p>
+            <h1 class="page-title"><c:out value="${view.borrower.name}"/></h1>
+            <p class="page-subtitle">Quarter <c:out value="${view.quarter}"/> &middot; <c:out value="${view.borrower.consortiumName}"/></p>
         </div>
         <div class="page-actions">
             <a class="btn btn-primary btn-bank-primary" href="/reports/${view.reportId()}/edit">Edit Annex II</a>
@@ -22,21 +22,21 @@
     <c:if test="${param.saved == '1'}">
         <div class="alert alert-success alert-dismissible fade show" role="status" data-auto-fade>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            Annex II for ${view.quarter} saved.
+            Annex II for <c:out value="${view.quarter}"/> saved.
         </div>
     </c:if>
 
     <c:if test="${not empty param.error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            ${not empty errorMessage ? errorMessage : param.error}
+            <c:out value="${not empty errorMessage ? errorMessage : param.error}"/>
         </div>
     </c:if>
 
     <c:if test="${not empty param.workflow}">
         <div class="alert alert-success alert-dismissible fade show" role="status" data-auto-fade>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            ${param.workflow}
+            <c:out value="${param.workflow}"/>
         </div>
     </c:if>
 

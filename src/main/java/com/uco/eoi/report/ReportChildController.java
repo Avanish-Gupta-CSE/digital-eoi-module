@@ -39,7 +39,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/directors/{rowId}/delete")
     public String deleteDirector(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        childRepository.deleteDirector(rowId);
+        childRepository.deleteDirector(id, rowId);
         return backToEdit(id);
     }
 
@@ -55,7 +55,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/allied/{rowId}/delete")
     public String deleteAllied(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        childRepository.deleteAllied(rowId);
+        childRepository.deleteAllied(id, rowId);
         return backToEdit(id);
     }
 
@@ -71,7 +71,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/banks/{rowId}/delete")
     public String deleteBank(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        childRepository.deleteBank(rowId);
+        childRepository.deleteBank(id, rowId);
         return backToEdit(id);
     }
 
@@ -89,7 +89,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/facilities/{rowId}/delete")
     public String deleteFacility(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        exposureRepository.deleteFacility(rowId);
+        exposureRepository.deleteFacility(id, rowId);
         return backToEdit(id);
     }
 
@@ -107,7 +107,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/derivatives/{rowId}/delete")
     public String deleteDerivative(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        exposureRepository.deleteDerivative(rowId);
+        exposureRepository.deleteDerivative(id, rowId);
         return backToEdit(id);
     }
 
@@ -124,7 +124,7 @@ public class ReportChildController {
     @PostMapping("/reports/{id}/currencies/{rowId}/delete")
     public String deleteCurrency(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        exposureRepository.deleteCurrency(rowId);
+        exposureRepository.deleteCurrency(id, rowId);
         return backToEdit(id);
     }
 

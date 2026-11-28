@@ -1,6 +1,9 @@
 package com.uco.eoi.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,17 +28,20 @@ public class AuthController {
     private final String encryptionKey;
     private final boolean devLoginEnabled;
     private final String testOtp;
+    private final LoginThrottle throttle;
 
     public AuthController(SsoToken ssoToken,
                           HrmsLookupService hrmsLookupService,
                           @Value("${sso.encryption.key:}") String encryptionKey,
                           @Value("${uco.sso.dev-login-enabled:false}") boolean devLoginEnabled,
-                          @Value("${uco.sso.test-otp:123456}") String testOtp) {
+                          @Value("${uco.sso.test-otp:123456}") String testOtp,
+                          LoginThrottle throttle) {
         this.ssoToken = ssoToken;
         this.hrmsLookupService = hrmsLookupService;
         this.encryptionKey = encryptionKey;
         this.devLoginEnabled = devLoginEnabled;
         this.testOtp = testOtp;
+        this.throttle = throttle;
     }
 
     /**
@@ -43,7 +49,7 @@ public class AuthController {
      */
     @GetMapping("/entry")
     public String entry(@RequestParam(name = "Value", required = false) String value,
-                        HttpSession session) {
+                        HttpServletRequest request) {
         if (value == null || value.isBlank()) {
             return "redirect:/login?error=sso";
         }
@@ -57,8 +63,15 @@ public class AuthController {
         if (staff == null) {
             return "redirect:/login?error=sso";
         }
-        session.setAttribute(STAFF, staff);
+        signIn(request, staff);
         return "redirect:/dashboard";
+    }
+
+    /** Starts the officer's session under a new session id, so an old id cannot be reused. */
+    private void signIn(HttpServletRequest request, StaffPrincipal staff) {
+        request.getSession(true);
+        request.changeSessionId();
+        request.getSession().setAttribute(STAFF, staff);
     }
 
     /** Reads the officer out of the decrypted token, or null when HRMS has no row. */
@@ -83,6 +96,10 @@ public class AuthController {
                             + "The dev OTP form is switched off on this server.");
             return "login";
         }
+        if ("expired".equals(error)) {
+            model.addAttribute("errorMessage",
+                    "Your session has ended or the page was out of date. Please sign in again.");
+        }
         if ("sso".equals(error)) {
             model.addAttribute("errorMessage",
                     "The bank sign-on link could not be read. Please sign in again with your "
@@ -97,18 +114,25 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestParam(name = "empNo", required = false) String empNo,
                         @RequestParam(name = "otp", required = false) String otp,
-                        HttpSession session,
+                        HttpServletRequest request,
                         Model model) {
         if (!devLoginEnabled) {
             model.addAttribute("errorMessage",
                     "The dev OTP form is switched off on this server.");
             return "login";
         }
+        String address = request.getRemoteAddr();
+        if (throttle.isLocked(address)) {
+            model.addAttribute("errorMessage",
+                    "Too many wrong attempts. Wait 15 minutes and try again.");
+            return "login";
+        }
         if (empNo == null || empNo.isBlank()) {
             model.addAttribute("errorMessage", "Enter your employee number.");
             return "login";
         }
-        if (!testOtp.equals(otp == null ? "" : otp.trim())) {
+        if (!sameText(testOtp, otp == null ? "" : otp.trim())) {
+            throttle.recordFailure(address);
             model.addAttribute("errorMessage",
                     "The one-time password is not correct. Check the number and try again.");
             return "login";
@@ -123,8 +147,15 @@ public class AuthController {
                             + ". Check the number with the HRMS team.");
             return "login";
         }
-        session.setAttribute(STAFF, staff);
+        throttle.recordSuccess(address);
+        signIn(request, staff);
         return "redirect:/dashboard";
+    }
+
+    /** Compares two texts in constant time, so the answer time does not leak the password. */
+    private static boolean sameText(String expected, String given) {
+        return MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8),
+                given.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

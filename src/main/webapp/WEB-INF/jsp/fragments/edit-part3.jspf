@@ -26,18 +26,19 @@
                 <tbody>
                     <c:forEach items="${editChildren.facilities}" var="r">
                         <tr>
-                            <td>${r.facilityType}</td>
-                            <td>${r.purpose}</td>
-                            <td>${r.facilityDateText}</td>
-                            <td class="text-end">${r.sanctionedText}</td>
-                            <td class="text-end">${r.outstandingText}</td>
-                            <td>${r.repaymentTerms}</td>
-                            <td>${r.defaultsCommitments}</td>
-                            <td>${r.securityText}</td>
+                            <td><c:out value="${r.facilityType}"/></td>
+                            <td><c:out value="${r.purpose}"/></td>
+                            <td><c:out value="${r.facilityDateText}"/></td>
+                            <td class="text-end"><c:out value="${r.sanctionedText}"/></td>
+                            <td class="text-end"><c:out value="${r.outstandingText}"/></td>
+                            <td><c:out value="${r.repaymentTerms}"/></td>
+                            <td><c:out value="${r.defaultsCommitments}"/></td>
+                            <td><c:out value="${r.securityText}"/></td>
                             <td>
                                 <form class="child-delete-form" method="post"
                                       action="${pageContext.request.contextPath}/reports/${view.reportId()}/facilities/${r.id()}/delete"
                                       data-confirm="Delete this facility?">
+                                    <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </td>
@@ -50,6 +51,7 @@
 
     <form class="row g-2 align-items-end mt-3" method="post"
           action="${pageContext.request.contextPath}/reports/${view.reportId()}/facilities/add">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="col-12 col-md-4">
             <label class="form-label" for="facility-type">Type of facility *</label>
             <input class="form-control" id="facility-type" name="facilityType" type="text" required>

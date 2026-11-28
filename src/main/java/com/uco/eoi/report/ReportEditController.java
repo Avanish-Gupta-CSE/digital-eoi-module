@@ -66,9 +66,13 @@ public class ReportEditController {
     public String save(@PathVariable("id") long id,
             @ModelAttribute("form") ReportEditForm form,
             BindingResult binding, Model model) {
+        ReportView view = reportService.report(id);
+        if (view == null) {
+            return "redirect:/dashboard?error=notfound";
+        }
         rejectBlankFields(form, binding);
         if (binding.hasErrors()) {
-            model.addAttribute("view", reportService.report(id));
+            model.addAttribute("view", view);
             model.addAttribute("editChildren", childRepository.loadAll(id));
             return "report-edit";
         }
@@ -97,15 +101,14 @@ public class ReportEditController {
     public void export(@PathVariable("id") long id, HttpServletResponse response)
             throws IOException {
         ReportView view = reportService.report(id);
+        if (view == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader("Content-Disposition",
                 "attachment; filename=\"annex-ii-report-" + id + ".csv\"");
-        PrintWriter out = response.getWriter();
-        if (view == null) {
-            out.println("Report not found");
-            return;
-        }
-        writeCsv(view, out);
+        writeCsv(view, response.getWriter());
     }
 
     /** The three fields the bank asks for every time. The message says what to type. */
@@ -167,6 +170,10 @@ public class ReportEditController {
 
     private static String csvCell(String value) {
         String text = value == null ? "" : value;
+        // A cell that starts like a formula is run by Excel when the maker opens the file.
+        if (!text.isEmpty() && "=+-@\t\r".indexOf(text.charAt(0)) >= 0) {
+            text = "'" + text;
+        }
         if (text.contains(",") || text.contains("\"") || text.contains("\n")) {
             return "\"" + text.replace("\"", "\"\"") + "\"";
         }

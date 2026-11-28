@@ -10,7 +10,7 @@ Last updated: 2026-11-28
 - Full Maker entry/edit (`/reports/{id}/edit`) for Parts I–II + Parts I.III–I.V and III–VI child-row add/delete + Part VI `ConductScoringService` auto-grader
 - Bank SSO (`GET /entry?Value=...` AES-GCM) + `HRMS_DBA` lookup + dev/UAT OTP login (`/login`, test OTP `123456`)
 - Oracle UAT Docker support (`uco-oracle-free`, `db_migrations/`, `scripts/dev-start.sh`) and H2 laptop profile (`h2`)
-- **45 tests pass** (`mvn -o clean test`) and `check-guardrails.sh` is green. What remains is bank-gated (live Finacle adapter, lender transmission channel, Annex I/III scope) — see below.
+- **57 tests pass** (`mvn -o clean test`) and `check-guardrails.sh` is green. What remains is bank-gated (live Finacle adapter, lender transmission channel, Annex I/III scope) — see below.
 
 > **RBI Circular verified (2026-11-27):** `.brain/01_Business_Requirement/RBI_Circular.pdf` is the
 > correct 57-page `RBI/DOR/2025-26/159` (*Commercial Banks – Transfer and Distribution of Credit Risk
@@ -27,6 +27,15 @@ Last updated: 2026-11-28
 | #4 Quarterly calendar | `eoi.current-quarter` property | the scheduler |
 | #5 ₹5 crore threshold | `eoi.borrower-threshold-amount` | confirming the population rule |
 | #6 Non-Finacle data | maker entry forms now exist | external sources if preferred |
+
+## Review gaps still open (found 2026-11-28, not fixed: they need an owner or bank decision)
+1. **No row-level access control:** any signed-in officer sees and edits every borrower's report. UcoRealtyStaff scopes by SOL/zone; the EoI scoping rule (branch, zone, head office) is not defined.
+2. **No re-open path** for an APPROVED report that has an error (it is now locked). Needs a bank-defined, audited "re-open" action and a rule for who may do it.
+3. **No audit rows for edits or child add/delete:** only submit/approve/return/sync reach `eoi_audit_log`, but STANDING_DECISIONS asks for every edit. Add audit writes.
+4. **Dev stand-in officer is always CHECKER** (`AuthController.devStaff`), and `DEV_LOGIN_ENABLED` plus test OTP `123456` must be removed before the audit build (secure-coding order, point 8).
+5. **Numeric inputs** (Part VI rubric, derivatives) go through `Double.parseDouble` with no range check.
+6. The nav shows a fake "Credit Officer / Maker" and a `DEV` chip when auth is off or on UAT; make the environment chip a property.
+7. Login attempts and logout are not logged (UcoRealtyStaff logs both); no log-folder policy.
 
 ## Build sequence
 

@@ -11,11 +11,11 @@
             <h1 class="page-title">Borrowers due for exchange</h1>
             <p class="page-subtitle">
                 Consortium and multiple banking borrowers above the reporting threshold
-                for <strong>${view.quarter}</strong>.
+                for <strong><c:out value="${view.quarter}"/></strong>.
             </p>
         </div>
         <div class="page-actions">
-            <span class="quarter-chip"><span class="dot"></span>${view.quarter}</span>
+            <span class="quarter-chip"><span class="dot"></span><c:out value="${view.quarter}"/></span>
             <button type="button" id="print-button" class="btn-print">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -41,7 +41,7 @@
                     </div>
                     <h2 class="empty-title">No borrowers are due this quarter</h2>
                     <p class="empty-text">
-                        Nothing matches the current threshold for ${view.quarter}.
+                        Nothing matches the current threshold for <c:out value="${view.quarter}"/>.
                         The next quarterly window opens on the first day of the next quarter.
                     </p>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="data-card-head">
                     <h2 class="data-card-title">
                         Borrowers
-                        <span class="count-pill" id="visible-count">${view.total}</span>
+                        <span class="count-pill" id="visible-count"><c:out value="${view.total}"/></span>
                     </h2>
                     <div class="toolbar">
                         <div class="search-box">
@@ -88,21 +88,21 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${view.rows}" var="row">
-                            <tr data-row data-status="${row.status}">
+                            <tr data-row data-status="<c:out value='${row.status}'/>">
                                 <td>
                                     <div class="borrower-cell">
-                                        <span class="borrower-initials" aria-hidden="true">${row.initials}</span>
+                                        <span class="borrower-initials" aria-hidden="true"><c:out value="${row.initials}"/></span>
                                         <span>
-                                            <a class="borrower-name" href="/reports/${row.reportId}">${row.borrowerName}</a>
-                                            <span class="borrower-sub">${row.consortiumName}</span>
+                                            <a class="borrower-name" href="/reports/${row.reportId}"><c:out value="${row.borrowerName}"/></a>
+                                            <span class="borrower-sub"><c:out value="${row.consortiumName}"/></span>
                                         </span>
                                     </div>
                                 </td>
-                                <td class="text-end amount">${row.sanctionedLimitText}</td>
-                                <td class="text-end amount">${row.outstandingText}</td>
+                                <td class="text-end amount"><c:out value="${row.sanctionedLimitText}"/></td>
+                                <td class="text-end amount"><c:out value="${row.outstandingText}"/></td>
                                 <td class="text-center">
-                                    <span class="status-pill ${row.statusClass}">
-                                        <span class="dot" aria-hidden="true"></span>${row.status}
+                                    <span class="status-pill <c:out value='${row.statusClass}'/>">
+                                        <span class="dot" aria-hidden="true"></span><c:out value="${row.status}"/>
                                     </span>
                                 </td>
                                 <td class="text-end action-col">

@@ -3,17 +3,17 @@
 
     <dl class="report-list">
         <dt>Borrowing party&rsquo;s name</dt>
-        <dd>${view.borrower.name}</dd>
+        <dd><c:out value="${view.borrower.name}"/></dd>
         <dt>Address</dt>
-        <dd>${view.borrower.address}</dd>
+        <dd><c:out value="${view.borrower.address}"/></dd>
         <dt>Constitution</dt>
-        <dd>${view.borrower.constitution}</dd>
+        <dd><c:out value="${view.borrower.constitution}"/></dd>
         <dt>Business activity &mdash; Main</dt>
-        <dd>${view.borrower.mainActivity}</dd>
+        <dd><c:out value="${view.borrower.mainActivity}"/></dd>
         <dt>Group affiliation</dt>
-        <dd>${view.borrower.groupAffiliation}</dd>
+        <dd><c:out value="${view.borrower.groupAffiliation}"/></dd>
         <dt>Associate concerns</dt>
-        <dd>${view.borrower.associateConcerns}</dd>
+        <dd><c:out value="${view.borrower.associateConcerns}"/></dd>
     </dl>
 
     <h3 class="report-subheading">Directors and partners</h3>
@@ -33,9 +33,9 @@
                 <tbody>
                     <c:forEach items="${view.directors}" var="director">
                         <tr>
-                            <td>${director.name}</td>
-                            <td>${director.designation}</td>
-                            <td>${director.netWorthText}</td>
+                            <td><c:out value="${director.name}"/></td>
+                            <td><c:out value="${director.designation}"/></td>
+                            <td><c:out value="${director.netWorthText}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -51,7 +51,7 @@
         <c:otherwise>
             <ul class="report-chips">
                 <c:forEach items="${view.alliedActivities}" var="activity">
-                    <li>${activity}</li>
+                    <li><c:out value="${activity}"/></li>
                 </c:forEach>
             </ul>
         </c:otherwise>
@@ -65,7 +65,7 @@
         <c:otherwise>
             <ul class="report-chips">
                 <c:forEach items="${view.otherBanks}" var="bank">
-                    <li>${bank}</li>
+                    <li><c:out value="${bank}"/></li>
                 </c:forEach>
             </ul>
         </c:otherwise>
@@ -77,21 +77,21 @@
 
     <dl class="report-list">
         <dt>IRAC classification</dt>
-        <dd>${view.report.iracClassification}</dd>
+        <dd><c:out value="${view.report.iracClassification}"/></dd>
         <dt>Internal rating</dt>
-        <dd>${view.report.internalRating}</dd>
+        <dd><c:out value="${view.report.internalRating}"/></dd>
         <dt>Internal rating narration</dt>
-        <dd>${view.report.internalRatingNarration}</dd>
+        <dd><c:out value="${view.report.internalRatingNarration}"/></dd>
         <dt>External rating</dt>
-        <dd>${view.report.externalRating}</dd>
+        <dd><c:out value="${view.report.externalRating}"/></dd>
         <dt>Latest annual report</dt>
-        <dd>${view.report.annualReportLatest}</dd>
+        <dd><c:out value="${view.report.annualReportLatest}"/></dd>
         <dt>Annual report as on</dt>
-        <dd>${view.report.annualReportAsOn}</dd>
+        <dd><c:out value="${view.report.annualReportAsOn}"/></dd>
         <dt>Changes in shareholding</dt>
-        <dd>${view.report.changesShareholding}</dd>
+        <dd><c:out value="${view.report.changesShareholding}"/></dd>
         <dt>Special information</dt>
-        <dd>${view.report.specialInformation}</dd>
+        <dd><c:out value="${view.report.specialInformation}"/></dd>
     </dl>
 </section>
 
@@ -119,13 +119,13 @@
                 <tbody>
                     <c:forEach items="${view.facilities}" var="facility">
                         <tr>
-                            <td>${facility.type}</td>
-                            <td>${facility.purpose}</td>
-                            <td>${facility.facilityDateText}</td>
-                            <td class="text-end">${facility.sanctionedText}</td>
-                            <td class="text-end">${facility.outstandingText}</td>
-                            <td>${facility.repaymentTerms}</td>
-                            <td>${facility.defaults}</td>
+                            <td><c:out value="${facility.type}"/></td>
+                            <td><c:out value="${facility.purpose}"/></td>
+                            <td><c:out value="${facility.facilityDateText}"/></td>
+                            <td class="text-end"><c:out value="${facility.sanctionedText}"/></td>
+                            <td class="text-end"><c:out value="${facility.outstandingText}"/></td>
+                            <td><c:out value="${facility.repaymentTerms}"/></td>
+                            <td><c:out value="${facility.defaults}"/></td>
                             <td>
                                 <c:choose>
                                     <c:when test="${empty facility.securities}">
@@ -134,7 +134,7 @@
                                     <c:otherwise>
                                         <ul class="report-chips">
                                             <c:forEach items="${facility.securities}" var="security">
-                                                <li>${security}</li>
+                                                <li><c:out value="${security}"/></li>
                                             </c:forEach>
                                         </ul>
                                     </c:otherwise>

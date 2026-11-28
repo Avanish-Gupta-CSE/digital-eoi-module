@@ -24,7 +24,10 @@ public class WorkflowService {
     static final String ROLE_CHECKER = "CHECKER";
 
     private static final String REPORT_MISSING =
-            "This report does not exist. Reload the page and try again.";
+            "This report is not in a state where that is allowed, or it does not exist. "
+                    + "Reload the page and check its status.";
+
+    private static final String FIND_STATUS = "SELECT status FROM eoi_report WHERE id = ?";
 
     private static final DateTimeFormatter AUDIT_TIME =
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
@@ -33,13 +36,16 @@ public class WorkflowService {
             "SELECT submitted_by FROM eoi_report WHERE id = ?";
 
     private static final String SET_SUBMITTED =
-            "UPDATE eoi_report SET status = 'SUBMITTED', submitted_by = ? WHERE id = ?";
+            "UPDATE eoi_report SET status = 'SUBMITTED', submitted_by = ? WHERE id = ? "
+                    + "AND status IN ('DRAFT', 'DUE', 'OVERDUE', 'RETURNED')";
 
     private static final String SET_APPROVED =
-            "UPDATE eoi_report SET status = 'APPROVED', checked_by = ? WHERE id = ?";
+            "UPDATE eoi_report SET status = 'APPROVED', checked_by = ? WHERE id = ? "
+                    + "AND status = 'SUBMITTED'";
 
     private static final String SET_RETURNED =
-            "UPDATE eoi_report SET status = 'RETURNED', checked_by = ? WHERE id = ?";
+            "UPDATE eoi_report SET status = 'RETURNED', checked_by = ? WHERE id = ? "
+                    + "AND status = 'SUBMITTED'";
 
     private static final String INSERT_AUDIT =
             "INSERT INTO eoi_audit_log (id, report_id, action, actor_id, actor_role, "
@@ -101,6 +107,10 @@ public class WorkflowService {
     /** Pulls the Finacle figures of the report and records the pull. */
     @Transactional
     public void syncFromFinacle(long reportId, String actorId) {
+        List<String> status = jdbc.query(FIND_STATUS, (rs, rowNumber) -> rs.getString(1), reportId);
+        if (status.isEmpty() || !List.of("DRAFT", "DUE", "OVERDUE", "RETURNED").contains(status.get(0))) {
+            throw new IllegalStateException(REPORT_MISSING);
+        }
         finacleDataSource.syncReport(reportId);
         writeAudit(reportId, "FINACLE_SYNC", actorId, ROLE_MAKER,
                 "Finacle data pulled for this report.");

@@ -34,7 +34,7 @@ class AuthControllerTest {
         // An empty schema means "no HRMS on this machine", which is the dev case.
         HrmsLookupService hrms = new HrmsLookupService(emptyJdbc(), "");
         AuthController controller = new AuthController(new SsoToken(), hrms,
-                KEY_BASE64, true, "123456");
+                KEY_BASE64, true, "123456", new LoginThrottle());
         return MockMvcBuilders.standaloneSetup(controller)
                 .setViewResolvers(new InternalResourceViewResolver("/WEB-INF/jsp/", ".jsp"))
                 .build();

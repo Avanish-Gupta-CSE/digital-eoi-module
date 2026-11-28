@@ -36,7 +36,7 @@ public class ReportRubricController {
     @PostMapping("/reports/{id}/experience/{rowId}/delete")
     public String deleteExperience(@PathVariable("id") long id,
             @PathVariable("rowId") long rowId) {
-        childWriteRepository.deleteExperience(rowId);
+        childWriteRepository.deleteExperience(id, rowId);
         return backToEdit(id);
     }
 

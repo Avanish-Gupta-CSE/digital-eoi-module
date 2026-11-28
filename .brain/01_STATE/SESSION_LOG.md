@@ -2,6 +2,42 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — UCO Bank look and feel (logo, header, footer) and visual fixes
+
+**Request:** start the app, review the look and feel, fix issues, add the UCO Bank logo like uco-realty-v3.
+
+**Done**
+- Copied `uco_bank_logo.png` and `favicon.png` from `UcoRealtyStaff` into `src/main/resources/static/assets/images/`.
+- `fragments/nav.jspf` rebuilt as the UcoRealtyStaff shell: white header with the logo, module title, user pills (name, EMP ID, SOL ID, role) and a red Sign out button; blue gradient nav bar with a saffron active underline. `fragments/foot.jspf` now has the UCO Bank copyright and "Developed by UCO Bank – DIT" lines (no scriptlet). Favicon added in `head.jspf`.
+- CSS: new header/nav/footer styles, sticky-bottom footer (body is a flex column), amounts no longer wrap in `td.text-end`, no underline on button-links, phone layout for the header.
+- Login page hides the nav bar and the user pills when nobody is signed in (`hideStaff` flag set in `login.jsp`).
+- CSS link now carries `?v=20261128c`; **bump it whenever the CSS changes**, otherwise browsers keep the old design.
+
+**Traps found**
+- A change to a `.jspf` (static include) is not seen by a running server: restart the app. `spring-boot:run` also needs `mvn -q compile` first for CSS/images.
+
+**Verified:** screenshots of dashboard, report, edit, login at desktop width and dashboard at phone width; `mvn -o clean test` and `check-guardrails.sh` green. Changes uncommitted.
+
+## 2026-11-28 — Security and workflow gap review against UcoRealtyStaff, and fixes
+
+**Request:** analyse how the app is built against `uco-realty-v3/UcoRealtyStaff` and fix the gaps (the first build was done by weaker models).
+
+**Gaps found (in the code, not the docs) and fixed**
+- **Stored/reflected XSS:** about 60 user-sourced `${}` outputs in JSPs (director names, bank names, derivative reasons, borrower name, `?quarter=`, `param.error`, login error) were unescaped. Now `<c:out>`.
+- **No CSRF protection** on any of the 23 POST forms. Added `web/CsrfFilter` (session token, hidden `_csrf` field in every form, stale form goes to `/login?error=expired`). No Spring Security, per Decision 019.
+- **No security headers or CSP were ever sent**, so the bank CSP rule was not enforced. Added `web/SecurityHeadersFilter` (same header set as UcoRealtyStaff; `/h2-console` skipped).
+- **Maker-checker was bypassable:** any signed-in officer could approve or return; approve, return and submit worked from any status (approve a DRAFT, re-approve, submit an APPROVED report); submitted and approved reports could still be edited. Now `WorkflowController` allows approve/return for CHECKER only, `WorkflowService` UPDATEs carry status guards, and `ReportLockInterceptor` + `ReportLockConfig` freeze the edit and child endpoints unless status is DRAFT, DUE, OVERDUE or RETURNED.
+- **Child-row IDOR:** delete endpoints deleted by row id only, so a row of report B could be deleted through report A's URL. Deletes now also match `report_id` / `borrower_id`.
+- **Login:** session id is changed at sign-in (fixation), OTP compare is constant-time, 5 wrong tries lock the address for 15 minutes (`auth/LoginThrottle`).
+- **Config:** committed default DB password removed (`scripts/dev-start.sh` now passes it); session timeout 30m, HttpOnly, SameSite=Lax, `SESSION_COOKIE_SECURE`; no stack traces or messages in error responses.
+- **CSV export:** formula-injection guard (cells starting with = + - @ get a leading apostrophe), 404 for a missing report; the edit POST on a missing report no longer throws a NullPointerException.
+
+**Verified**
+- `mvn -o clean test`: **57 pass** (12 new: `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5). `sh scripts/check-guardrails.sh`: ok.
+- Live on the h2 profile (port 18089): CSP, X-Frame-Options and no-store are sent; POST without token goes to `/login?error=expired`; with token it works; edit and child delete after submit go to `?error=locked`; re-approve is refused with a message; a `<script>` in a director name renders escaped; a missing CSV gives 404.
+
+**Not done / left for the owner:** see NEXT_STEPS, "Review gaps still open". Changes are uncommitted in the working tree.
+
 ## 2026-11-28 — Oracle UAT Docker, Parts III–VI child forms, and SSO/HRMS Auth (PRs #27, #28, #29)
 
 **Done**
