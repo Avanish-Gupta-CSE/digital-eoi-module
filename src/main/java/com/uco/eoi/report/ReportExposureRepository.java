@@ -172,13 +172,21 @@ public class ReportExposureRepository {
         return new BigDecimal(text.replace(",", "").trim());
     }
 
-    /** A typed date, or null when the officer left the box empty. */
+    /** A typed date (dd-MM-yyyy, yyyy-MM-dd, or dd/MM/yyyy), or null when blank. */
     private static Date date(String text) {
         if (text == null || text.isBlank()) {
             return null;
         }
-        LocalDate parsed = LocalDate.parse(text.trim(), DATE_FORMAT);
-        return Date.valueOf(parsed);
+        String clean = text.trim();
+        for (DateTimeFormatter fmt : List.of(DATE_FORMAT, DateTimeFormatter.ISO_LOCAL_DATE,
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"))) {
+            try {
+                return Date.valueOf(LocalDate.parse(clean, fmt));
+            } catch (java.time.format.DateTimeParseException ignored) {
+                // try next accepted format
+            }
+        }
+        return Date.valueOf(LocalDate.parse(clean, DATE_FORMAT));
     }
 
     /** A date is printed as dd-MM-yyyy; a missing date as empty text. */
