@@ -1,0 +1,150 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part I &mdash; Directors, allied activities and other banks</h2>
+
+    <fieldset class="entry-part">
+        <legend>Directors and partners</legend>
+        <c:choose>
+            <c:when test="${empty editChildren.directors}">
+                <p class="report-empty-line">No directors or partners recorded. Add the first one below.</p>
+            </c:when>
+            <c:otherwise>
+                <table class="eoi-table report-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Net worth</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${editChildren.directors}" var="r">
+                            <tr>
+                                <td>${r.name}</td>
+                                <td>${r.designation}</td>
+                                <td class="text-end">${r.netWorthText}</td>
+                                <td>
+                                    <form class="child-delete-form" method="post"
+                                          action="${pageContext.request.contextPath}/reports/${view.reportId()}/directors/${r.id()}/delete"
+                                          data-confirm="Delete this director or partner?">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
+
+        <form class="row g-2 align-items-end mt-3" method="post"
+              action="${pageContext.request.contextPath}/reports/${view.reportId()}/directors/add">
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="director-name">Name *</label>
+                <input class="form-control" id="director-name" name="name" type="text" required>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="director-designation">Designation *</label>
+                <input class="form-control" id="director-designation" name="designation" type="text" required>
+            </div>
+            <div class="col-12 col-md-2">
+                <label class="form-label" for="director-net-worth">Net worth</label>
+                <input class="form-control" id="director-net-worth" name="netWorth" type="text" inputmode="decimal">
+            </div>
+            <div class="col-12 col-md-2">
+                <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add director</button>
+            </div>
+        </form>
+    </fieldset>
+
+    <fieldset class="entry-part">
+        <legend>Allied activities</legend>
+        <c:choose>
+            <c:when test="${empty editChildren.allied}">
+                <p class="report-empty-line">No allied activities recorded.</p>
+            </c:when>
+            <c:otherwise>
+                <table class="eoi-table report-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Activity</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${editChildren.allied}" var="r">
+                            <tr>
+                                <td>${r.text}</td>
+                                <td>
+                                    <form class="child-delete-form" method="post"
+                                          action="${pageContext.request.contextPath}/reports/${view.reportId()}/allied/${r.id()}/delete"
+                                          data-confirm="Delete this allied activity?">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
+
+        <form class="row g-2 align-items-end mt-3" method="post"
+              action="${pageContext.request.contextPath}/reports/${view.reportId()}/allied/add">
+            <div class="col-12 col-md-9">
+                <label class="form-label" for="allied-activity-name">Activity name *</label>
+                <input class="form-control" id="allied-activity-name" name="activityName" type="text" required>
+            </div>
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add activity</button>
+            </div>
+        </form>
+    </fieldset>
+
+    <fieldset class="entry-part">
+        <legend>Other financing banks</legend>
+        <c:choose>
+            <c:when test="${empty editChildren.banks}">
+                <p class="report-empty-line">No other financing banks recorded.</p>
+            </c:when>
+            <c:otherwise>
+                <table class="eoi-table report-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Bank</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${editChildren.banks}" var="r">
+                            <tr>
+                                <td>${r.text}</td>
+                                <td>
+                                    <form class="child-delete-form" method="post"
+                                          action="${pageContext.request.contextPath}/reports/${view.reportId()}/banks/${r.id()}/delete"
+                                          data-confirm="Delete this financing bank?">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
+
+        <form class="row g-2 align-items-end mt-3" method="post"
+              action="${pageContext.request.contextPath}/reports/${view.reportId()}/banks/add">
+            <div class="col-12 col-md-9">
+                <label class="form-label" for="bank-name">Bank name *</label>
+                <input class="form-control" id="bank-name" name="bankName" type="text" required>
+            </div>
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add bank</button>
+            </div>
+        </form>
+    </fieldset>
+</section>

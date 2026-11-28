@@ -37,11 +37,14 @@ public class ReportEditController {
 
     private final ReportService reportService;
     private final ReportWriteRepository writeRepository;
+    private final ReportChildRepository childRepository;
 
     public ReportEditController(ReportService reportService,
-            ReportWriteRepository writeRepository) {
+            ReportWriteRepository writeRepository,
+            ReportChildRepository childRepository) {
         this.reportService = reportService;
         this.writeRepository = writeRepository;
+        this.childRepository = childRepository;
     }
 
     /** The entry screen of one report, with the values already in it. */
@@ -53,6 +56,7 @@ public class ReportEditController {
         }
         model.addAttribute("view", view);
         model.addAttribute("form", writeRepository.loadForm(id));
+        model.addAttribute("editChildren", childRepository.loadAll(id));
         return "report-edit";
     }
 

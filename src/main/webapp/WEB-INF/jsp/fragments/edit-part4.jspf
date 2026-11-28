@@ -1,0 +1,89 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part IV &mdash; Derivatives</h2>
+
+    <c:choose>
+        <c:when test="${empty editChildren.derivatives}">
+            <p class="report-empty-line">No derivative contracts recorded. Add the first one below.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr. No.</th>
+                        <th scope="col">Nature of contract</th>
+                        <th scope="col">Notional amount</th>
+                        <th scope="col">Weighted average maturity</th>
+                        <th scope="col">Positive mark-to-market</th>
+                        <th scope="col">NPA amount</th>
+                        <th scope="col">Restructured notional</th>
+                        <th scope="col">Reasons</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${editChildren.derivatives}" var="r">
+                        <tr>
+                            <td>${r.serialNo}</td>
+                            <td>${r.nature}</td>
+                            <td class="text-end">${r.notionalText}</td>
+                            <td>${r.maturityText}</td>
+                            <td class="text-end">${r.positiveMtmText}</td>
+                            <td class="text-end">${r.npaText}</td>
+                            <td class="text-end">${r.restructuredText}</td>
+                            <td>${r.reasons}</td>
+                            <td>
+                                <form class="child-delete-form" method="post"
+                                      action="${pageContext.request.contextPath}/reports/${view.reportId()}/derivatives/${r.id()}/delete"
+                                      data-confirm="Delete this derivative contract?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <form class="row g-2 align-items-end mt-3" method="post"
+          action="${pageContext.request.contextPath}/reports/${view.reportId()}/derivatives/add">
+        <div class="col-12 col-md-3">
+            <label class="form-label" for="derivative-serial-no">Sr. No. *</label>
+            <input class="form-control" id="derivative-serial-no" name="serialNo" type="text" required>
+        </div>
+        <div class="col-12 col-md-5">
+            <label class="form-label" for="derivative-contract-nature">Nature of contract *</label>
+            <input class="form-control" id="derivative-contract-nature" name="contractNature" type="text" required>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="derivative-notional">Notional amount</label>
+            <input class="form-control" id="derivative-notional" name="notionalAmount" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="form-label" for="derivative-maturity">Weighted average maturity</label>
+            <input class="form-control" id="derivative-maturity" name="weightedAvgMaturity" type="text">
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="form-label" for="derivative-positive-mtm">Positive mark-to-market</label>
+            <input class="form-control" id="derivative-positive-mtm" name="positiveMtm" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="form-label" for="derivative-npa">NPA amount</label>
+            <input class="form-control" id="derivative-npa" name="npaAmount" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="form-label" for="derivative-restructured">Restructured notional</label>
+            <input class="form-control" id="derivative-restructured" name="restructuredNotionalAmount" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-9">
+            <label class="form-label" for="derivative-reasons">Reasons</label>
+            <input class="form-control" id="derivative-reasons" name="reasons" type="text">
+        </div>
+        <div class="col-12 col-md-3">
+            <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add contract</button>
+        </div>
+    </form>
+</section>

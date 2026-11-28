@@ -1,0 +1,89 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part III &mdash; Exposure details other than derivatives</h2>
+
+    <c:choose>
+        <c:when test="${empty editChildren.facilities}">
+            <p class="report-empty-line">No facilities recorded for this quarter. Add the first one below.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Type of facility</th>
+                        <th scope="col">Purpose</th>
+                        <th scope="col">Date of sanction</th>
+                        <th scope="col">Sanctioned limit</th>
+                        <th scope="col">Outstanding</th>
+                        <th scope="col">Repayment terms</th>
+                        <th scope="col">Defaults and commitments</th>
+                        <th scope="col">Security</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${editChildren.facilities}" var="r">
+                        <tr>
+                            <td>${r.facilityType}</td>
+                            <td>${r.purpose}</td>
+                            <td>${r.facilityDateText}</td>
+                            <td class="text-end">${r.sanctionedText}</td>
+                            <td class="text-end">${r.outstandingText}</td>
+                            <td>${r.repaymentTerms}</td>
+                            <td>${r.defaultsCommitments}</td>
+                            <td>${r.securityText}</td>
+                            <td>
+                                <form class="child-delete-form" method="post"
+                                      action="${pageContext.request.contextPath}/reports/${view.reportId()}/facilities/${r.id()}/delete"
+                                      data-confirm="Delete this facility?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <form class="row g-2 align-items-end mt-3" method="post"
+          action="${pageContext.request.contextPath}/reports/${view.reportId()}/facilities/add">
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-type">Type of facility *</label>
+            <input class="form-control" id="facility-type" name="facilityType" type="text" required>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-purpose">Purpose</label>
+            <input class="form-control" id="facility-purpose" name="purpose" type="text">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-date">Date of sanction</label>
+            <input class="form-control" id="facility-date" name="facilityDate" type="text" placeholder="dd-mm-yyyy">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-sanctioned">Sanctioned limit</label>
+            <input class="form-control" id="facility-sanctioned" name="sanctionedAmount" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-outstanding">Balance outstanding</label>
+            <input class="form-control" id="facility-outstanding" name="balanceOutstanding" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-repayment-terms">Repayment terms</label>
+            <input class="form-control" id="facility-repayment-terms" name="repaymentTerms" type="text">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-defaults">Defaults and commitments</label>
+            <input class="form-control" id="facility-defaults" name="defaultsCommitments" type="text">
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="facility-security">Security</label>
+            <input class="form-control" id="facility-security" name="securityText" type="text">
+        </div>
+        <div class="col-12 col-md-4">
+            <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add facility</button>
+        </div>
+    </form>
+</section>
