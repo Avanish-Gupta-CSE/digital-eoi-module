@@ -169,6 +169,11 @@ Every task bigger than a one-line fix gets an issue on the **Digital EoI** board
 
 ## Reporting to the owner
 
+Your final "Done" report **must contain** a `SECURITY` block copied from the builders and the TL:
+rules 1-10 as `yes` / `n/a because ...`, and the endpoint table (wrong role, wrong status, wrong
+owner, no token, test name). If a builder or the TL did not provide it, send them back before you
+report. A final report without it is incomplete, however good the summary reads.
+
 - **Done:** what now works, in plain terms, with the person's name.
 - **Files:** the paths that changed.
 - **Checked:** how it was verified (build, test, manual steps).
@@ -178,9 +183,17 @@ Every task bigger than a one-line fix gets an issue on the **Digital EoI** board
 Never report a task as done because an agent said so. A task is done only when `tl` has reviewed it
 and the build or test result is known.
 
+## Task cutting (binding)
+
+Cut work to **one endpoint or one screen per task**. Every task you hand out must name the matching
+file in `.opencode/patterns/`, the role and the statuses allowed, and the negative cases to test.
+Send back any REQ or design that lacks them. Never accept a "Done" report without a `SECURITY` line
+and a green `sh scripts/check-guardrails.sh`. When the owner brings a reviewer's finding, add it to
+`.opencode/LESSONS.md` and, if it repeats, to the guardrail.
+
 ## Guardrails you enforce
 
-`.opencode/guardrails/minimal-code.md` and `.opencode/guardrails/ui-ux.md` are binding for everyone.
+`.opencode/guardrails/minimal-code.md`, `.opencode/guardrails/ui-ux.md` and `.opencode/guardrails/security-and-integrity.md` are binding for everyone.
 Reject work that adds a dependency, CDN link, or internet font/image; writes clever code a beginner
 cannot read; ships a screen with no empty, error, or loading state; or breaks "no inline JS, no
 inline CSS".

@@ -53,6 +53,8 @@ Your measure of success is **zero surprises** — you changed exactly what was a
 
 ## What you must never do
 
+- Touch a `<form>`, a `${...}` output, SQL, a role or status check, or `ReportLockConfig`. Hand those back to the Manager: they are not tiny edits.
+
 - Invent a business rule, a threshold, a validation, or a message.
 - Touch more than 2 files. If it needs 3, report `TOO BIG — needs SE`.
 - Add a dependency, a CDN link, a remote font, or a new JS library.

@@ -78,3 +78,14 @@ Every agent operating in this workspace must adhere to the following mandatory c
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, zero speculative abstractions, clarifying questions asked before writing code, and every change is verified against clear success criteria.
+
+---
+
+## Security non-negotiables (every agent, every tool)
+
+Full rules and copyable patterns: `.opencode/guardrails/security-and-integrity.md`, `.opencode/patterns/`,
+past mistakes in `.opencode/LESSONS.md`. In short: escape every printed `${}` with `<c:out>`; every
+`<form>` carries the `_csrf` field; check role **and** status on the server (status inside the UPDATE);
+child-row SQL also matches the parent id; new write URLs go into `ReportLockConfig`; state changes write
+an audit row; no secrets or default passwords; write the negative tests. Run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test` before saying done.

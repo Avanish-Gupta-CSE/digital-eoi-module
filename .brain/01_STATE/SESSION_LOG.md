@@ -2,6 +2,32 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Nobody-signed-in fail-open closed
+
+`WorkflowController`: submit, approve, return, re-open and sync-finacle now refuse ("Sign in before you act on a report.") when the session holds no officer; the spoofable `actorId` request parameter is gone (nothing posted it). Production was already protected by the login redirect; the gap was the h2 profile (`auth-required=false`) and any misconfiguration. Test added for all five actions. 63 tests, guardrails ok. Effect: on h2 a developer must use dev login to run workflow actions.
+
+## 2026-11-28 — Re-open of an approved report built
+
+PR #34 and #35 CI both green. Built `POST /reports/{id}/reopen`: checker role check in the controller; service `reopen` refuses a reason outside 10-500 characters and the officer who prepared the report, then runs `UPDATE ... WHERE status = 'APPROVED'` (to RETURNED) and writes audit action `REOPEN` in one transaction. Form on the report page carries `_csrf`, shown only to a signed-in checker on an APPROVED report. Tests: service happy path and four refusals, controller maker refusal; `GuardrailsTest` workflow list updated. 62 tests, guardrails ok. Defaults chosen: preparer may not re-open (same as approve); owner to confirm. Fail-open when nobody is signed in left as is (separate task).
+
+## 2026-11-28 — Dry run of the agent team with the new rules
+
+**Run:** `opencode run --auto --agent manager` in a scratch copy (remote removed), task: checker-only re-open of an APPROVED report. Manager used deepseek-v4.1-flash-free; the run ended with "Free usage limit reached" after the final report.
+
+**Result (verified independently in the scratch copy):** `check-guardrails.sh` ok, 64 tests green. The team got the role check (`notChecker`), the status guard inside the UPDATE, the audit row in the same transaction, the `_csrf` field, and tests for happy path, short reason and wrong status. It asked the owner whether the preparer may re-open (not guessed) and flagged the fail-open when nobody is signed in.
+
+**Misses against the new rules:** no `SECURITY` block in the final report; a builder refactored the working return-form JS in `workflow.js` (out of scope); no explicit "wrong owner: n/a" statement. Fixed by: manager.md reporting rule, guardrail "Scope of a change", LESSONS 14-15, pattern note on the same-officer question.
+
+**Open:** the free model quota ran out mid-run; the team needs a paid/plan model path for real work. Same-officer re-open and the nobody-signed-in fail-open are owner decisions (the latter is already in NEXT_STEPS gap 4 area).
+
+## 2026-11-28 — Agent-team quality rules (PR on top of #34)
+
+**Request:** make cheaper models in the OpenCode team perform closer to a reviewed standard.
+
+**Done:** `.opencode/guardrails/security-and-integrity.md`, `.opencode/patterns/*` (5 patterns), `.opencode/LESSONS.md` (13 defects from the first build); `scripts/check-guardrails.sh` extended (unescaped output, form without `_csrf`, scriptlets, concatenated SQL, hard-coded credentials, inline script without `src`); new `GuardrailsTest` (write URL not covered by `ReportLockConfig`, DELETE not tied to its parent); prompts of `tl`, `sse`, `sse-b`, `sse2`, `se`, `ase`, `po`, `manager` updated; `TEAM.md` section 11; pointers in `AGENTS.md`/`GEMINI.md`/`CLAUDE.md`; `opencode.json` loads the new guardrail.
+
+**Verified:** on a scratch copy each original defect (unescaped `${}`, form without token, scriptlet, SQL concatenation, hard-coded password, uncovered POST URL, loose DELETE) made the gate fail; on the real tree the gates pass and `mvn -o clean test` is green. **Not verified:** a real run of the opencode team with the new prompts (`opencode debug agents` / a dry-run task) — do that next.
+
 ## 2026-11-28 — UCO Bank look and feel (logo, header, footer) and visual fixes
 
 **Request:** start the app, review the look and feel, fix issues, add the UCO Bank logo like uco-realty-v3.

@@ -65,6 +65,15 @@ correct version — not the most impressive one.
 
 ## After you write
 
+## Security self-check (binding, read `.opencode/guardrails/security-and-integrity.md`)
+
+Start from the matching file in `.opencode/patterns/`. Before you report, run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test`, and answer each line with `yes` or
+`n/a because ...`: output escaped with `<c:out>` · every form has `_csrf` · role checked on the
+server · status checked inside the UPDATE · child SQL matches the parent id · new write URL added to
+`ReportLockConfig` · audit row for a state change · no exception text shown · no secret or default
+password · negative tests written (wrong role, wrong status, wrong owner).
+
 Report exactly:
 
 ```
@@ -72,6 +81,7 @@ CHANGED   path — one line on what changed
 PATTERN   the pattern the rest of the team should now follow (3 lines max)
 TEST      test name — result
 RUN       exact command to demo it locally (h2 profile)
+SECURITY  the self-check from guardrails/security-and-integrity.md: each item yes / n/a because ...
 OPEN      anything a beginner would trip over later
 ```
 

@@ -109,6 +109,23 @@ Guardrail checks, every time:
 - [ ] Empty, loading, and error states exist for every list and form
 - [ ] Money and dates formatted for India (lakh/crore, dd-mm-yyyy)
 - [ ] One test proves the change; it fails before and passes after
+- [ ] Security table above complete, gates green
+
+**Security review (binding, `.opencode/guardrails/security-and-integrity.md`).** First run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test`; a red gate is a BLOCKER. Then attack the diff.
+For every new or changed endpoint fill this table in your review, never skip a row:
+
+```
+ENDPOINT   wrong role   wrong status   wrong owner   no token   test that proves it
+/x/y       refused?     refused?       refused?      refused?   ClassName.method
+```
+
+- A cell with no test is a MAJOR. A missing role/status/owner check is a BLOCKER.
+- Every `${}` printed in a JSP is `<c:out>`; every `<form>` has `_csrf`; new write URLs are in
+  `ReportLockConfig`; state changes write an audit row; no exception text reaches the screen.
+- Compare with the matching file in `.opencode/patterns/`. Unexplained deviation = MAJOR.
+- Do not approve on the builder's say-so: open the page or call the URL yourself where possible.
+- Add each new kind of defect you find to `.opencode/LESSONS.md` via the Manager.
 
 Run `mvn -q test` (or `./mvnw -q test`) when a build exists and report the real result. If there is no
 build yet, say `not verifiable yet` instead of claiming success.

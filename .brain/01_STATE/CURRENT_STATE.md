@@ -15,7 +15,7 @@ Arrangements.
   - Oracle UAT/Prod default (`application.properties` + `ojdbc11`), verified against Docker Oracle Free (`uco-oracle-free` on `localhost:1521/FREEPDB1`) via `scripts/dev-start.sh`, `db_migrations/01_CREATE_EOI_TABLES.sql`, and `db_migrations/02_SEED_EOI_DEMO.sql`.
   - H2 in-memory (`--spring.profiles.active=h2`) with synthetic rows in `h2-init.sql`.
 - **Auth:** Session-based (`HttpSession` + `AuthConfig` interceptor): Bank SSO (`GET /entry?Value=...` AES-GCM), `HRMS_DBA` lookup (`HrmsLookupService`), and dev/UAT OTP login (`GET/POST /login`, test OTP `123456` gated by `DEV_LOGIN_ENABLED=true`).
-- **Tests:** **57 passing** (`mvn -o clean test`) — `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5, `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4.
+- **Tests:** **63 passing** (`mvn -o clean test`) — `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5, `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 9, `WorkflowControllerTest` 2, `ReportEditControllerTest` 4.
   CI runs `guardrails` + `mvn test` on every PR.
 - **Git:** `main` at `029faf0` (PRs up to #33 merged). The security pass of 2026-11-28 is uncommitted until the owner reviews it. Public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected. See `CONTRIBUTING.md`.
 
@@ -86,6 +86,7 @@ RBI/DOR/2025-26/159, DOR.STR.REC.No.78/21.04.048/2025-26, dated 28-11-2025, upda
 | `.opencode/agents/*.md` | Eight agents: `manager` (primary/default), `po`, `tl`, `sse2`, `sse`, `sse-b`, `se`, `ase` |
 | `.opencode/guardrails/minimal-code.md` | Binding simplicity, dependency, offline-build, testing, change-map rules |
 | `.opencode/guardrails/ui-ux.md` | Binding UI/UX, bank vocabulary, accessibility, print, local-asset rules |
+| `.opencode/guardrails/security-and-integrity.md` | Binding security rules (Decision 021), with `.opencode/patterns/` and `.opencode/LESSONS.md`; checked by `check-guardrails.sh` and `GuardrailsTest` |
 | `.opencode/opencode.json` | `default_agent: manager`; both guardrails in `instructions` (absolute paths) |
 | `.opencode/TEAM.md` | Org chart, routing table, worked example, definition of done |
 | `.opencode/README.md` | Quickstart, model tiering, failure modes |

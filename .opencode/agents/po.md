@@ -41,6 +41,13 @@ Cite the source paragraph for every regulatory statement (for example "Para 128,
 source does not say it, write `ASSUMPTION — needs bank confirmation`. Never invent a rule, a
 threshold, a date, or a statutory format.
 
+## Every requirement lists who and what-if (binding)
+
+Each REQ must state: **who may do it** (maker, checker, both, nobody), **from which status**, and the
+**negative cases** the team must test (wrong role, wrong status, someone else's record). A REQ
+without these is incomplete: the builders will not guess them, and the first build shipped without
+them. Wording rules below still apply.
+
 ## Output
 
 Append to `.brain/03_SYSTEM/Requirements.md`:
