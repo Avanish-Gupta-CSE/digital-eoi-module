@@ -246,6 +246,14 @@
 
 ---
 
+### Decision 019: Session-based Bank SSO + HRMS auth without Spring Security
+* **Date:** 2026-11-28
+* **Context:** The Digital EoI module needed Bank SSO (`/entry?Value=...` AES-GCM), `HRMS_DBA` employee/tenure role lookup, and a dev/UAT OTP login (`/login`) matching `uco-realty-v3` while staying minimal (`mvn -o`, zero new Maven dependencies).
+* **Decision:** Use a plain `HttpSession` attribute (`staff` -> `StaffPrincipal`) enforced by `AuthConfig` (`HandlerInterceptor` on `/dashboard`, `/dashboard/**`, `/reports/**` when `uco.sso.auth-required=true`), with `SsoToken` (`AES/GCM/NoPadding`), `HrmsLookupService` (`JdbcTemplate` reading `HRMS_DBA.employee_contact_details` and `HRMS_DBA.employee_tenure`), and `DEV_LOGIN_ENABLED=true` / `TEST_OTP=123456` for local & Docker UAT.
+* **Status:** In Force.
+
+---
+
 ### Decision 018: Part V arithmetic shown literally; across-currency total withheld until FX exists
 * **Date:** 2026-11-27
 * **Context:** The Annex II report view must show Part V (un-hedged foreign currency exposure) with its net positions. The Tech Lead asked for two sign-offs before coding: the sign convention, and whether an across-all-currencies total is shown.

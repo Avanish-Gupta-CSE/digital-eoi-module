@@ -1,6 +1,6 @@
 # CURRENT_STATE
 
-Last updated: 2026-11-27
+Last updated: 2026-11-28
 
 ## Project
 UCO Bank — Digital EoI (Exchange of Information) Module.
@@ -8,15 +8,33 @@ Automated generation of credit information exchange under Consortium / Multiple 
 Arrangements.
 
 ## Repository status
-- **Application exists.** Spring Boot 4.1.3 / Java 25, WAR packaging, Maven.
-- **Data model:** 11 Annex II tables — `eoi_borrower` (master) + `eoi_report` (one per borrower
-  per quarter) + 9 children, all defined in three ordered schema files. Ids from `eoi_seq.NEXTVAL`.
-- Working screen: `/dashboard` (rebuilt in `#17` with KPI cards, search & status filters in
-  `dashboard.js`, initials avatars, status pills, print stylesheet). Amounts are `SUM(facility)` per report.
-- Data: H2 in-memory (`h2` profile) with synthetic rows in `h2-init.sql`. No Oracle profile yet.
-- Tests: 7 passing (`IndianMoneyTest` 4, `SchemaTest` 3). CI runs `guardrails` + `mvn test` on every PR.
-- Git: public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected (PR + `guardrails`
-  required, admins enforced). See `CONTRIBUTING.md`.
+- **Application exists and is feature-complete for local H2 and Docker Oracle UAT.** Spring Boot 4.1.3 / Java 25, WAR packaging, Maven.
+- **Data model:** 12 tables — the 11 Annex II tables (`eoi_borrower` master + `eoi_report` per
+  borrower-quarter + 9 children) plus `eoi_audit_log` in `schema-audit.sql`. Ids from `eoi_seq.NEXTVAL`.
+- **Dual DB profiles:**
+  - Oracle UAT/Prod default (`application.properties` + `ojdbc11`), verified against Docker Oracle Free (`uco-oracle-free` on `localhost:1521/FREEPDB1`) via `scripts/dev-start.sh`, `db_migrations/01_CREATE_EOI_TABLES.sql`, and `db_migrations/02_SEED_EOI_DEMO.sql`.
+  - H2 in-memory (`--spring.profiles.active=h2`) with synthetic rows in `h2-init.sql`.
+- **Auth:** Session-based (`HttpSession` + `AuthConfig` interceptor): Bank SSO (`GET /entry?Value=...` AES-GCM), `HRMS_DBA` lookup (`HrmsLookupService`), and dev/UAT OTP login (`GET/POST /login`, test OTP `123456` gated by `DEV_LOGIN_ENABLED=true`).
+- **Tests:** **45 passing** (`mvn -o clean test`) — `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4.
+  CI runs `guardrails` + `mvn test` on every PR.
+- **Git:** `main` at `ea03bd6` (PRs #27, #28, #29 merged). Public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected. See `CONTRIBUTING.md`.
+
+## Working screens (all on `main`)
+
+| Route | What it does | Controller |
+|---|---|---|
+| `/dashboard` | quarterly borrower list, KPI cards, search + status filters | `web/DashboardController` |
+| `/reports/{id}` | read-only Annex II Parts I–VI, workflow panel, print stylesheet | `report/ReportController` |
+| `/reports/{id}/edit` | maker entry form (GET) and save (POST), field-level validation | `report/ReportEditController` |
+| `/reports/{id}/prefill` | copy the previous quarter's report into this one (POST) | `report/ReportEditController` |
+| `/reports/{id}/export.csv` | zero-dependency CSV export | `report/ReportEditController` |
+| `/reports/{id}/submit` · `/approve` · `/return` | maker–checker state machine (POST) | `report/WorkflowController` |
+| `/reports/{id}/sync-finacle` | pulls CBS-owned values from the mock adapter (POST) | `report/WorkflowController` |
+
+**Services of note:** `ConductScoringService` (advisory Part VI scoring; an NPA that is still NPA on
+the exchange date is forced Below Par and cannot be overridden), `WorkflowService` (state transitions
+written to `eoi_audit_log`), `FinacleDataSource` interface with `MockFinacleDataSource` as its only
+implementation today.
 
 ## How to run it
 ```sh

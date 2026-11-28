@@ -7,11 +7,12 @@ Keep this table current. A beginner must be able to find the file for a label ch
 | Screen | URL | Controller | Service | Repository | View | JS |
 |---|---|---|---|---|---|---|
 | Quarterly dashboard | `/dashboard` | `web/DashboardController#dashboard` | `borrower/BorrowerService#dashboard` | `borrower/BorrowerRepository#findByQuarter` | `WEB-INF/jsp/dashboard.jsp` | `assets/js/dashboard.js` |
-| Annex II report & workflow | `/reports/{id}` | `report/ReportController#report` | `report/ReportService#report`, `WorkflowService` | `report/ReportRepository` | `WEB-INF/jsp/report.jsp` | `assets/js/workflow.js` |
-| Annex II maker entry | `/reports/{id}/edit` | `report/ReportEditController#edit` | `report/ReportService#report` | `report/ReportWriteRepository` | `WEB-INF/jsp/report-edit.jsp` | `assets/js/report-edit.js` |
-| Annex II CSV export | `/reports/{id}/export.csv` | `report/ReportEditController#export` | `report/ReportService#report` | `report/ReportRepository` | — | — |
-| Workflow & Finacle sync | `/reports/{id}/{submit,approve,return,sync-finacle}` | `report/WorkflowController` | `report/WorkflowService`, `MockFinacleDataSource` | `schema-audit.sql` (`eoi_audit_log`) | `fragments/report-workflow.jspf` | `assets/js/workflow.js` |
-| Annex II report (read-only) | `/reports/{id}` | `report/ReportController#report` | `report/ReportService#report` | `report/ReportRepository` | `WEB-INF/jsp/report.jsp` + `fragments/report-part1-3.jspf`, `report-part4-6.jspf` | `assets/js/dashboard.js` (print binding only) |
+| Annex II report (read-only) | `/reports/{id}` | `report/ReportController#report` | `report/ReportService#report`; `WorkflowService` for the panel state | `report/ReportRepository` | `report.jsp` + `fragments/report-part1-3.jspf`, `report-part4-6.jspf`, `report-status.jspf`, `report-workflow.jspf` | `assets/js/dashboard.js` (print binding) |
+| Maker entry | `/reports/{id}/edit` (GET form, POST save) | `report/ReportEditController#edit`, `#save` | `report/ReportService#report`; `ReportWriteRepository` for writes | `report/ReportWriteRepository` | `WEB-INF/jsp/report-edit.jsp` | `assets/js/report-edit.js` |
+| Prefill from previous quarter | POST `/reports/{id}/prefill` | `report/ReportEditController#prefill` | `report/ReportWriteRepository` | `report/ReportWriteRepository` | — | `assets/js/report-edit.js` |
+| Annex II CSV export | `GET /reports/{id}/export.csv` | `report/ReportEditController#export` | `report/ReportService#report` | `report/ReportRepository` | — | — |
+| Maker–checker actions | POST `/reports/{id}/submit`, `/approve`, `/return` | `report/WorkflowController` | `report/WorkflowService` | `resources/db/schema-audit.sql` (`eoi_audit_log`) | `fragments/report-workflow.jspf` | `assets/js/workflow.js` |
+| Sync from Finacle | POST `/reports/{id}/sync-finacle` | `report/WorkflowController` | `report/WorkflowService` + `FinacleDataSource` → `MockFinacleDataSource` | `report/ReportWriteRepository` | `fragments/report-workflow.jspf` | `assets/js/workflow.js` |
 
 ## Shared pieces
 
@@ -23,6 +24,10 @@ Keep this table current. A beginner must be able to find the file for a label ch
 | Table definitions — Part I + report header | `resources/db/schema.sql` |
 | Table definitions — Parts III & IV (facilities, derivatives) | `resources/db/schema-annexii-exposure.sql` |
 | Table definitions — Part VI (experience) | `resources/db/schema-annexii-experience.sql` |
+| Table definition — audit trail | `resources/db/schema-audit.sql` (`eoi_audit_log`) |
+| Part VI scoring rules (advisory, NPA override) | `java/com/uco/eoi/report/ConductScoringService.java` |
+| Finacle seam — swap the live system in here | `java/com/uco/eoi/report/FinacleDataSource.java` (interface), `MockFinacleDataSource.java` (today) |
+| Maker–checker state machine + audit writes | `java/com/uco/eoi/report/WorkflowService.java` |
 | Mock rows for every table | `resources/db/h2-init.sql` |
 | Schema provenance test | `src/test/java/com/uco/eoi/db/SchemaTest.java` |
 | Threshold, current quarter | `resources/application.properties` |
@@ -40,10 +45,18 @@ Keep this table current. A beginner must be able to find the file for a label ch
 | add a new screen | new `@Controller` + service method + `*.jsp` + an entry in this table |
 | change the database for UAT | `application-uat.properties` (Oracle, created with the uat profile) |
 
-## Not built yet
+## Built — do not rebuild
 
-Annex II entry form · maker–checker · audit log · Part VI scoring · report export · Finacle adapter.
-Add each to this table in the PR that introduces it.
+Annex II report view · maker entry form · prefill from previous quarter · CSV export ·
+maker–checker with audit log · Part VI advisory scoring with mandatory NPA override ·
+`FinacleDataSource` interface with `MockFinacleDataSource`.
+
+## Bank-gated, not built
+
+Oracle 19c `uat` profile (`ojdbc11`, `application-uat.properties`, one schema run including the
+Part IV `ALTER` from Decision 017) · bank SSO/HRMS login following `uco-realty-v3` · the live
+`FinacleDataSource` adapter · quarterly scheduler and alerts · transmission to lenders.
+Each is a swap behind an interface or a property, not a rewrite.
 
 ## Data model (Annex II, 11 tables)
 
