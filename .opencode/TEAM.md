@@ -262,3 +262,22 @@ The team handles code, tests, wording and review. These stay with you:
 - **Accepting work** — you read the "Done" report, not the code.
 
 Everything else, ask Nagendra.
+
+---
+
+## 11. Quality loop for cheaper models
+
+Cheap models follow what is written and what a machine checks. So:
+
+1. **Patterns, not principles.** Builders start from `.opencode/patterns/` and copy real files.
+2. **Machine gates.** `sh scripts/check-guardrails.sh` and `GuardrailsTest` reject unescaped output,
+   forms without `_csrf`, scriptlets, concatenated SQL, hard-coded credentials, write URLs the report
+   lock does not cover, and DELETEs not tied to their report. Green gates are part of "done".
+3. **Negative tests.** Every endpoint: wrong role, wrong status, wrong owner. The TL fills in the
+   security table; an empty cell blocks approval.
+4. **Small tasks.** One endpoint per task, with who/status/negative cases written by the PO.
+5. **Different model family reviews.** The TL is not the model that wrote the code. Before a merge
+   that touches auth, workflow or SQL, ask a stronger model for a pass (for example `/code-review`
+   in Claude Code) and put what it finds in `.opencode/LESSONS.md`.
+6. **Live check.** The builder opens the page or calls the URL once; "tests pass" alone is not done.
+

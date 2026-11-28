@@ -28,6 +28,9 @@ Last updated: 2026-11-28
 | #5 ₹5 crore threshold | `eoi.borrower-threshold-amount` | confirming the population rule |
 | #6 Non-Finacle data | maker entry forms now exist | external sources if preferred |
 
+## Next for the agent team
+Dry-run the team with the new rules: ask `manager` for one small endpoint and confirm the `SECURITY` line, four negative tests and green gates appear (`opencode debug agents` first, to confirm the new guardrail path loads).
+
 ## Review gaps still open (found 2026-11-28, not fixed: they need an owner or bank decision)
 1. **No row-level access control:** any signed-in officer sees and edits every borrower's report. UcoRealtyStaff scopes by SOL/zone; the EoI scoping rule (branch, zone, head office) is not defined.
 2. **No re-open path** for an APPROVED report that has an error (it is now locked). Needs a bank-defined, audited "re-open" action and a rule for who may do it.

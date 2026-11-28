@@ -2,6 +2,14 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Agent-team quality rules (PR on top of #34)
+
+**Request:** make cheaper models in the OpenCode team perform closer to a reviewed standard.
+
+**Done:** `.opencode/guardrails/security-and-integrity.md`, `.opencode/patterns/*` (5 patterns), `.opencode/LESSONS.md` (13 defects from the first build); `scripts/check-guardrails.sh` extended (unescaped output, form without `_csrf`, scriptlets, concatenated SQL, hard-coded credentials, inline script without `src`); new `GuardrailsTest` (write URL not covered by `ReportLockConfig`, DELETE not tied to its parent); prompts of `tl`, `sse`, `sse-b`, `sse2`, `se`, `ase`, `po`, `manager` updated; `TEAM.md` section 11; pointers in `AGENTS.md`/`GEMINI.md`/`CLAUDE.md`; `opencode.json` loads the new guardrail.
+
+**Verified:** on a scratch copy each original defect (unescaped `${}`, form without token, scriptlet, SQL concatenation, hard-coded password, uncovered POST URL, loose DELETE) made the gate fail; on the real tree the gates pass and `mvn -o clean test` is green. **Not verified:** a real run of the opencode team with the new prompts (`opencode debug agents` / a dry-run task) — do that next.
+
 ## 2026-11-28 — UCO Bank look and feel (logo, header, footer) and visual fixes
 
 **Request:** start the app, review the look and feel, fix issues, add the UCO Bank logo like uco-realty-v3.

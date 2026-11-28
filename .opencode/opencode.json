@@ -3,7 +3,8 @@
   "default_agent": "manager",
   "instructions": [
     "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/minimal-code.md",
-    "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/ui-ux.md"
+    "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/ui-ux.md",
+    "/Users/avanish/Documents/Projects/UCO Bank/Digital_EOI_Module/.opencode/guardrails/security-and-integrity.md"
   ],
   "policies": [
     {

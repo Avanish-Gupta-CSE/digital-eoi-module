@@ -82,7 +82,17 @@ the whole slice including the JSP.
 3. The page shows a validation error for one bad input.
 4. The new test passes, and it failed before your change.
 
-Report: `CHANGED`, `TEST`, `RUN`, `OPEN` — nothing else.
+
+## Security self-check (binding, read `.opencode/guardrails/security-and-integrity.md`)
+
+Start from the matching file in `.opencode/patterns/`. Before you report, run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test`, and answer each line with `yes` or
+`n/a because ...`: output escaped with `<c:out>` · every form has `_csrf` · role checked on the
+server · status checked inside the UPDATE · child SQL matches the parent id · new write URL added to
+`ReportLockConfig` · audit row for a state change · no exception text shown · no secret or default
+password · negative tests written (wrong role, wrong status, wrong owner).
+
+Report: `CHANGED`, `TEST`, `RUN`, `SECURITY`, `OPEN` — nothing else. `SECURITY` is the self-check above.
 
 ## Hard stops
 

@@ -272,3 +272,12 @@
 * **Decision:** Keep Decision 019 (no Spring Security, no new dependency). Add servlet filters `CsrfFilter` and `SecurityHeadersFilter`; escape every user-sourced JSP output with `<c:out>`; approve/return are CHECKER-only; workflow UPDATEs are guarded by the current status; edits are allowed only in DRAFT/DUE/OVERDUE/RETURNED (`ReportLockInterceptor`); child deletes are scoped to the report; OTP login locks for 15 min after 5 failures. The DB password has no committed default.
 * **Consequences / Rationale:** Closes the OWASP items in the bank's secure-coding order (XSS, CSRF, broken access control, authentication) with about 250 lines and no dependency. Cost: every new `<form>` must carry the `_csrf` hidden field, and an approved report can no longer be corrected in place; it needs a bank-defined re-open step (open question).
 * **Status:** In Force.
+
+---
+
+### Decision 021: Security rules for the agent team are machine-checked, not just written
+* **Date:** 2026-11-28
+* **Context:** The OpenCode team (cheap models) built an app that was clean on style rules but had stored XSS, no CSRF, no CSP and a bypassable maker-checker. The guardrails had no security content and the only gate was two greps.
+* **Decision:** Add `.opencode/guardrails/security-and-integrity.md` (ten rules with copyable repo examples and four required negative tests), `.opencode/patterns/`, `.opencode/LESSONS.md`; extend `scripts/check-guardrails.sh` and add `GuardrailsTest`; builders report a `SECURITY` line; the TL fills a role/status/owner/token table per endpoint; the PO lists who/status/negative cases per REQ; tasks are cut to one endpoint; a stronger-model review precedes merges touching auth, workflow or SQL. Same block added to `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`.
+* **Consequences / Rationale:** Cheap models follow patterns and obey machines, so quality is enforced by CI rather than by model skill. Cost: some grep false positives (fail only on unambiguous patterns), slightly slower tasks. No new dependency.
+* **Status:** In Force.

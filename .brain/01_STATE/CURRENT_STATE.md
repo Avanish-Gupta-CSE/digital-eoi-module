@@ -86,6 +86,7 @@ RBI/DOR/2025-26/159, DOR.STR.REC.No.78/21.04.048/2025-26, dated 28-11-2025, upda
 | `.opencode/agents/*.md` | Eight agents: `manager` (primary/default), `po`, `tl`, `sse2`, `sse`, `sse-b`, `se`, `ase` |
 | `.opencode/guardrails/minimal-code.md` | Binding simplicity, dependency, offline-build, testing, change-map rules |
 | `.opencode/guardrails/ui-ux.md` | Binding UI/UX, bank vocabulary, accessibility, print, local-asset rules |
+| `.opencode/guardrails/security-and-integrity.md` | Binding security rules (Decision 021), with `.opencode/patterns/` and `.opencode/LESSONS.md`; checked by `check-guardrails.sh` and `GuardrailsTest` |
 | `.opencode/opencode.json` | `default_agent: manager`; both guardrails in `instructions` (absolute paths) |
 | `.opencode/TEAM.md` | Org chart, routing table, worked example, definition of done |
 | `.opencode/README.md` | Quickstart, model tiering, failure modes |

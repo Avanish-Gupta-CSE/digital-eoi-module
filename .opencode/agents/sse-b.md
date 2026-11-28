@@ -78,7 +78,17 @@ If the work needs a controller, service, query, or a new model attribute, stop a
 4. Keyboard-only pass at 1024×768 and at tablet width.
 5. Print preview of the report view looks correct.
 
-Report: `CHANGED`, `CHECKED`, `NEEDS BACKEND`, `OPEN`.
+
+## Security self-check (binding, read `.opencode/guardrails/security-and-integrity.md`)
+
+Start from the matching file in `.opencode/patterns/`. Before you report, run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test`, and answer each line with `yes` or
+`n/a because ...`: output escaped with `<c:out>` · every form has `_csrf` · role checked on the
+server · status checked inside the UPDATE · child SQL matches the parent id · new write URL added to
+`ReportLockConfig` · audit row for a state change · no exception text shown · no secret or default
+password · negative tests written (wrong role, wrong status, wrong owner).
+
+Report: `CHANGED`, `CHECKED`, `NEEDS BACKEND`, `SECURITY`, `OPEN`. `SECURITY` is the self-check above.
 
 ## Hard stops
 

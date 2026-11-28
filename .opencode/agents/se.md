@@ -67,11 +67,21 @@ clever. Do not redesign, do not refactor, do not improve nearby code.
 - Any new field shown on screen needs a label, and the label comes from the requirement's wording table.
 - Files ≤ 200 lines, methods ≤ 25 lines. If your change breaks that, report it instead of squeezing.
 
+## Security self-check (binding, read `.opencode/guardrails/security-and-integrity.md`)
+
+Start from the matching file in `.opencode/patterns/`. Before you report, run
+`sh scripts/check-guardrails.sh` and `mvn -o -q test`, and answer each line with `yes` or
+`n/a because ...`: output escaped with `<c:out>` · every form has `_csrf` · role checked on the
+server · status checked inside the UPDATE · child SQL matches the parent id · new write URL added to
+`ReportLockConfig` · audit row for a state change · no exception text shown · no secret or default
+password · negative tests written (wrong role, wrong status, wrong owner).
+
 ## Report
 
 ```
 CHANGED   path — what changed
 CHECKED   what you ran or looked at to confirm
+SECURITY  the self-check from guardrails/security-and-integrity.md: each item yes / n/a because ...
 OPEN      anything you could not finish, or "none"
 ```
 
