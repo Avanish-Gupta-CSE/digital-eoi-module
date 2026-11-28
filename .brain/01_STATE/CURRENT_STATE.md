@@ -15,7 +15,7 @@ Arrangements.
   - Oracle UAT/Prod default (`application.properties` + `ojdbc11`), verified against Docker Oracle Free (`uco-oracle-free` on `localhost:1521/FREEPDB1`) via `scripts/dev-start.sh`, `db_migrations/01_CREATE_EOI_TABLES.sql`, and `db_migrations/02_SEED_EOI_DEMO.sql`.
   - H2 in-memory (`--spring.profiles.active=h2`) with synthetic rows in `h2-init.sql`.
 - **Auth:** Session-based (`HttpSession` + `AuthConfig` interceptor): Bank SSO (`GET /entry?Value=...` AES-GCM), `HRMS_DBA` lookup (`HrmsLookupService`), and dev/UAT OTP login (`GET/POST /login`, test OTP `123456` gated by `DEV_LOGIN_ENABLED=true`).
-- **Tests:** **57 passing** (`mvn -o clean test`) — `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5, `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 7, `ReportEditControllerTest` 4.
+- **Tests:** **62 passing** (`mvn -o clean test`) — `SecurityFiltersTest` 5, `LoginThrottleTest` 2, `ReportLockTest` 5, `AuthControllerTest` 7, `IndianMoneyTest` 4, `SchemaTest` 3, `ReportServiceTest` 2, `ConductScoringServiceTest` 12, `ReportChildControllerTest` 6, `WorkflowServiceTest` 9, `WorkflowControllerTest` 1, `ReportEditControllerTest` 4.
   CI runs `guardrails` + `mvn test` on every PR.
 - **Git:** `main` at `029faf0` (PRs up to #33 merged). The security pass of 2026-11-28 is uncommitted until the owner reviews it. Public repo `Avanish-Gupta-CSE/digital-eoi-module`, `main` protected. See `CONTRIBUTING.md`.
 

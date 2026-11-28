@@ -2,6 +2,10 @@
 
 <!-- Append new entries at the top, newest first. -->
 
+## 2026-11-28 — Re-open of an approved report built
+
+PR #34 and #35 CI both green. Built `POST /reports/{id}/reopen`: checker role check in the controller; service `reopen` refuses a reason outside 10-500 characters and the officer who prepared the report, then runs `UPDATE ... WHERE status = 'APPROVED'` (to RETURNED) and writes audit action `REOPEN` in one transaction. Form on the report page carries `_csrf`, shown only to a signed-in checker on an APPROVED report. Tests: service happy path and four refusals, controller maker refusal; `GuardrailsTest` workflow list updated. 62 tests, guardrails ok. Defaults chosen: preparer may not re-open (same as approve); owner to confirm. Fail-open when nobody is signed in left as is (separate task).
+
 ## 2026-11-28 — Dry run of the agent team with the new rules
 
 **Run:** `opencode run --auto --agent manager` in a scratch copy (remote removed), task: checker-only re-open of an APPROVED report. Manager used deepseek-v4.1-flash-free; the run ended with "Free usage limit reached" after the final report.

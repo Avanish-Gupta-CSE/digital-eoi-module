@@ -47,6 +47,10 @@ public class WorkflowService {
             "UPDATE eoi_report SET status = 'RETURNED', checked_by = ? WHERE id = ? "
                     + "AND status = 'SUBMITTED'";
 
+    private static final String SET_REOPENED =
+            "UPDATE eoi_report SET status = 'RETURNED', checked_by = ? WHERE id = ? "
+                    + "AND status = 'APPROVED'";
+
     private static final String INSERT_AUDIT =
             "INSERT INTO eoi_audit_log (id, report_id, action, actor_id, actor_role, "
                     + "remarks, created_at) "
@@ -102,6 +106,26 @@ public class WorkflowService {
         }
         setStatus(SET_RETURNED, actorId, reportId);
         writeAudit(reportId, "RETURN", actorId, ROLE_CHECKER, remarks.trim());
+    }
+
+    /**
+     * The checker re-opens an approved report so the maker can correct it.
+     *
+     * Same rule as approve: the officer who prepared the report may not re-open it. A
+     * reason of 10 to 500 characters is required and is kept in the audit trail.
+     */
+    @Transactional
+    public void reopen(long reportId, String actorId, String remarks) {
+        if (remarks == null || remarks.trim().length() < 10 || remarks.trim().length() > 500) {
+            throw new IllegalStateException(
+                    "Enter a reason for re-opening the report, 10 to 500 characters.");
+        }
+        if (actorId.equals(findSubmittedBy(reportId))) {
+            throw new IllegalStateException(
+                    "You prepared this report. A different officer must re-open it.");
+        }
+        setStatus(SET_REOPENED, actorId, reportId);
+        writeAudit(reportId, "REOPEN", actorId, ROLE_CHECKER, remarks.trim());
     }
 
     /** Pulls the Finacle figures of the report and records the pull. */

@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class WorkflowController {
 
     private static final String CHECKER_ONLY =
-            "Only a checker can approve or return a report. Your role is maker.";
+            "Only a checker can approve, return or re-open a report. Your role is maker.";
 
     private final WorkflowService workflowService;
 
@@ -77,6 +77,24 @@ public class WorkflowController {
             return refused(id, e.getMessage(), attributes);
         }
         return "redirect:/reports/" + id + "?workflow=returned";
+    }
+
+    /** The checker re-opens an approved report, with a reason. */
+    @PostMapping("/reports/{id}/reopen")
+    public String reopen(@PathVariable("id") long id,
+            @RequestParam(name = "actorId", defaultValue = "checker01") String actorId,
+            @RequestParam(name = "remarks", required = false, defaultValue = "") String remarks,
+            @SessionAttribute(name = "staff", required = false) StaffPrincipal staff,
+            RedirectAttributes attributes) {
+        if (notChecker(staff)) {
+            return refused(id, CHECKER_ONLY, attributes);
+        }
+        try {
+            workflowService.reopen(id, actorOf(staff, actorId), remarks);
+        } catch (IllegalStateException e) {
+            return refused(id, e.getMessage(), attributes);
+        }
+        return "redirect:/reports/" + id + "?workflow=reopened";
     }
 
     /** The maker pulls the Finacle figures into the report. */

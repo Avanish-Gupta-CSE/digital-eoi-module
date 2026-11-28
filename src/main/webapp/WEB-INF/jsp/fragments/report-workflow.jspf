@@ -4,6 +4,27 @@
 <c:set var="makerCanAct" value="${view.status() == 'DRAFT' or view.status() == 'DUE' or view.status() == 'RETURNED' or view.status() == 'OVERDUE'}"/>
 <c:set var="checkerCanAct" value="${view.status() == 'SUBMITTED'}"/>
 
+<c:set var="checkerCanReopen" value="${view.status() == 'APPROVED' and sessionScope.staff != null and sessionScope.staff.isChecker()}"/>
+
+<c:if test="${checkerCanReopen}">
+    <section class="data-card workflow-card">
+        <div class="data-card-head">
+            <h2 class="data-card-title">Re-open report</h2>
+            <span class="count-pill"><c:out value="${view.status()}"/></span>
+        </div>
+        <div class="entry-card">
+            <form method="post" id="reopen-form" action="${pageContext.request.contextPath}/reports/${view.reportId()}/reopen">
+                <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
+                <label class="form-label" for="reopen-remarks">Reason *</label>
+                <textarea class="form-control" id="reopen-remarks" name="remarks" rows="2" maxlength="500"></textarea>
+                <div class="workflow-actions">
+                    <button type="submit" class="btn-print" id="reopen-button">Re-open for Maker</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</c:if>
+
 <c:if test="${makerCanAct or checkerCanAct}">
     <section class="data-card workflow-card">
         <div class="data-card-head">

@@ -24,7 +24,7 @@ class GuardrailsTest {
 
     /** The maker-checker actions guard themselves in WorkflowService, so the lock skips them. */
     private static final Set<String> WORKFLOW_URLS = Set.of(
-            "/reports/{id}/submit", "/reports/{id}/approve", "/reports/{id}/return",
+            "/reports/{id}/submit", "/reports/{id}/approve", "/reports/{id}/return", "/reports/{id}/reopen",
             "/reports/{id}/sync-finacle");
 
     private static final Path JAVA = Path.of("src/main/java");

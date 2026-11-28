@@ -125,6 +125,38 @@ class WorkflowServiceTest {
     }
 
     @Test
+    @DisplayName("a second officer re-opens an approved report and the reason lands in the audit trail")
+    void reopen_byAnotherOfficer_returnsTheReportAndWritesTheAuditRow() {
+        service.submit(steelsReportId(), "maker01");
+        service.approve(steelsReportId(), "checker01");
+        service.reopen(steelsReportId(), "checker02", "Wrong turnover figure was approved.");
+
+        assertThat(text("SELECT status FROM eoi_report WHERE id = ?", steelsReportId()))
+                .isEqualTo("RETURNED");
+        assertThat(auditActions()).containsExactly("SUBMIT", "APPROVE", "REOPEN");
+    }
+
+    @Test
+    @DisplayName("re-open is refused for the preparer, a short or long reason, and a report not approved")
+    void reopen_breakingARule_isRefusedAndNothingIsWritten() {
+        service.submit(steelsReportId(), "maker01");
+
+        assertThatThrownBy(() -> service.reopen(steelsReportId(), "checker02", "Not approved yet, so no."))
+                .isInstanceOf(IllegalStateException.class);
+        service.approve(steelsReportId(), "checker01");
+        assertThatThrownBy(() -> service.reopen(steelsReportId(), "maker01", "I prepared it myself."))
+                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> service.reopen(steelsReportId(), "checker02", "too short"))
+                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> service.reopen(steelsReportId(), "checker02", "x".repeat(501)))
+                .isInstanceOf(IllegalStateException.class);
+
+        assertThat(text("SELECT status FROM eoi_report WHERE id = ?", steelsReportId()))
+                .isEqualTo("APPROVED");
+        assertThat(auditActions()).containsExactly("SUBMIT", "APPROVE");
+    }
+
+    @Test
     @DisplayName("the Finacle sync fills the IRAC classification and lands in the audit trail")
     void syncFromFinacle_fillsTheClassificationAndWritesTheAuditRow() {
         jdbc.update("UPDATE eoi_report SET irac_classification = NULL WHERE id = ?",
