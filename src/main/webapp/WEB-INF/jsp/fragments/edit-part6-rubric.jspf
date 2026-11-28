@@ -6,6 +6,7 @@
 
     <form class="row g-2 align-items-end" method="post"
           action="${pageContext.request.contextPath}/reports/${view.reportId()}/rubric/auto-grade">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="col-6 col-md-3">
             <label class="form-label" for="rubric-overdrawings">Overdrawings</label>
             <input class="form-control" id="rubric-overdrawings" name="overdrawings" type="text" inputmode="decimal">
@@ -73,9 +74,9 @@
                 <tbody>
                     <c:forEach items="${view.rubric()}" var="rubricRow">
                         <tr>
-                            <td>${rubricRow.itemCode}</td>
-                            <td>${rubricRow.observedValue}</td>
-                            <td>${rubricRow.grade}</td>
+                            <td><c:out value="${rubricRow.itemCode}"/></td>
+                            <td><c:out value="${rubricRow.observedValue}"/></td>
+                            <td><c:out value="${rubricRow.grade}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>

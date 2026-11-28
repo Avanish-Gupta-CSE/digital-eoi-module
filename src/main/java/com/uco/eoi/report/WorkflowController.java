@@ -21,6 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class WorkflowController {
 
+    private static final String CHECKER_ONLY =
+            "Only a checker can approve or return a report. Your role is maker.";
+
     private final WorkflowService workflowService;
 
     public WorkflowController(WorkflowService workflowService) {
@@ -47,6 +50,9 @@ public class WorkflowController {
             @RequestParam(name = "actorId", defaultValue = "checker01") String actorId,
             @SessionAttribute(name = "staff", required = false) StaffPrincipal staff,
             RedirectAttributes attributes) {
+        if (notChecker(staff)) {
+            return refused(id, CHECKER_ONLY, attributes);
+        }
         try {
             workflowService.approve(id, actorOf(staff, actorId));
         } catch (IllegalStateException e) {
@@ -62,6 +68,9 @@ public class WorkflowController {
             @RequestParam(name = "remarks", required = false, defaultValue = "") String remarks,
             @SessionAttribute(name = "staff", required = false) StaffPrincipal staff,
             RedirectAttributes attributes) {
+        if (notChecker(staff)) {
+            return refused(id, CHECKER_ONLY, attributes);
+        }
         try {
             workflowService.returnToMaker(id, actorOf(staff, actorId), remarks);
         } catch (IllegalStateException e) {
@@ -82,6 +91,11 @@ public class WorkflowController {
             return refused(id, e.getMessage(), attributes);
         }
         return "redirect:/reports/" + id + "?workflow=synced";
+    }
+
+    /** A signed-in officer who is not a checker. With no sign-in (h2 profile) nobody is blocked. */
+    private boolean notChecker(StaffPrincipal staff) {
+        return staff != null && !staff.isChecker();
     }
 
     /** The signed-in officer's employee number, or the given actor when nobody signed in. */

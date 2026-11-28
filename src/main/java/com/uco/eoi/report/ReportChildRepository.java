@@ -73,8 +73,9 @@ public class ReportChildRepository {
     }
 
     /** Removes one director or partner. */
-    public void deleteDirector(long rowId) {
-        jdbc.update("DELETE FROM eoi_borrower_director WHERE id = ?", rowId);
+    public void deleteDirector(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_borrower_director WHERE id = ? AND borrower_id = ?", rowId,
+                findBorrowerId(reportId));
     }
 
     /** Adds one allied business activity to the borrower of the report. */
@@ -83,8 +84,9 @@ public class ReportChildRepository {
     }
 
     /** Removes one allied business activity. */
-    public void deleteAllied(long rowId) {
-        jdbc.update("DELETE FROM eoi_borrower_allied WHERE id = ?", rowId);
+    public void deleteAllied(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_borrower_allied WHERE id = ? AND borrower_id = ?", rowId,
+                findBorrowerId(reportId));
     }
 
     /** Adds one other financing bank to the borrower of the report. */
@@ -93,8 +95,9 @@ public class ReportChildRepository {
     }
 
     /** Removes one other financing bank. */
-    public void deleteBank(long rowId) {
-        jdbc.update("DELETE FROM eoi_borrower_bank WHERE id = ?", rowId);
+    public void deleteBank(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_borrower_bank WHERE id = ? AND borrower_id = ?", rowId,
+                findBorrowerId(reportId));
     }
 
     /** The borrower of one report, or 0 when the report is unknown. */

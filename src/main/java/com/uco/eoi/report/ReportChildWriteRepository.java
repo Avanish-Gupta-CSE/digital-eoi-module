@@ -55,8 +55,9 @@ public class ReportChildWriteRepository {
     }
 
     /** Removes one graded experience item. */
-    public void deleteExperience(long rowId) {
-        jdbc.update("DELETE FROM eoi_report_experience WHERE id = ?", rowId);
+    public void deleteExperience(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_report_experience WHERE id = ? AND report_id = ?", rowId,
+                reportId);
     }
 
     /** The graded experience items of one report, ready for the entry screen. */

@@ -8,16 +8,18 @@
     <section class="data-card workflow-card">
         <div class="data-card-head">
             <h2 class="data-card-title">Maker and checker</h2>
-            <span class="count-pill">${view.status()}</span>
+            <span class="count-pill"><c:out value="${view.status()}"/></span>
         </div>
         <div class="entry-card">
             <c:choose>
                 <c:when test="${makerCanAct}">
                     <div class="workflow-actions">
                         <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/sync-finacle">
+                            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                             <button type="submit" class="btn-print" id="sync-finacle-button">Sync from Finacle</button>
                         </form>
                         <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/submit">
+                            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                             <button type="submit" class="btn-bank-primary" id="submit-button">Submit for Checking</button>
                         </form>
                     </div>
@@ -25,10 +27,12 @@
                 <c:when test="${checkerCanAct}">
                     <div class="workflow-actions">
                         <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/approve">
+                            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                             <button type="submit" class="btn-bank-primary" id="approve-button">Approve</button>
                         </form>
                     </div>
                     <form method="post" id="return-form" action="${pageContext.request.contextPath}/reports/${view.reportId()}/return">
+                        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                         <label class="form-label" for="return-remarks">Remarks *</label>
                         <textarea class="form-control" id="return-remarks" name="remarks" rows="2"
                                   aria-describedby="return-remarks-error"></textarea>
@@ -46,7 +50,7 @@
 <section class="data-card workflow-card">
     <div class="data-card-head">
         <h2 class="data-card-title">History</h2>
-        <span class="count-pill">${history.size()}</span>
+        <span class="count-pill"><c:out value="${history.size()}"/></span>
     </div>
     <c:choose>
         <c:when test="${empty history}">
@@ -67,11 +71,11 @@
                     <tbody>
                     <c:forEach items="${history}" var="entry">
                         <tr>
-                            <td>${entry.action()}</td>
-                            <td>${entry.actorId()}</td>
-                            <td>${entry.actorRole()}</td>
-                            <td>${entry.remarks()}</td>
-                            <td>${entry.createdAtText()}</td>
+                            <td><c:out value="${entry.action()}"/></td>
+                            <td><c:out value="${entry.actorId()}"/></td>
+                            <td><c:out value="${entry.actorRole()}"/></td>
+                            <td><c:out value="${entry.remarks()}"/></td>
+                            <td><c:out value="${entry.createdAtText()}"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>

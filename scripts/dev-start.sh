@@ -155,7 +155,7 @@ cd "$ROOT_DIR"
 mvn -o -q clean package -DskipTests
 
 echo "==> Starting the application on port $APP_PORT"
-DEV_LOGIN_ENABLED=true nohup mvn -o spring-boot:run -Dspring-boot.run.arguments="--server.port=$APP_PORT" > "$LOG_FILE" 2>&1 < /dev/null &
+DEV_LOGIN_ENABLED=true EOI_DB_USER="$APP_USER" EOI_DB_PASSWORD="$APP_PASSWORD" nohup mvn -o spring-boot:run -Dspring-boot.run.arguments="--server.port=$APP_PORT" > "$LOG_FILE" 2>&1 < /dev/null &
 APP_PID=$!
 echo "$APP_PID" > "$RUN_DIR/eoi.pid"
 

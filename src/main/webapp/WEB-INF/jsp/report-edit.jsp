@@ -10,10 +10,11 @@
         <div>
             <p class="page-eyebrow">Annex II report</p>
             <h1 class="page-title">Annex II Entry</h1>
-            <p class="page-subtitle">${view.borrower.name} &middot; Quarter ${view.quarter}</p>
+            <p class="page-subtitle"><c:out value="${view.borrower.name}"/> &middot; Quarter <c:out value="${view.quarter}"/></p>
         </div>
         <div class="page-actions">
             <form method="post" action="${pageContext.request.contextPath}/reports/${view.reportId()}/prefill">
+                <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                 <button type="submit" class="btn-print">Prefill from Previous Quarter</button>
             </form>
         </div>
@@ -38,7 +39,7 @@
     <c:if test="${param.prefilled == '1'}">
         <div class="alert alert-success alert-dismissible fade show" role="status">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            Details copied from the report for ${empty param.prefillQuarter ? 'the previous quarter' : param.prefillQuarter}. Check every value before saving.
+            Details copied from the report for <c:out value="${empty param.prefillQuarter ? 'the previous quarter' : param.prefillQuarter}"/>. Check every value before saving.
         </div>
     </c:if>
 
@@ -50,6 +51,7 @@
 
     <form:form id="report-edit-form" method="post" modelAttribute="form"
                action="${pageContext.request.contextPath}/reports/${view.reportId()}/edit">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="data-card entry-card">
             <p class="entry-required">* Required</p>
 

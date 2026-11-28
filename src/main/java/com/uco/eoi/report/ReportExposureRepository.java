@@ -83,9 +83,10 @@ public class ReportExposureRepository {
 
     /** Removes one facility. The security goes first: it points at the facility. */
     @Transactional
-    public void deleteFacility(long rowId) {
-        jdbc.update("DELETE FROM eoi_facility_security WHERE facility_id = ?", rowId);
-        jdbc.update("DELETE FROM eoi_facility WHERE id = ?", rowId);
+    public void deleteFacility(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_facility_security WHERE facility_id IN "
+                + "(SELECT id FROM eoi_facility WHERE id = ? AND report_id = ?)", rowId, reportId);
+        jdbc.update("DELETE FROM eoi_facility WHERE id = ? AND report_id = ?", rowId, reportId);
     }
 
     /** Adds one derivative contract to the report. */
@@ -98,8 +99,8 @@ public class ReportExposureRepository {
     }
 
     /** Removes one derivative contract. */
-    public void deleteDerivative(long rowId) {
-        jdbc.update("DELETE FROM eoi_derivative WHERE id = ?", rowId);
+    public void deleteDerivative(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_derivative WHERE id = ? AND report_id = ?", rowId, reportId);
     }
 
     /** Adds one currency position to the report. */
@@ -110,8 +111,8 @@ public class ReportExposureRepository {
     }
 
     /** Removes one currency position. */
-    public void deleteCurrency(long rowId) {
-        jdbc.update("DELETE FROM eoi_currency_position WHERE id = ?", rowId);
+    public void deleteCurrency(long reportId, long rowId) {
+        jdbc.update("DELETE FROM eoi_currency_position WHERE id = ? AND report_id = ?", rowId, reportId);
     }
 
     /** The facilities of one report, each with the security offered against it. */

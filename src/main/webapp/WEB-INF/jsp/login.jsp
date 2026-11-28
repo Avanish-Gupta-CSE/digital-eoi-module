@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="fragments/head.jspf" %>
+<c:set var="hideStaff" value="true"/>
 <%@ include file="fragments/nav.jspf" %>
 
 <main class="login-main">
@@ -13,10 +14,11 @@
         </p>
 
         <c:if test="${not empty errorMessage}">
-            <p class="login-error" role="alert">${errorMessage}</p>
+            <p class="login-error" role="alert"><c:out value="${errorMessage}"/></p>
         </c:if>
 
         <form method="post" action="${pageContext.request.contextPath}/login">
+            <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
             <div class="login-field">
                 <label for="empNo">Employee number</label>
                 <input type="text" id="empNo" name="empNo" autocomplete="username"

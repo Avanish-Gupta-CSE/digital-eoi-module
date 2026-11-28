@@ -26,18 +26,19 @@
                 <tbody>
                     <c:forEach items="${editChildren.derivatives}" var="r">
                         <tr>
-                            <td>${r.serialNo}</td>
-                            <td>${r.nature}</td>
-                            <td class="text-end">${r.notionalText}</td>
-                            <td>${r.maturityText}</td>
-                            <td class="text-end">${r.positiveMtmText}</td>
-                            <td class="text-end">${r.npaText}</td>
-                            <td class="text-end">${r.restructuredText}</td>
-                            <td>${r.reasons}</td>
+                            <td><c:out value="${r.serialNo}"/></td>
+                            <td><c:out value="${r.nature}"/></td>
+                            <td class="text-end"><c:out value="${r.notionalText}"/></td>
+                            <td><c:out value="${r.maturityText}"/></td>
+                            <td class="text-end"><c:out value="${r.positiveMtmText}"/></td>
+                            <td class="text-end"><c:out value="${r.npaText}"/></td>
+                            <td class="text-end"><c:out value="${r.restructuredText}"/></td>
+                            <td><c:out value="${r.reasons}"/></td>
                             <td>
                                 <form class="child-delete-form" method="post"
                                       action="${pageContext.request.contextPath}/reports/${view.reportId()}/derivatives/${r.id()}/delete"
                                       data-confirm="Delete this derivative contract?">
+                                    <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </td>
@@ -50,6 +51,7 @@
 
     <form class="row g-2 align-items-end mt-3" method="post"
           action="${pageContext.request.contextPath}/reports/${view.reportId()}/derivatives/add">
+        <input type="hidden" name="_csrf" value="<c:out value='${sessionScope._csrf}'/>">
         <div class="col-12 col-md-3">
             <label class="form-label" for="derivative-serial-no">Sr. No. *</label>
             <input class="form-control" id="derivative-serial-no" name="serialNo" type="text" required>

@@ -3,22 +3,22 @@
 <p class="report-status-line">
     <c:choose>
         <c:when test="${view.status() == 'APPROVED'}">
-            <span class="status-pill status-approved">${view.status()}</span>
+            <span class="status-pill status-approved"><c:out value="${view.status()}"/></span>
         </c:when>
         <c:when test="${view.status() == 'SUBMITTED'}">
-            <span class="status-pill status-submitted">${view.status()}</span>
+            <span class="status-pill status-submitted"><c:out value="${view.status()}"/></span>
         </c:when>
         <c:when test="${view.status() == 'RETURNED'}">
-            <span class="status-pill status-returned">${view.status()}</span>
+            <span class="status-pill status-returned"><c:out value="${view.status()}"/></span>
         </c:when>
         <c:when test="${view.status() == 'DUE'}">
-            <span class="status-pill status-due">${view.status()}</span>
+            <span class="status-pill status-due"><c:out value="${view.status()}"/></span>
         </c:when>
         <c:when test="${view.status() == 'OVERDUE'}">
-            <span class="status-pill status-overdue">${view.status()}</span>
+            <span class="status-pill status-overdue"><c:out value="${view.status()}"/></span>
         </c:when>
         <c:otherwise>
-            <span class="status-pill status-draft">${view.status()}</span>
+            <span class="status-pill status-draft"><c:out value="${view.status()}"/></span>
         </c:otherwise>
     </c:choose>
 </p>

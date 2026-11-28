@@ -263,3 +263,12 @@
   * **Amounts stay in absolute units** and are not run through the Indian rupee formatter for per-currency positions, because a position in USD is not rupees. Part III and IV amounts remain rupees, formatted with `IndianMoney`.
 * **Consequences / Rationale:** The report cannot print a wrong regulatory figure, and the missing consolidated value is explained rather than silently omitted. Cost: the form is not visually complete until FX rates are in scope — accepted, and recorded here so it is a decision rather than an oversight.
 * **Status:** In Force.
+
+---
+
+### Decision 020: Security hardening without Spring Security; report lock by status
+* **Date:** 2026-11-28
+* **Context:** Review against `UcoRealtyStaff` found no CSRF protection, no CSP header, unescaped JSP output, a bypassable maker-checker, and no OTP throttling.
+* **Decision:** Keep Decision 019 (no Spring Security, no new dependency). Add servlet filters `CsrfFilter` and `SecurityHeadersFilter`; escape every user-sourced JSP output with `<c:out>`; approve/return are CHECKER-only; workflow UPDATEs are guarded by the current status; edits are allowed only in DRAFT/DUE/OVERDUE/RETURNED (`ReportLockInterceptor`); child deletes are scoped to the report; OTP login locks for 15 min after 5 failures. The DB password has no committed default.
+* **Consequences / Rationale:** Closes the OWASP items in the bank's secure-coding order (XSS, CSRF, broken access control, authentication) with about 250 lines and no dependency. Cost: every new `<form>` must carry the `_csrf` hidden field, and an approved report can no longer be corrected in place; it needs a bank-defined re-open step (open question).
+* **Status:** In Force.
