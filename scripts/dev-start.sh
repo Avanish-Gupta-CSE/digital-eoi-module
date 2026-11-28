@@ -58,10 +58,15 @@ run_as_system() {
             "$SYSTEM_USER/$SYSTEM_PASSWORD@//localhost:$PORT/$SERVICE"
 }
 
-# Runs a SQL file as the application user.
+# Runs a SQL file (or stdin when no file argument is passed) as the application user.
 run_app_file() {
-    docker exec -i "$CONTAINER" "$SQLPLUS" -s \
-        "$APP_USER/$APP_PASSWORD@//localhost:$PORT/$SERVICE" < "$1"
+    if [ -n "$1" ]; then
+        docker exec -i "$CONTAINER" "$SQLPLUS" -s \
+            "$APP_USER/$APP_PASSWORD@//localhost:$PORT/$SERVICE" < "$1"
+    else
+        docker exec -i "$CONTAINER" "$SQLPLUS" -s \
+            "$APP_USER/$APP_PASSWORD@//localhost:$PORT/$SERVICE"
+    fi
 }
 
 echo "==> Checking the Oracle container"

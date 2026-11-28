@@ -69,6 +69,7 @@ public class ReportEditController {
         rejectBlankFields(form, binding);
         if (binding.hasErrors()) {
             model.addAttribute("view", reportService.report(id));
+            model.addAttribute("editChildren", childRepository.loadAll(id));
             return "report-edit";
         }
         writeRepository.updatePart1And2(id, form);

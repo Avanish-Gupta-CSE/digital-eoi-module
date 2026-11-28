@@ -21,6 +21,13 @@
 
     <%@ include file="fragments/report-status.jspf" %>
 
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <c:out value="${errorMessage}"/>
+        </div>
+    </c:if>
+
     <c:if test="${param.saved == '1'}">
         <div class="alert alert-success alert-dismissible fade show" role="status">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
