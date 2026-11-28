@@ -18,9 +18,24 @@ class WorkflowControllerTest {
                 StaffPrincipal.MAKER);
         RedirectAttributesModelMap attributes = new RedirectAttributesModelMap();
 
-        String view = controller.reopen(5, "x", "A reason that is long enough.", maker, attributes);
+        String view = controller.reopen(5, "A reason that is long enough.", maker, attributes);
 
         assertThat(view).isEqualTo("redirect:/reports/5?error=notallowed");
         assertThat(attributes.getFlashAttributes()).containsKey("errorMessage");
+    }
+
+    @Test
+    @DisplayName("with nobody signed in every workflow action is refused before the service is called")
+    void everyAction_withNobodySignedIn_isRefused() {
+        WorkflowController controller = new WorkflowController(null);
+        RedirectAttributesModelMap attributes = new RedirectAttributesModelMap();
+
+        assertThat(controller.submit(5, null, attributes)).isEqualTo("redirect:/reports/5?error=notallowed");
+        assertThat(controller.approve(5, null, attributes)).isEqualTo("redirect:/reports/5?error=notallowed");
+        assertThat(controller.returnToMaker(5, "A reason that is long enough.", null, attributes))
+                .isEqualTo("redirect:/reports/5?error=notallowed");
+        assertThat(controller.reopen(5, "A reason that is long enough.", null, attributes))
+                .isEqualTo("redirect:/reports/5?error=notallowed");
+        assertThat(controller.syncFinacle(5, null, attributes)).isEqualTo("redirect:/reports/5?error=notallowed");
     }
 }

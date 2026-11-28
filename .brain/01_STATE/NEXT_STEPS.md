@@ -29,7 +29,7 @@ Last updated: 2026-11-28
 | #6 Non-Finacle data | maker entry forms now exist | external sources if preferred |
 
 ## Next for the agent team
-Dry run done 2026-11-28 (see SESSION_LOG): gates and role/status/audit/CSRF were right; reporting and scope rules tightened. Re-run once on a paid-plan model to confirm the `SECURITY` block now appears. Re-open was then built here by hand (`POST /reports/{id}/reopen`, checker only, APPROVED to RETURNED, reason 10-500 characters, audit `REOPEN`; the preparer may not re-open, same rule as approve). That choice is a working default: **owner to confirm**. The nobody-signed-in fail-open is still open and covers all four workflow actions.
+Dry run done 2026-11-28 (see SESSION_LOG): gates and role/status/audit/CSRF were right; reporting and scope rules tightened. Re-run once on a paid-plan model to confirm the `SECURITY` block now appears. Re-open was then built here by hand (`POST /reports/{id}/reopen`, checker only, APPROVED to RETURNED, reason 10-500 characters, audit `REOPEN`; the preparer may not re-open, same rule as approve). That choice is a working default: **owner to confirm**. The nobody-signed-in fail-open is closed (2026-11-28): all five workflow POSTs refuse when no officer is signed in, so on the h2 profile a developer signs in through dev login (`uco.sso.dev-login-enabled`) to approve, return, re-open, submit or sync.
 
 ## Review gaps still open (found 2026-11-28, not fixed: they need an owner or bank decision)
 1. **No row-level access control:** any signed-in officer sees and edits every borrower's report. UcoRealtyStaff scopes by SOL/zone; the EoI scoping rule (branch, zone, head office) is not defined.
