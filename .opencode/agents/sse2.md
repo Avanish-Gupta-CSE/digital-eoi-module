@@ -1,7 +1,7 @@
 ---
 description: Shaik Arif (SSE2) — implementation lead. Takes the Tech Lead's design, builds the hardest part, and sets the pattern the rest of the team copies.
 mode: subagent
-model: minimax-coding-plan/MiniMax-M3.1-Flash
+model: minimax-coding-plan/MiniMax-M3
 steps: 24
 color: "#00b894"
 permissions:

@@ -2,7 +2,7 @@
 description: Shaik Arif (TL) — tech lead. Designs the smallest safe change, names every file to touch, reviews code against the guardrails, and verifies the build. Does not write feature code.
 mode: subagent
 model: opencode-go/deepseek-v4-pro#high
-steps: 14
+steps: 18
 color: "#0984e3"
 permissions:
   - action: edit
