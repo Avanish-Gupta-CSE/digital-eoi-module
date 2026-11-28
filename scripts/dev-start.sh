@@ -95,16 +95,16 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE USER $APP_USER IDENTIFIED BY $APP_PASSWORD';
         EXECUTE IMMEDIATE 'GRANT CONNECT, RESOURCE, CREATE TABLE, CREATE SEQUENCE, UNLIMITED TABLESPACE TO $APP_USER';
     END IF;
-    BEGIN
-        EXECUTE IMMEDIATE 'GRANT SELECT ON hrms_dba.employee_contact_details TO $APP_USER';
-        EXECUTE IMMEDIATE 'GRANT SELECT ON hrms_dba.employee_tenure TO $APP_USER';
-    EXCEPTION WHEN OTHERS THEN NULL;
-    END;
 END;
 /
 COMMIT;
 EXIT;
 " >/dev/null
+
+# Grant read access to HRMS_DBA tables (must run as hrms_dba, since system lacks GRANT OPTION on them).
+printf "GRANT SELECT ON hrms_dba.employee_contact_details TO $APP_USER;\nGRANT SELECT ON hrms_dba.employee_tenure TO $APP_USER;\nEXIT;\n" |
+    docker exec -i "$CONTAINER" "$SQLPLUS" -s \
+        "hrms_dba/hrms_dba_pwd@//localhost:$PORT/$SERVICE" >/dev/null 2>&1 || true
 
 if [ "$RESET" -eq 1 ]; then
     echo "==> --reset: dropping the EoI tables and the sequence"
