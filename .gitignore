@@ -33,3 +33,6 @@ node_modules/
 
 # local agent scratch
 .opencode/tmp/
+
+# local run state of scripts/dev-start.sh (the app log and the pid file)
+.run/

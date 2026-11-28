@@ -537,6 +537,44 @@ body {
     color: var(--bad);
 }
 
+/* The row action opens the Annex II report of that quarter. */
+.row-open-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--navy-600);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.row-open-link:hover,
+.row-open-link:focus {
+    color: var(--navy);
+    border-color: var(--navy-600);
+    background: #f8fbfe;
+}
+
+.row-open-link:focus-visible {
+    outline: 3px solid rgba(10, 74, 128, 0.35);
+    outline-offset: 2px;
+}
+
+/* The action is a screen action: it does not belong on paper. */
+@media print {
+    .row-open-link,
+    .action-col {
+        display: none !important;
+    }
+}
+
 /* ---------- Empty states ---------- */
 
 .empty-state {

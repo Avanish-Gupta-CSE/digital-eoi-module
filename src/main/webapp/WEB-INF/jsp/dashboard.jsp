@@ -68,6 +68,9 @@
                             <button type="button" class="chip" data-filter="DUE">Due</button>
                             <button type="button" class="chip" data-filter="SUBMITTED">Submitted</button>
                             <button type="button" class="chip" data-filter="OVERDUE">Overdue</button>
+                            <button type="button" class="chip" data-filter="DRAFT">Draft</button>
+                            <button type="button" class="chip" data-filter="APPROVED">Approved</button>
+                            <button type="button" class="chip" data-filter="RETURNED">Returned</button>
                         </div>
                     </div>
                 </div>
@@ -80,6 +83,7 @@
                             <th scope="col" class="text-end">Sanctioned limit</th>
                             <th scope="col" class="text-end">Outstanding</th>
                             <th scope="col" class="text-center">Status</th>
+                            <th scope="col" class="text-end action-col">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -100,6 +104,9 @@
                                     <span class="status-pill ${row.statusClass}">
                                         <span class="dot" aria-hidden="true"></span>${row.status}
                                     </span>
+                                </td>
+                                <td class="text-end action-col">
+                                    <a class="row-open-link" href="/reports/${row.reportId}">Open</a>
                                 </td>
                             </tr>
                         </c:forEach>
