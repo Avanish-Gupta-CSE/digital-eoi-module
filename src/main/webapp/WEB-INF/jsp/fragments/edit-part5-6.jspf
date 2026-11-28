@@ -1,0 +1,122 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part V &mdash; Currency positions</h2>
+
+    <c:choose>
+        <c:when test="${empty editChildren.currencies}">
+            <p class="report-empty-line">No currency positions recorded. Add the first one below.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Currency</th>
+                        <th scope="col">Short &ndash; Long</th>
+                        <th scope="col">Short &ndash; Short</th>
+                        <th scope="col">Long &ndash; Long</th>
+                        <th scope="col">Long &ndash; Short</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${editChildren.currencies}" var="r">
+                        <tr>
+                            <td>${r.currency}</td>
+                            <td class="text-end">${r.shortLongText}</td>
+                            <td class="text-end">${r.shortShortText}</td>
+                            <td class="text-end">${r.longLongText}</td>
+                            <td class="text-end">${r.longShortText}</td>
+                            <td>
+                                <form class="child-delete-form" method="post"
+                                      action="${pageContext.request.contextPath}/reports/${view.reportId()}/currencies/${r.id()}/delete"
+                                      data-confirm="Delete this currency position?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <form class="row g-2 align-items-end mt-3" method="post"
+          action="${pageContext.request.contextPath}/reports/${view.reportId()}/currencies/add">
+        <div class="col-12 col-md-2">
+            <label class="form-label" for="currency-code">Currency *</label>
+            <input class="form-control" id="currency-code" name="currencyCode" type="text" required>
+        </div>
+        <div class="col-6 col-md-2">
+            <label class="form-label" for="currency-short-long">Short &ndash; Long</label>
+            <input class="form-control" id="currency-short-long" name="shortLong" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-2">
+            <label class="form-label" for="currency-short-short">Short &ndash; Short</label>
+            <input class="form-control" id="currency-short-short" name="shortShort" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-2">
+            <label class="form-label" for="currency-long-long">Long &ndash; Long</label>
+            <input class="form-control" id="currency-long-long" name="longLong" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-2">
+            <label class="form-label" for="currency-long-short">Long &ndash; Short</label>
+            <input class="form-control" id="currency-long-short" name="longShort" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-2">
+            <button type="submit" class="btn btn-primary btn-bank-primary w-100">Add currency</button>
+        </div>
+    </form>
+</section>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part VI.A &mdash; Experience</h2>
+
+    <c:choose>
+        <c:when test="${empty editChildren.experience}">
+            <p class="report-empty-line">No experience items graded. Add the first one below.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Grade</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${editChildren.experience}" var="r">
+                        <tr>
+                            <td>${r.itemCode}</td>
+                            <td>${r.grade}</td>
+                            <td>
+                                <form class="child-delete-form" method="post"
+                                      action="${pageContext.request.contextPath}/reports/${view.reportId()}/experience/${r.id()}/delete"
+                                      data-confirm="Delete this experience grade?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+    <form class="row g-2 align-items-end mt-3" method="post"
+          action="${pageContext.request.contextPath}/reports/${view.reportId()}/experience/save">
+        <div class="col-12 col-md-5">
+            <label class="form-label" for="experience-item-code">Item *</label>
+            <input class="form-control" id="experience-item-code" name="itemCode" type="text" required>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" for="experience-grade">Grade *</label>
+            <input class="form-control" id="experience-grade" name="grade" type="text" required>
+        </div>
+        <div class="col-12 col-md-3">
+            <button type="submit" class="btn btn-primary btn-bank-primary w-100">Save grade</button>
+        </div>
+    </form>
+</section>

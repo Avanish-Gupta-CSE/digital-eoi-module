@@ -41,4 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         event.returnValue = "";
     });
+
+    document.querySelectorAll(".child-delete-form").forEach(function (deleteForm) {
+        deleteForm.addEventListener("submit", function (event) {
+            const msg = deleteForm.getAttribute("data-confirm");
+            if (msg && !window.confirm(msg)) {
+                event.preventDefault();
+            }
+        });
+    });
 });

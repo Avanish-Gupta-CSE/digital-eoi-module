@@ -1,0 +1,85 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<section class="data-card entry-card">
+    <h2 class="data-card-title">Part VI.B &mdash; Conduct rubric</h2>
+
+    <form class="row g-2 align-items-end" method="post"
+          action="${pageContext.request.contextPath}/reports/${view.reportId()}/rubric/auto-grade">
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-overdrawings">Overdrawings</label>
+            <input class="form-control" id="rubric-overdrawings" name="overdrawings" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-funded-months">Funded adjustment (months)</label>
+            <input class="form-control" id="rubric-funded-months" name="fundedAdjMonths" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-overdrawing-pct">Overdrawing (per cent)</label>
+            <input class="form-control" id="rubric-overdrawing-pct" name="overdrawingPct" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-contingent-defaults">Contingent defaults</label>
+            <input class="form-control" id="rubric-contingent-defaults" name="contingentDefaults" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-contingent-weeks">Contingent adjustment (weeks)</label>
+            <input class="form-control" id="rubric-contingent-weeks" name="contingentAdjWeeks" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-irregularities">Irregularities</label>
+            <input class="form-control" id="rubric-irregularities" name="irregularities" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-lc-devolvements">LC devolvements</label>
+            <input class="form-control" id="rubric-lc-devolvements" name="lcDevolvements" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-bg-invocations">BG invocations</label>
+            <input class="form-control" id="rubric-bg-invocations" name="bgInvocations" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-turnover-pct">Creation of charge delay (days)</label>
+            <input class="form-control" id="rubric-turnover-pct" name="turnoverPct" type="text" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3">
+            <label class="form-label" for="rubric-stock-days">Stock statement delay (days)</label>
+            <input class="form-control" id="rubric-stock-days" name="stockStmtDays" type="text" inputmode="decimal">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" id="rubric-is-npa" name="isNpaAccount" type="checkbox" value="true">
+                <label class="form-check-label" for="rubric-is-npa">Account is classified NPA</label>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <button type="submit" class="btn btn-primary btn-bank-primary w-100">Grade rubric</button>
+        </div>
+    </form>
+
+    <c:choose>
+        <c:when test="${empty view.rubric()}">
+            <p class="report-empty-line mt-3">The rubric has not been graded for this quarter.</p>
+        </c:when>
+        <c:otherwise>
+            <table class="eoi-table report-table mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Observed value</th>
+                        <th scope="col">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${view.rubric()}" var="rubricRow">
+                        <tr>
+                            <td>${rubricRow.itemCode}</td>
+                            <td>${rubricRow.observedValue}</td>
+                            <td>${rubricRow.grade}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+</section>

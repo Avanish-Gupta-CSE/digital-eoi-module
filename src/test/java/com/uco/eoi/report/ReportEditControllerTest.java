@@ -59,7 +59,9 @@ class ReportEditControllerTest {
         jdbc = new JdbcTemplate(new SingleConnectionDataSource(connection, true));
         ReportService service = new ReportService(new ReportRepository(jdbc));
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new ReportEditController(service, new ReportWriteRepository(jdbc)))
+                .standaloneSetup(new ReportEditController(service, new ReportWriteRepository(jdbc),
+                        new ReportChildRepository(jdbc, new ReportExposureRepository(jdbc),
+                                new ReportChildWriteRepository(jdbc))))
                 .build();
     }
 
